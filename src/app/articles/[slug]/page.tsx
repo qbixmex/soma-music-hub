@@ -21,7 +21,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
     redirect("/");
   }
 
-  const { title, content, image } = article;
+  const { id, title, content, image } = article;
 
   return (
     <article>
@@ -38,8 +38,9 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
           alt={title}
           width={1280}
           height={720}
+          priority
         />
-        <Content content={content} />
+        <Content id={id} content={content} />
       </main>
 
       <p className="text-right mb-5">
