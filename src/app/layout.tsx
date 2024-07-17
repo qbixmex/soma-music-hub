@@ -6,7 +6,7 @@ import Providers from "@/components/providers/providers";
 import { Navbar } from "@/components/layout";
 import clsx from "clsx";
 
-const montserrat = Montserrat();
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Quantic Coders Blog",
