@@ -53,19 +53,19 @@
     @apply p-5 lg:max-w-7xl lg:mx-auto;
   }
 
-  .title {
+  .h1 {
     @apply text-4xl font-bold text-purple-400;
   }
-  
-  .subtitle {
+
+  .h2 {
     @apply text-3xl font-semibold text-blue-400;
   }
-  
-  .level3 {
+
+  .h3 {
     @apply text-2xl font-semibold text-orange-400;
   }
 
   .paragraph {
-    @apply text-lg text-gray-400/80 text-pretty;
+    @apply text-lg text-slate-400/80 text-pretty;
   }
 }
