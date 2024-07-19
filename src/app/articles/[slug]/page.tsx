@@ -53,7 +53,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
                       <FaUser />
                     </div>
                     <p className="italic group-hover:text-slate-200 text-slate-500 transition-colors">
-                      { article.publishedAt }
+                      { article.author }
                     </p>
                   </div>
                 </Link>
