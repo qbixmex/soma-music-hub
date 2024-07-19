@@ -7,7 +7,7 @@ export interface Article {
   content: string;
   category: string;
   tags: string[];
-  publishedAt: string;
+  publishedAt: string | null;
   author: string;
   robots: string;
 }
