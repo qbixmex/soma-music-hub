@@ -19,7 +19,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
 
   const article = articles.find((article) => article.slug === slug) as Article;
   
-  if (!article) {
+  if (!article || !article.publishedAt) {
     redirect("/");
   }
 
