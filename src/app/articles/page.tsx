@@ -1,19 +1,27 @@
-import { Title } from "@/components/text";
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import articles from "@/data/articles.json";
-
-import Link from "next/link";
+import articlesFetch from "@/data/articles.json";
+import { Article } from "@/interfaces";
+import { Title } from "@/components/text";
 
 const ArticlesPage = () => {
+
+  const articles = (articlesFetch as Article[])
+    .filter((article) => article.publishedAt);
+
   return (
     <>
       <Title heading="h1" className="text-5xl font-bold mb-10">
         Quantic Coders
       </Title>
 
+      {articles.length === 0 && (
+        <p className="paragraph">No articles found.</p>
+      )}
+
       {
-        articles.map((article) => (
+        articles.length > 0 && articles.map((article) => (
           <article key={article.id} className="grid grid-cols-1 gap-5 md:grid-cols-4">
             <div className="col-span-4 lg:col-span-2">
               <Link
