@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "products" (
+CREATE TABLE "articles" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -14,11 +14,11 @@ CREATE TABLE "products" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "articles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "products_slug_key" ON "products"("slug");
+CREATE UNIQUE INDEX "articles_slug_key" ON "articles"("slug");
 
 -- CreateIndex
-CREATE INDEX "products_title_slug_idx" ON "products"("title", "slug");
+CREATE INDEX "articles_title_slug_idx" ON "articles"("title", "slug");
