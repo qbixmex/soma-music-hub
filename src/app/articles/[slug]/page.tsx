@@ -6,13 +6,42 @@ import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
-import { getArticleBySlug } from "@/actions";
+import { getArticleBySlug, getArticleMetadataBySlug } from "@/actions";
+import { Metadata } from "next";
 
 type Props = {
   params: {
     slug: string;
   };
 };
+
+export const generateMetadata = async ({ params }: Props): Promise<Metadata>  => {
+  // read route params
+  const slug = params.slug;
+
+  // fetch data
+  const { metadata } = await getArticleMetadataBySlug(slug);
+
+  const metaTitle = metadata?.title;
+  const metaDescription = metadata?.description;
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    robots: metadata?.robots,
+    authors: [{ name: metadata?.author }],
+    // social media
+    // openGraph: {
+    //   title: metaTitle,
+    //   description: metaDescription,
+    //   // images: ['https://example.com/image-1.jpg', 'https://example.com/image-2.jpg'],
+    //   images: [`/products/${product?.images[1]}`],
+    // },
+  }
+};
+
+//* This re-validates the page every 7 days
+export const revalidate = 604800;
 
 const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
 

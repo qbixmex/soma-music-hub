@@ -9,7 +9,11 @@ import clsx from "clsx";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Quantic Coders Blog",
+  title: {
+    template: '%s | Quantic Coders',
+    absolute: 'Quantic Coders',
+    default: 'Quantic Coders',
+  },
   description: "A blog about software development and programming.",
 };
 
