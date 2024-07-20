@@ -39,7 +39,7 @@ DB_NAME=your_database_name
 **Create Docker Image:**
 
 ```bash
-docker compose -p teslo_shop up -d
+docker compose -p quantic_coders up -d
 
 # -p container name
 # -d detach mode
@@ -50,7 +50,7 @@ docker compose -p teslo_shop up -d
 **Initialize Prisma:**
 
 ```bash
-npx init --datasource-provider postgressql
+npx init --datasource-provider postgresql
 ```
 
 **Prisma Client:**
@@ -104,12 +104,12 @@ bun build
 **IMPORTANT: You can run this command only if you executed build command before!**
 
 ```bash
-npm run preview
+npm run start
 # or
-yarn preview
+yarn start
 # or
-pnpm preview
+pnpm start
 # or
-bun preview
+bun start
 ```
 

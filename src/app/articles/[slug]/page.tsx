@@ -17,9 +17,9 @@ type Props = {
 const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
 
   const response = await getArticleBySlug(slug);
-  const { ok, article } = response;
+  const { article } = response;
 
-  if (!ok || !article?.publishedAt) {
+  if (!article || !article?.publishedAt) {
     redirect("/");
   }
 
@@ -120,7 +120,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
       </header>
 
       <main>
-        <Content id={article.id} content={article.content} />
+        <Content id={article.id!} content={article.content} />
       </main>
 
       <p className="text-right mb-5">
