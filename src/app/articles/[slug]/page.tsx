@@ -2,12 +2,11 @@ import { FC } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import articles from "@/data/articles.json";
 import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
-import { Article } from "@/interfaces";
+import { getArticleBySlug } from "@/actions";
 
 type Props = {
   params: {
@@ -15,11 +14,12 @@ type Props = {
   };
 };
 
-const ArticlePage: FC<Props> = ({ params: { slug } }) => {
+const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
 
-  const article = articles.find((article) => article.slug === slug) as Article;
-  
-  if (!article || !article.publishedAt) {
+  const response = await getArticleBySlug(slug);
+  const { article } = response;
+
+  if (!article || !article?.publishedAt) {
     redirect("/");
   }
 
@@ -68,7 +68,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
                 <p className="space-x-2">
                   <span className="font-semibold">Date:</span>
                   <span className="italic text-base">
-                    { new Date(article.publishedAt).toDateString() }
+                    { article.publishedAt.toDateString() }
                   </span>
                 </p>
               </div>
@@ -120,7 +120,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
       </header>
 
       <main>
-        <Content id={article.id} content={article.content} />
+        <Content id={article.id!} content={article.content} />
       </main>
 
       <p className="text-right mb-5">

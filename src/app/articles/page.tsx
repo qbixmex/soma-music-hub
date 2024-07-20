@@ -1,14 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import articlesFetch from "@/data/articles.json";
-import { Article } from "@/interfaces";
 import { Title } from "@/components/text";
+import { getArticles } from "@/actions";
 
-const ArticlesPage = () => {
+const ArticlesPage = async () => {
 
-  const articles = (articlesFetch as Article[])
-    .filter((article) => article.publishedAt);
+  const { articles } = await getArticles();
 
   return (
     <>
