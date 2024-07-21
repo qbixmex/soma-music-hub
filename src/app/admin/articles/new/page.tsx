@@ -1,6 +1,18 @@
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import ArticleForm from "../(components)/article-form";
+import { Button } from "@/components/ui/button";
+
 const CreateArticlePage = () => {
   return (
-    <h1>Create Article Page</h1>
+      <Card>
+        <CardHeader className="px-7">
+          <CardTitle className="text-4xl">Create Article</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ArticleForm />
+        </CardContent>
+        <CardFooter></CardFooter>
+      </Card>
   );
 };
 
