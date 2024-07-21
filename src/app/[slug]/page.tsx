@@ -2,12 +2,12 @@ import { FC } from "react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import articles from "@/data/articles.json";
 import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
-import { Article } from "@/interfaces";
+import { getArticleBySlug, getArticleMetadataBySlug } from "@/actions";
+import { Metadata } from "next";
 
 type Props = {
   params: {
@@ -15,11 +15,40 @@ type Props = {
   };
 };
 
-const ArticlePage: FC<Props> = ({ params: { slug } }) => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata>  => {
+  // read route params
+  const slug = params.slug;
 
-  const article = articles.find((article) => article.slug === slug) as Article;
-  
-  if (!article || !article.publishedAt) {
+  // fetch data
+  const { metadata } = await getArticleMetadataBySlug(slug);
+
+  const metaTitle = metadata?.title;
+  const metaDescription = metadata?.description;
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    robots: metadata?.robots,
+    authors: [{ name: metadata?.author }],
+    // social media
+    // openGraph: {
+    //   title: metaTitle,
+    //   description: metaDescription,
+    //   // images: ['https://example.com/image-1.jpg', 'https://example.com/image-2.jpg'],
+    //   images: [`/products/${product?.images[1]}`],
+    // },
+  }
+};
+
+//* This re-validates the page every 7 days
+export const revalidate = 604800;
+
+const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
+
+  const response = await getArticleBySlug(slug);
+  const { article } = response;
+
+  if (!article || !article?.publishedAt) {
     redirect("/");
   }
 
@@ -68,7 +97,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
                 <p className="space-x-2">
                   <span className="font-semibold">Date:</span>
                   <span className="italic text-base">
-                    { new Date(article.publishedAt).toDateString() }
+                    { article.publishedAt.toDateString() }
                   </span>
                 </p>
               </div>
@@ -120,7 +149,7 @@ const ArticlePage: FC<Props> = ({ params: { slug } }) => {
       </header>
 
       <main>
-        <Content id={article.id} content={article.content} />
+        <Content id={article.id!} content={article.content} />
       </main>
 
       <p className="text-right mb-5">

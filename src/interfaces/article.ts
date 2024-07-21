@@ -1,5 +1,5 @@
 export interface Article {
-  id: string;
+  id?: string;
   title: string;
   slug: string;
   image: string;
@@ -7,7 +7,9 @@ export interface Article {
   content: string;
   category: string;
   tags: string[];
-  publishedAt: string | null;
+  publishedAt: Date | null;
   author: string;
   robots: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

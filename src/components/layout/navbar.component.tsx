@@ -4,7 +4,7 @@ import { FaGoogle } from "react-icons/fa6";
 
 const Navbar = () => {
   return (
-    <nav className="mb-10">
+    <nav className="customContainer">
       <div className="flex items-center justify-between">
         <div className="group">
           <Link href="/" className="text-2xl font-bold group-hover:text-primary transition-colors">Quantic Coders</Link>

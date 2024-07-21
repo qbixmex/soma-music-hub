@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { FC, Fragment } from "react";
-import CodeSnippet from "@/app/articles/code-snippet.component";
+import CodeSnippet from "@/app/code-snippet.component";
 
 const Content: FC<{id: string; content: string;}> = ({ id, content }) => {
   const regex = /<code>([\s\S]*?)<\/code>/g;
