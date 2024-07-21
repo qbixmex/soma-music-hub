@@ -1,12 +1,14 @@
 import { FC, ReactNode } from "react";
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-import "./globals.css";
+import { Montserrat as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
 import Providers from "@/components/providers/providers";
-import { Navbar } from "@/components/layout";
-import clsx from "clsx";
+import "./globals.css";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -20,17 +22,12 @@ export const metadata: Metadata = {
 const RootLayout: FC<{children: ReactNode}> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={clsx([
-          montserrat.className,
-          'customContainer',
-        ])}
-      >
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        fontSans.variable,
+      )}>
         <Providers>
-          <Navbar />
-          <main>
-            {children}
-          </main>
+          {children}
         </Providers>
       </body>
     </html>
