@@ -2,7 +2,6 @@ import { FC, ReactNode } from "react";
 import { Metadata } from "next";
 import Link from "next/link"
 import {
-  Bell,
   CircleUser,
   Home,
   LineChart,
@@ -17,23 +16,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { SideNav, ToggleMode } from "./(components)";
+import { SideNav, ToggleMode } from "@/app/admin/(components)";
 
 export const metadata: Metadata = {
   title: {
