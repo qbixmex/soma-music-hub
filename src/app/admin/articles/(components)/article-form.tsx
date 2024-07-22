@@ -21,72 +21,57 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, formatISO } from "date-fns";
 import { z } from "zod";
 import { cn } from "@/lib";
-import { useState } from "react";
-
-const formSchema = z.object({
-  title: z
-    .string({ message: 'The title must be an string' })
-    .min(4, 'The title must contain at lest 8 characters long')
-    .max(150, 'The title must be less than 155 characters long'),
-  slug: z
-    .string({ message: 'The slug must be an string' })
-    .min(4, 'The slug must contain at lest 8 characters long')
-    .max(150, 'The slug must be less than 155 characters long'),
-  image: z
-    .string({ message: 'The image must be an string' })
-    .min(8, 'The image must contain at lest 8 characters long'),
-  description: z
-    .string({ message: 'The description must be an string' })
-    .min(8, 'The description must contain at lest 8 characters long'),
-  category: z
-    .string({ message: 'The category must be an string' })
-    .min(3, 'The category must contain at lest 3 characters long')
-    .max(155, 'The category must be less than 155 characters long'),
-  content: z
-    .string({ message: 'The content must be an string' })
-    .min(8, 'The content must contain at lest 8 characters long'),
-  tags: z
-    .string({ message: 'The tags must be an string' }),
-  publishedAt: z
-    .date({ required_error: 'The published at is required' })
-    .optional(),
-  robots: z
-    .enum([
-      "index, follow",
-      "noindex, follow",
-      "index, nofollow",
-      "noindex, nofollow"
-    ], { message: "Please select a valid robot" })
-    .optional(),
-});
+import articleSchema from "@/actions/articles/article.schema";
+import { createArticle } from "@/actions";
+import { formatDateForDatabase } from "@/utils";
+import { useRouter } from "next/navigation";
 
 const ArticleForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof articleSchema>>({
+    resolver: zodResolver(articleSchema),
     defaultValues: {
-      title: "How to create a react component ?",
-      slug: "how-to-create-a-react-component",
-      image: "react-component.jpg",
-      category: "react",
-      description: "Lorem ipsum dolor dolem",
-      content: "Lorem ipsum dolor dolem Lorem ipsum dolor dolem",
+      title: "",
+      slug: "",
+      image: "",
+      category: "",
+      author: "",
+      description: "",
+      content: "",
       robots: "noindex, nofollow",
-      tags: "javascript, react, typescript",
+      tags: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    const tags = values.tags.split(',');
+  const onSubmit = async (values: z.infer<typeof articleSchema>) => {
+    const formData = new FormData();
 
-    console.log("FORM VALUES", {
-      ...values,
-      tags,
-    });
+    // TODO: Add image to the form data
+    // const { image, ...articleToSave } = data;
+
+    formData.append('title', values.title);
+    formData.append('slug', values.slug);
+    formData.append('image', values.image);
+    formData.append('category', values.category);
+    formData.append('author', values.author);
+    formData.append('description', values.description);
+    formData.append('content', values.content);
+    formData.append('tags', values.tags);
+    formData.append('robots', values.robots ?? "noindex, nofollow");
+
+    if (values.publishedAt) {
+      formData.append('publishedAt', formatDateForDatabase(values.publishedAt));
+    }
+
+    const response = await createArticle(formData);
+
+    if (response.ok) {
+      router.replace('/admin/articles');
+    }
   };
 
   return (
@@ -140,6 +125,19 @@ const ArticleForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Input autoComplete="off" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="author"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Author</FormLabel>
               <FormControl>
                 <Input autoComplete="off" {...field} />
               </FormControl>
@@ -231,7 +229,7 @@ const ArticleForm = () => {
                       )}
                     >
                       {field.value ? (
-                        format(field.value, "PPP")
+                        format(field.value, "P")
                       ) : (
                         <span>Pick a date</span>
                       )}
@@ -245,9 +243,10 @@ const ArticleForm = () => {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("2000-01-01")
-                    }
+                    disabled={(date) => {
+                      const minDate = new Date("2000-01-01");
+                      return date < minDate;
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
