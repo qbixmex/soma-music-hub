@@ -5,7 +5,7 @@ import articleSchema from './article.schema';
 import { slugFormat } from '@/utils';
 import { revalidatePath } from 'next/cache';
 
-export const createArticle = async (formData: FormData) => {
+export const updateArticle = async (id: string, formData: FormData) => {
   const data = Object.fromEntries(formData);
 
   const articleParsed = articleSchema.safeParse({
@@ -32,7 +32,8 @@ export const createArticle = async (formData: FormData) => {
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
 
-      const createdArticle = await prisma.article.create({
+      const updatedArticle = await prisma.article.update({
+        where: { id },
         data: {
           ...articleToSave,
           tags: { set: tagsArray },
@@ -41,21 +42,22 @@ export const createArticle = async (formData: FormData) => {
 
       return {
         ok: true,
-        message: 'Article created successfully',
-        article: createdArticle,
+        message: 'Article updated successfully',
+        article: updatedArticle,
       }
     });
     
     // Revalidate Paths
     revalidatePath('/articles');
     revalidatePath('/admin/articles');
+    revalidatePath(`/admin/articles/${data.slug}`);
 
     return prismaTransaction;
   } catch (error) {
     console.error(error);
     return {
       ok: false,
-      message: 'Error creating a product',
+      message: 'Error updating a product',
     };
   }
 };

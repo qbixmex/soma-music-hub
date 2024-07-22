@@ -1,5 +1,6 @@
 "use client";
 
+import { FC } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,29 +22,37 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, formatISO } from "date-fns";
+import { format } from "date-fns";
 import { z } from "zod";
 import { cn } from "@/lib";
 import articleSchema from "@/actions/articles/article.schema";
-import { createArticle } from "@/actions";
-import { formatDateForDatabase } from "@/utils";
+import { createArticle, updateArticle } from "@/actions";
 import { useRouter } from "next/navigation";
+import { Article } from "@/interfaces";
+import { TimePicker } from "@/components/time-picker";
 
-const ArticleForm = () => {
+type Props = {
+  article?: Article;
+};
+
+const ArticleForm: FC<Props> = ({ article }) => {
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
+
     defaultValues: {
-      title: "",
-      slug: "",
-      image: "",
-      category: "",
-      author: "",
-      description: "",
-      content: "",
-      robots: "noindex, nofollow",
-      tags: "",
+      title: article?.title ?? "",
+      slug: article?.slug ?? "",
+      image: article?.image ?? "",
+      category: article?.category ?? "",
+      author: article?.author ?? "",
+      description: article?.description ?? "",
+      content: article?.content ?? "",
+      robots: article?.robots ?? "noindex, nofollow",
+      publishedAt: article?.publishedAt ? new Date(article.publishedAt) : undefined,
+      tags: article?.tags ? (article?.tags as string[]).join(', ') : "",
     },
   });
 
@@ -64,16 +73,18 @@ const ArticleForm = () => {
     formData.append('robots', values.robots ?? "noindex, nofollow");
 
     if (values.publishedAt) {
-      formData.append('publishedAt', formatDateForDatabase(values.publishedAt));
+      formData.append('publishedAt', values.publishedAt.toISOString());
     }
 
-    const response = await createArticle(formData);
-
-    console.log(response)
-
-    if (response.ok) {
-      router.replace('/admin/articles');
+    if (!article) {
+      await createArticle(formData);
     }
+
+    if (article && article.id) {
+      await updateArticle(article.id, formData);
+    }
+
+    router.replace('/admin/articles');
   };
 
   return (
@@ -202,7 +213,7 @@ const ArticleForm = () => {
                           )}
                         >
                           {field.value ? (
-                            format(field.value, "P")
+                            format(field.value, "PPP HH:mm:ss")
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -212,12 +223,18 @@ const ArticleForm = () => {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        className="rounded-md border"
+                        className="rounded-md border mb-4"
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
                       />
+                      <div className="p-3 border-t border-border">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
                     </PopoverContent>
                   </Popover>
                   <FormMessage />
@@ -271,7 +288,7 @@ const ArticleForm = () => {
 
         <div className="text-left md:text-right">
           <Button type="submit" variant="primary" className="w-full md:w-fit">
-            Create
+            { article ? 'Update' : 'Create' }
           </Button>
         </div>
       </form>
