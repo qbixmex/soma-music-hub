@@ -69,6 +69,8 @@ const ArticleForm = () => {
 
     const response = await createArticle(formData);
 
+    console.log(response)
+
     if (response.ok) {
       router.replace('/admin/articles');
     }
@@ -214,10 +216,6 @@ const ArticleForm = () => {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => {
-                          const minDate = new Date("2000-01-01");
-                          return date < minDate;
-                        }}
                         initialFocus
                       />
                     </PopoverContent>
