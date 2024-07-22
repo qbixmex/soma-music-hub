@@ -3,17 +3,41 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { Article } from "@/interfaces";
+import { deleteArticle } from "@/actions";
 
 type Props = {
   articles: Article[];
 };
 
 const ArticlesList: FC<Props> = ({ articles }) => {
+
+  const handleDeleteArticle = async (id: string) => {
+    const response = await deleteArticle(id);
+
+    console.log(response);
+
+    if (response.ok) {
+      // Show a success toast
+      console.log(response.message);
+    }
+  };
+
   if (articles.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1">
@@ -21,7 +45,9 @@ const ArticlesList: FC<Props> = ({ articles }) => {
           <h3 className="text-2xl font-bold tracking-tight">
             You have no articles create yet.
           </h3>
-          <Button className="mt-4" variant="primary">Create Article</Button>
+          <Link href="/admin/articles/new">
+            <Button className="mt-4" variant="primary">Create Article</Button>
+          </Link>
         </div>
       </div>
     );
@@ -86,9 +112,26 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                         <Edit />
                       </Button>
                     </Link>
-                    <Button variant="danger">
-                      <Trash2 />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="danger"><Trash2 /></Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            <p>This action cannot be undone.</p>
+                            <p> This will permanently delete your article and data from our servers will deleted forever.</p>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDeleteArticle(article.id!)}>
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))

@@ -2,7 +2,7 @@ const formatDateForDatabase = (value: Date) => {
   const year = value.getFullYear();
   const month = value.getMonth() + 1;
   const formattedMonth = month < 10 ? `0${month}` : month;
-  const day = value.getDay();
+  const day = value.getDate();
   const formattedDay = day < 10 ? `0${day}` : day;
 
   const date = new Date();
