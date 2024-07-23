@@ -1,9 +1,18 @@
 "use client";
 
 import { FC } from "react";
+import { createArticle, updateArticle } from "@/actions";
+import articleSchema from "@/actions/articles/article.schema";
+import { TimePicker } from "@/components/time-picker";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -12,24 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
+import { Article } from "@/interfaces";
+import { cn } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { z } from "zod";
-import { cn } from "@/lib";
-import articleSchema from "@/actions/articles/article.schema";
-import { createArticle, updateArticle } from "@/actions";
+import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Article } from "@/interfaces";
-import { TimePicker } from "@/components/time-picker";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 type Props = {
   article?: Article;
@@ -76,12 +77,30 @@ const ArticleForm: FC<Props> = ({ article }) => {
       formData.append('publishedAt', values.publishedAt.toISOString());
     }
 
+    let response: any;
+
     if (!article) {
-      await createArticle(formData);
+      response = await createArticle(formData);
     }
 
     if (article && article.id) {
-      await updateArticle(article.id, formData);
+      response = await updateArticle(article.id, formData);
+    }
+
+    if (!response.ok) {
+      toast.error(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-red-500 text-white",
+      });
+    }
+
+    if (response.ok) {
+      toast.success(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-green-500 text-white",
+      });
     }
 
     router.replace('/admin/articles');

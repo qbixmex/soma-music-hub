@@ -20,6 +20,7 @@ import {
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { Article } from "@/interfaces";
 import { deleteArticle } from "@/actions";
+import { toast } from "sonner";
 import { format } from "date-fns";
 
 type Props = {
@@ -31,11 +32,20 @@ const ArticlesList: FC<Props> = ({ articles }) => {
   const handleDeleteArticle = async (id: string) => {
     const response = await deleteArticle(id);
 
-    console.log(response);
+    if (!response.ok) {
+      toast.error(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-red-500 text-white",
+      });
+    }
 
     if (response.ok) {
-      // Show a success toast
-      console.log(response.message);
+      toast.success(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-green-500 text-white",
+      });
     }
   };
 
