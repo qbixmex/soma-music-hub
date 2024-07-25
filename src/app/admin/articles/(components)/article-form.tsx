@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Editor } from "../../(components)";
 
 type Props = {
   article?: Article;
@@ -103,6 +104,15 @@ const ArticleForm: FC<Props> = ({ article }) => {
       });
     }
 
+    // Redirect to articles page if article is created
+    // so if you are updating an article, you will stay on the same page. 
+    if (!article) {
+      form.reset();
+      router.replace('/admin/articles');
+    }
+  };
+
+  const onClose = () => {
     router.replace('/admin/articles');
   };
 
@@ -298,7 +308,7 @@ const ArticleForm: FC<Props> = ({ article }) => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={10} />
+                <Editor content={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -306,8 +316,18 @@ const ArticleForm: FC<Props> = ({ article }) => {
         />
 
         <div className="text-left md:text-right">
-          <Button type="submit" variant="primary" className="w-full md:w-fit">
-            { article ? 'Update' : 'Create' }
+          {article && (
+            <Button
+              type="button"
+              onClick={onClose}
+              variant="primary"
+              className="w-full md:w-fit mr-4 mb-4 md:mb-0"
+            >
+              Close
+            </Button>
+          )}
+          <Button type="submit" variant="success" className="w-full md:w-fit">
+            { article ? 'Save' : 'Create' }
           </Button>
         </div>
       </form>

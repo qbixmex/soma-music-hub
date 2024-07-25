@@ -2,8 +2,13 @@
   "cSpell.words": [
     "clsx",
     "Linkedin",
+    "lowlight",
     "lucide",
     "sonner",
-    "tailwindcss"
+    "tailwindcss",
+    "tiptap"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    "class:\\s*?[\"'`]([^\"'`]*).*?,"
   ]
 }
