@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SideNav, ToggleMode } from "@/app/admin/(components)";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -151,6 +152,7 @@ const AdminLayout: FC<{ children: ReactNode }> = ({ children }) => {
           {children}
         </main>
       </div>
+      <Toaster richColors />
     </div>
   );
 };

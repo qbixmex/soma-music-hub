@@ -3,7 +3,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
@@ -20,6 +20,8 @@ import {
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { Article } from "@/interfaces";
 import { deleteArticle } from "@/actions";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 type Props = {
   articles: Article[];
@@ -30,11 +32,20 @@ const ArticlesList: FC<Props> = ({ articles }) => {
   const handleDeleteArticle = async (id: string) => {
     const response = await deleteArticle(id);
 
-    console.log(response);
+    if (!response.ok) {
+      toast.error(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-red-500 text-white",
+      });
+    }
 
     if (response.ok) {
-      // Show a success toast
-      console.log(response.message);
+      toast.success(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-green-500 text-white",
+      });
     }
   };
 
@@ -83,7 +94,7 @@ const ArticlesList: FC<Props> = ({ articles }) => {
               articles.map((article) => (
                 <TableRow key={article.id} className="bg-secondary/50">
                   <TableCell>
-                    <span className="font-medium">How to create a React component</span>
+                    <span className="font-medium">{ article.title }</span>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <Badge className="text-xs" variant="info">
@@ -99,7 +110,7 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    { article.publishedAt?.toDateString() ?? "N/A" }
+                    { format(new Date(article.publishedAt!), "PPP") }
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-center">
                     <Link href={`/admin/articles/${article.slug}`}>

@@ -37,12 +37,7 @@ export const getArticles = async (params: Params = {
 }) :Promise<ResponseFetchArticles> =>
 {
   try {
-    const articles = await prisma.article.findMany({
-      where: {
-        // I want only published articles
-        publishedAt: params.isPublished ? { not: null } : null,
-      },
-    }) as Article[];
+    const articles = await prisma.article.findMany() as Article[];
 
     return {
       ok: true,

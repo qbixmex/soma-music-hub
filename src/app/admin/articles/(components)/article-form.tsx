@@ -1,8 +1,18 @@
 "use client";
 
+import { FC } from "react";
+import { createArticle, updateArticle } from "@/actions";
+import articleSchema from "@/actions/articles/article.schema";
+import { TimePicker } from "@/components/time-picker";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -11,39 +21,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { format, formatISO } from "date-fns";
-import { z } from "zod";
+import { Textarea } from "@/components/ui/textarea";
+import { Article } from "@/interfaces";
 import { cn } from "@/lib";
-import articleSchema from "@/actions/articles/article.schema";
-import { createArticle } from "@/actions";
-import { formatDateForDatabase } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Editor } from "../../(components)";
 
-const ArticleForm = () => {
+type Props = {
+  article?: Article;
+};
+
+const ArticleForm: FC<Props> = ({ article }) => {
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
+
     defaultValues: {
-      title: "",
-      slug: "",
-      image: "",
-      category: "",
-      author: "",
-      description: "",
-      content: "",
-      robots: "noindex, nofollow",
-      tags: "",
+      title: article?.title ?? "",
+      slug: article?.slug ?? "",
+      image: article?.image ?? "",
+      category: article?.category ?? "",
+      author: article?.author ?? "",
+      description: article?.description ?? "",
+      content: article?.content ?? "",
+      robots: article?.robots ?? "noindex, nofollow",
+      publishedAt: article?.publishedAt ? new Date(article.publishedAt) : undefined,
+      tags: article?.tags ? (article?.tags as string[]).join(', ') : "",
     },
   });
 
@@ -64,16 +75,45 @@ const ArticleForm = () => {
     formData.append('robots', values.robots ?? "noindex, nofollow");
 
     if (values.publishedAt) {
-      formData.append('publishedAt', formatDateForDatabase(values.publishedAt));
+      formData.append('publishedAt', values.publishedAt.toISOString());
     }
 
-    const response = await createArticle(formData);
+    let response: any;
 
-    console.log(response)
+    if (!article) {
+      response = await createArticle(formData);
+    }
+
+    if (article && article.id) {
+      response = await updateArticle(article.id, formData);
+    }
+
+    if (!response.ok) {
+      toast.error(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-red-500 text-white",
+      });
+    }
 
     if (response.ok) {
+      toast.success(response.message, {
+        duration: 3000,
+        position: "top-right",
+        className: "bg-green-500 text-white",
+      });
+    }
+
+    // Redirect to articles page if article is created
+    // so if you are updating an article, you will stay on the same page. 
+    if (!article) {
+      form.reset();
       router.replace('/admin/articles');
     }
+  };
+
+  const onClose = () => {
+    router.replace('/admin/articles');
   };
 
   return (
@@ -202,7 +242,7 @@ const ArticleForm = () => {
                           )}
                         >
                           {field.value ? (
-                            format(field.value, "P")
+                            format(field.value, "PPP HH:mm:ss")
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -212,12 +252,18 @@ const ArticleForm = () => {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        className="rounded-md border"
+                        className="rounded-md border mb-4"
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
                       />
+                      <div className="p-3 border-t border-border">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
                     </PopoverContent>
                   </Popover>
                   <FormMessage />
@@ -262,7 +308,7 @@ const ArticleForm = () => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={10} />
+                <Editor content={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -270,8 +316,18 @@ const ArticleForm = () => {
         />
 
         <div className="text-left md:text-right">
-          <Button type="submit" variant="primary" className="w-full md:w-fit">
-            Create
+          {article && (
+            <Button
+              type="button"
+              onClick={onClose}
+              variant="primary"
+              className="w-full md:w-fit mr-4 mb-4 md:mb-0"
+            >
+              Close
+            </Button>
+          )}
+          <Button type="submit" variant="success" className="w-full md:w-fit">
+            { article ? 'Save' : 'Create' }
           </Button>
         </div>
       </form>

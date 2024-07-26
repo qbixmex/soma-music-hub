@@ -1,3 +1,10 @@
+export type Robots =
+  | "index, follow"
+  | "noindex, follow"
+  | "index, nofollow"
+  | "noindex, nofollow"
+  | undefined;
+
 export interface Article {
   id?: string;
   title: string;
@@ -9,7 +16,7 @@ export interface Article {
   tags: string[];
   publishedAt: Date | null;
   author: string;
-  robots: string;
+  robots: Robots;
   createdAt?: Date;
   updatedAt?: Date;
 }
