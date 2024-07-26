@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { Article } from "@/interfaces";
 import { deleteArticle } from "@/actions";
 import { toast } from "sonner";
@@ -113,11 +113,6 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                     { format(new Date(article.publishedAt!), "PPP") }
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-center">
-                    <Link href={`/admin/articles/${article.slug}`}>
-                      <Button variant="info">
-                        <Eye />
-                      </Button>
-                    </Link>
                     <Link href={`/admin/articles/${article.slug}/edit/`}>
                       <Button variant="warning">
                         <Edit />

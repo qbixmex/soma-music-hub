@@ -3,7 +3,7 @@
 import { prisma } from "@/lib";
 import { revalidatePath } from "next/cache";
 
-export const deleteArticle = async (id: string) => {
+const deleteArticle = async (id: string) => {
   try {
     const articleDeleted = await prisma.article.delete({
       where: { id },
@@ -32,3 +32,5 @@ export const deleteArticle = async (id: string) => {
     };
   }
 };
+
+export default deleteArticle;
