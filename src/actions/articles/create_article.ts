@@ -5,7 +5,7 @@ import articleSchema from './article.schema';
 import { slugFormat } from '@/utils';
 import { revalidatePath } from 'next/cache';
 
-export const createArticle = async (formData: FormData) => {
+const createArticle = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
 
   const articleParsed = articleSchema.safeParse({
@@ -59,3 +59,6 @@ export const createArticle = async (formData: FormData) => {
     };
   }
 };
+
+export default createArticle;
+
