@@ -316,16 +316,14 @@ const ArticleForm: FC<Props> = ({ article }) => {
         />
 
         <div className="text-left md:text-right">
-          {article && (
-            <Button
-              type="button"
-              onClick={onClose}
-              variant="primary"
-              className="w-full md:w-fit mr-4 mb-4 md:mb-0"
-            >
-              Close
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={onClose}
+            variant="primary"
+            className="w-full md:w-fit mr-4 mb-4 md:mb-0"
+          >
+            Close
+          </Button>
           <Button type="submit" variant="success" className="w-full md:w-fit">
             { article ? 'Save' : 'Create' }
           </Button>
