@@ -55,7 +55,7 @@ const createArticle = async (formData: FormData) => {
     console.error(error);
     return {
       ok: false,
-      message: 'Error creating a product',
+      message: 'Error creating an article',
     };
   }
 };

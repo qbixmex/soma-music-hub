@@ -3,9 +3,20 @@
 import { Article } from "@/interfaces";
 import { prisma } from "@/lib";
 
+export type ArticlesForList = {
+  id: string;
+  title: string;
+  slug: string;
+  category: {
+    name: string;
+    slug: string;
+  };
+  publishedAt: Date;
+};
+
 type ResponseFetchArticles = {
   ok: boolean;
-  articles: Article[];
+  articles: ArticlesForList[];
   message: string;
 };
 
@@ -37,7 +48,20 @@ export const getArticles = async (params: Params = {
 }) :Promise<ResponseFetchArticles> =>
 {
   try {
-    const articles = await prisma.article.findMany() as Article[];
+    const articles = await prisma.article.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          }
+        },
+        publishedAt: true,
+      }
+    }) as ArticlesForList[];
 
     return {
       ok: true,
@@ -87,8 +111,17 @@ export const getArticleBySlug = async (slug: string): Promise<ResponseFetchArtic
   try {
     const article = await prisma.article.findUnique({
       where: { slug },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      }
     }) as Article | null;
-  
+
     if (!article) {
       return {
         ok: false,

@@ -57,7 +57,7 @@ const updateArticle = async (id: string, formData: FormData) => {
     console.error(error);
     return {
       ok: false,
-      message: 'Error updating a product',
+      message: 'Error updating an article',
     };
   }
 };
