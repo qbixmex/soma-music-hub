@@ -1,6 +1,11 @@
-const CategoriesPage = () => {
+import { getCategories } from "@/actions";
+import CategoriesList from "./(components)/categories-list";
+
+const CategoriesPage = async () => {
+  const { categories } = await getCategories();
+
   return (
-    <h1>Categories Page</h1>
+    <CategoriesList categories={categories} />
   );
 };
 

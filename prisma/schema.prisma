@@ -13,6 +13,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id          String @id @default(uuid())
+  name        String
+  slug        String @unique
+  description String
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  articles Article[]
+
+  // Indexes
+  @@index([name, slug])
+  @@map("categories")
+}
+
 model Article {
   id          String    @id @default(uuid())
   title       String
@@ -20,11 +38,14 @@ model Article {
   image       String
   description String    @default("no_image.jpg")
   content     String    @db.Text
-  category    String
   tags        String[]
   publishedAt DateTime? @map("published_at")
   author      String
   robots      String?   @default("noindex, nofollow")
+
+  // Relations
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
