@@ -1,6 +1,11 @@
-const UsersPage = () => {
+import { getUsers } from "@/actions";
+import UsersList from "./(components)/users-list";
+
+const UsersPage = async () => {
+  const { users } = await getUsers();
+
   return (
-    <h1>Users Page</h1>
+    <UsersList users={users} />
   );
 };
 

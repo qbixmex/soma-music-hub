@@ -124,7 +124,7 @@ const CategoryForm: FC<Props> = ({ category }) => {
               type="button"
               variant="primary"
               className="w-full md:w-fit mr-4"
-              onClick={() => router.replace('/admin/categories')}
+              onClick={onClose}
             >
               close
             </Button>

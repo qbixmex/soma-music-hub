@@ -1,9 +1,37 @@
-import { Category, ArticleSeed } from '../interfaces';
+import { Category, ArticleSeed, UserSeed } from '../interfaces';
 
 type SeedData = {
+  users: UserSeed[];
   categories: Category[];
   articles: ArticleSeed[];
 };
+
+const users: UserSeed[] = [
+  {
+    name: 'Daniel González',
+    email: 'daniel@gmail.com',
+    emailVerified: new Date('2024-07-18T02:05:38.742Z'),
+    password: 'abc123',
+    role: 'admin',
+    image: 'daniel.jpg'
+  },
+  {
+    name: 'James Smith',
+    email: 'james@gmail.com',
+    emailVerified: new Date('2024-07-18T02:08:44.224Z'),
+    password: 'abc123',
+    role: 'author',
+    image: 'james.jpg'
+  },
+  {
+    name: 'Alice Johnson',
+    email: 'alice@gmail.com',
+    emailVerified: new Date('2024-07-18T02:10:15.145Z'),
+    password: 'abc123',
+    role: 'subscriber',
+    image: 'alice.jpg'
+  },
+];
 
 const categories: Category[] = [
   {
@@ -142,6 +170,7 @@ console.log(b);
 ];
 
 export const initialData: SeedData = {
+  users,
   categories,
   articles,
 };
