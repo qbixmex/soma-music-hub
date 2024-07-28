@@ -15,10 +15,9 @@ const articleSchema = z.object({
   description: z
     .string({ message: 'The description must be an string' })
     .min(8, 'The description must contain at lest 8 characters long'),
-  category: z
+  categoryId: z
     .string({ message: 'The category must be an string' })
-    .min(3, 'The category must contain at lest 3 characters long')
-    .max(155, 'The category must be less than 155 characters long'),
+    .uuid({ message: 'The category must be an valid uuid' }),
   author: z
     .string({ message: 'The author must be an string' })
     .min(3, 'The author must contain at lest 3 characters long'),

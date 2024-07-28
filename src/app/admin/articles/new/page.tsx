@@ -6,15 +6,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ArticleForm from "../(components)/article-form";
+import { getCategories } from "@/actions";
 
-const CreateArticlePage = () => {
+const CreateArticlePage = async () => {
+
+  const { categories } = await getCategories();
+
   return (
     <Card>
       <CardHeader className="px-7">
         <CardTitle className="text-4xl">Create Article</CardTitle>
       </CardHeader>
       <CardContent>
-        <ArticleForm />
+        <ArticleForm categories={categories} />
       </CardContent>
       <CardFooter></CardFooter>
     </Card>

@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Article } from "@/interfaces";
+import { Article, Category } from "@/interfaces";
 import { cn } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -35,9 +35,10 @@ import { Editor } from "../../(components)";
 
 type Props = {
   article?: Article;
+  categories: Category[];
 };
 
-const ArticleForm: FC<Props> = ({ article }) => {
+const ArticleForm: FC<Props> = ({ article, categories }) => {
 
   const router = useRouter();
 
@@ -48,7 +49,7 @@ const ArticleForm: FC<Props> = ({ article }) => {
       title: article?.title ?? "",
       slug: article?.slug ?? "",
       image: article?.image ?? "",
-      category: article?.category ?? "",
+      categoryId: article?.category.id ?? "",
       author: article?.author ?? "",
       description: article?.description ?? "",
       content: article?.content ?? "",
@@ -67,7 +68,7 @@ const ArticleForm: FC<Props> = ({ article }) => {
     formData.append('title', values.title);
     formData.append('slug', values.slug);
     formData.append('image', values.image);
-    formData.append('category', values.category);
+    formData.append('categoryId', values.categoryId);
     formData.append('author', values.author);
     formData.append('description', values.description);
     formData.append('content', values.content);
@@ -168,12 +169,30 @@ const ArticleForm: FC<Props> = ({ article }) => {
           />
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <FormControl>
-                  <Input autoComplete="off" {...field} />
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select an a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        { categories.map((category) => (
+                          <SelectItem
+                            key={category.id}
+                            value={ category.id! }
+                          >{ category.name }</SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -316,16 +335,14 @@ const ArticleForm: FC<Props> = ({ article }) => {
         />
 
         <div className="text-left md:text-right">
-          {article && (
-            <Button
-              type="button"
-              onClick={onClose}
-              variant="primary"
-              className="w-full md:w-fit mr-4 mb-4 md:mb-0"
-            >
-              Close
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={onClose}
+            variant="primary"
+            className="w-full md:w-fit mr-4 mb-4 md:mb-0"
+          >
+            Close
+          </Button>
           <Button type="submit" variant="success" className="w-full md:w-fit">
             { article ? 'Save' : 'Create' }
           </Button>

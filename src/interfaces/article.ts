@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export type Robots =
   | "index, follow"
   | "noindex, follow"
@@ -12,7 +14,7 @@ export interface Article {
   image: string;
   description: string;
   content: string;
-  category: string;
+  category: Category;
   tags: string[];
   publishedAt: Date | null;
   author: string;

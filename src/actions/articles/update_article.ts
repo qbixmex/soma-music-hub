@@ -5,7 +5,7 @@ import articleSchema from './article.schema';
 import { slugFormat } from '@/utils';
 import { revalidatePath } from 'next/cache';
 
-export const updateArticle = async (id: string, formData: FormData) => {
+const updateArticle = async (id: string, formData: FormData) => {
   const data = Object.fromEntries(formData);
 
   const articleParsed = articleSchema.safeParse({
@@ -57,7 +57,9 @@ export const updateArticle = async (id: string, formData: FormData) => {
     console.error(error);
     return {
       ok: false,
-      message: 'Error updating a product',
+      message: 'Error updating an article',
     };
   }
 };
+
+export default updateArticle;
