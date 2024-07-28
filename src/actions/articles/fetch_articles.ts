@@ -1,11 +1,44 @@
 "use server";
 
-import { Article } from "@/interfaces";
+import { Article, Category, Robots } from "@/interfaces";
 import { prisma } from "@/lib";
+
+export type ArticlesPublic = {
+  id?: string;
+  title: string;
+  slug: string;
+  image: string;
+  description: string;
+  content: string;
+  category: Category;
+  tags: string[];
+  publishedAt: Date | null;
+  author: string;
+  robots: Robots;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+type ResponseFetchArticlesPublic = {
+  ok: boolean;
+  articles: ArticlesPublic[];
+  message: string;
+};
+
+export type ArticlesForList = {
+  id: string;
+  title: string;
+  slug: string;
+  category: {
+    name: string;
+    slug: string;
+  };
+  publishedAt: Date;
+};
 
 type ResponseFetchArticles = {
   ok: boolean;
-  articles: Article[];
+  articles: ArticlesForList[];
   message: string;
 };
 
@@ -32,17 +65,49 @@ type Params = {
   isPublished: boolean;
 };
 
+export const getArticlesPublic = async (params: Params = {
+  isPublished: true,
+}): Promise<ResponseFetchArticlesPublic> =>
+{
+  try {
+    const articles = await prisma.article.findMany({
+      include: { category: true }
+    }) as ArticlesPublic[];
+
+    return {
+      ok: true,
+      articles,
+      message: "Articles fetched successfully 👍",
+    };
+  } catch(error) {
+    console.error(error);
+    return {
+      ok: false,
+      articles: [],
+      message: "Something went wrong !, check logs for details",
+    };
+  }
+};
+
 export const getArticles = async (params: Params = {
   isPublished: true,
 }) :Promise<ResponseFetchArticles> =>
 {
   try {
     const articles = await prisma.article.findMany({
-      where: {
-        // I want only published articles
-        publishedAt: params.isPublished ? { not: null } : null,
-      },
-    }) as Article[];
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          }
+        },
+        publishedAt: true,
+      }
+    }) as ArticlesForList[];
 
     return {
       ok: true,
@@ -92,8 +157,17 @@ export const getArticleBySlug = async (slug: string): Promise<ResponseFetchArtic
   try {
     const article = await prisma.article.findUnique({
       where: { slug },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      }
     }) as Article | null;
-  
+
     if (!article) {
       return {
         ok: false,

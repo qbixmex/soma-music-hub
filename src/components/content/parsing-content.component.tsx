@@ -2,13 +2,20 @@ import crypto from "crypto";
 import { FC, Fragment } from "react";
 import CodeSnippet from "@/app/code-snippet.component";
 
-const Content: FC<{id: string; content: string;}> = ({ id, content }) => {
-  const regex = /<code>([\s\S]*?)<\/code>/g;
+type Props = {
+  id: string;
+  content: string;
+};
+
+const Content: FC<Props> = ({ id, content }) => {
+  const regex = /<pre><code class="language-([^"]+)">([\s\S]*?)<\/code><\/pre>/g;
   let lastIndex = 0;
   const elements = [];
 
-  content.replace(regex, (match, codeContent, offset) => {
-    // Add the content before the <code> tag if there's any
+  // 
+
+  content.replace(regex, (match, language, codeContent, offset) => {
+    // Add the content before the <pre> tag if there's any
     if (offset > lastIndex) {
       elements.push(
         <section
@@ -19,7 +26,13 @@ const Content: FC<{id: string; content: string;}> = ({ id, content }) => {
     }
 
     // Add the code snippet
-    elements.push(<CodeSnippet key={crypto.randomUUID()} snippet={codeContent} />);
+    elements.push(
+      <CodeSnippet
+        key={crypto.randomUUID()}
+        language={language}
+        snippet={codeContent}
+      />
+    );
 
     lastIndex = offset + match.length;
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import he from 'he';
 import { materialDark as theme } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Button } from "@/components/ui/button";
 import { FaCopy, FaCheck } from "react-icons/fa6";
@@ -14,10 +15,13 @@ import {
 
 type Props = {
   snippet: string;
+  language: string;
 };
 
-const CodeSnippet: React.FC<Readonly<Props>> = ({ snippet }) => {
+const CodeSnippet: React.FC<Readonly<Props>> = ({ snippet, language }) => {
 
+  // Decode HTML entities
+  const decodedSnippet = he.decode(snippet);
   const [ copied, setCopied ] = useState(false);
 
   const copyText = () => {
@@ -27,13 +31,13 @@ const CodeSnippet: React.FC<Readonly<Props>> = ({ snippet }) => {
   };
 
   return (
-    <section className="mb-10">
-      <div className="text-right">
+    <section className="mb-10 relative">
+      <div className="text-right absolute top-2 right-2 z-50">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="outline"
+                variant="ghost"
                 onClick={copyText}
               >
                 { copied
@@ -50,12 +54,13 @@ const CodeSnippet: React.FC<Readonly<Props>> = ({ snippet }) => {
         
       </div>
       <SyntaxHighlighter
-        language="typescript"
+        language={language}
         style={theme}
-        className="rounded-lg"
+        className="rounded-lg relative z-0"
         wrapLongLines
+        showInlineLineNumbers
       >
-        {snippet}
+        {decodedSnippet}
       </SyntaxHighlighter>
     </section>
   );

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
 import { getArticleBySlug, getArticleMetadataBySlug } from "@/actions";
 import { Metadata } from "next";
+import "./article.css";
 
 type Props = {
   params: {
@@ -53,7 +54,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
   }
 
   return (
-    <article>
+    <article className="container mx-auto px-4">
       <header>
         <Title
           heading="h1"
@@ -77,11 +78,11 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
               <div className="gap-x-3 mb-8 lg:text-left">
                 {/* Author */}
                 <Link className="no-underline group" href="#">
-                  <div className="flex gap-3 items-center mb-4 group">
+                  <div className="flex items-center gap-3 mb-4 group">
                     <div className="text-slate-300 bg-slate-800 group-hover:text-slate-200 p-3 rounded-full text-lg transition-colors">
                       <FaUser />
                     </div>
-                    <p className="italic group-hover:text-slate-200 text-slate-500 transition-colors">
+                    <p className="italic mb-0 group-hover:text-slate-200 text-slate-500 transition-colors">
                       { article.author }
                     </p>
                   </div>
@@ -90,7 +91,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                 {/* CATEGORY */}
                 <p className="space-x-2">
                   <span className="font-semibold">Category:</span>
-                  <Link href="#">{ article.category }</Link>
+                  <Link href="#">{ article.category.name }</Link>
                 </p>
 
                 {/* DATE */}
@@ -111,7 +112,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                       article.tags.map((tag, i) => (
                         <Link
                           key={`${tag}-${i}`}
-                          className="tag-link"
+                          className="text-sm font-semibold px-3 py-2 bg-slate-800 rounded"
                           href="#"
                         >
                           { tag }
@@ -153,7 +154,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
       </main>
 
       <p className="text-right mb-5">
-        <Button>
+        <Button variant="outline">
           <Link href="/articles" className="no-underline text-white">back to articles</Link>
         </Button>
       </p>
