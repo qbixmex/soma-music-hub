@@ -1,6 +1,5 @@
 import { Category, ArticleSeed } from '../interfaces';
 
-
 type SeedData = {
   categories: Category[];
   articles: ArticleSeed[];

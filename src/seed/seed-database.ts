@@ -7,6 +7,7 @@ const main = async () => {
   console.log('Clearing data 🧹');
 
   await prisma.category.deleteMany();
+
   await prisma.article.deleteMany();
 
   console.log('Deleted all tables 👍');
