@@ -2,7 +2,6 @@
 
 import { FC } from "react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -18,19 +17,18 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Edit, Trash2 } from "lucide-react";
-import { Category } from "@/interfaces";
-import { deleteCategory } from "@/actions";
+import { User } from "@/interfaces";
+import { deleteUser } from "@/actions";
 import { toast } from "sonner";
-import { format } from "date-fns";
 
 type Props = {
-  categories: Category[];
+  users: User[];
 };
 
-const ArticlesList: FC<Props> = ({ categories }) => {
+const UsersList: FC<Props> = ({ users }) => {
 
-  const handleDeleteCategory = async (id: string) => {
-    const response = await deleteCategory(id);
+  const handleDeleteUser = async (id: string) => {
+    const response = await deleteUser(id);
 
     if (!response.ok) {
       toast.error(response.message, {
@@ -49,15 +47,15 @@ const ArticlesList: FC<Props> = ({ categories }) => {
     }
   };
 
-  if (categories.length === 0) {
+  if (users.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            You have no categories create yet.
+            You have no users create yet.
           </h3>
-          <Link href="/admin/categories/new">
-            <Button className="mt-4" variant="primary">Create Category</Button>
+          <Link href="/admin/users/new">
+            <Button className="mt-4" variant="primary">Create User</Button>
           </Link>
         </div>
       </div>
@@ -68,12 +66,12 @@ const ArticlesList: FC<Props> = ({ categories }) => {
     <Card>
       <CardHeader className="px-7">
         <CardTitle className="text-4xl">
-          Categories
+          Users
         </CardTitle>
         <CardDescription className="text-right">
-        <Link href="/admin/categories/new">
+        <Link href="/admin/users/new">
           <Button variant="primary" className="w-full md:w-fit">
-            Add a Category
+            Add a User
           </Button>
         </Link>
         </CardDescription>
@@ -83,22 +81,26 @@ const ArticlesList: FC<Props> = ({ categories }) => {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead className="hidden sm:table-cell">Description</TableHead>
+              <TableHead className="hidden sm:table-cell">Email</TableHead>
+              <TableHead className="hidden sm:table-cell">Role</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {
-              categories.map((category) => (
-                <TableRow key={category.id} className="bg-secondary/50">
+              users.map((user) => (
+                <TableRow key={user.id} className="bg-secondary/50">
                   <TableCell>
-                    <span className="font-medium">{ category.name }</span>
+                    <span className="font-medium">{ user.name }</span>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <span className="font-medium">{ category.description }</span>
+                    <span className="font-medium">{ user.email }</span>
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <span className="font-medium capitalize">{ user.role }</span>
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-end">
-                    <Link href={`/admin/categories/${category.slug}/edit/`}>
+                    <Link href={`/admin/users/${user.id}/edit`}>
                       <Button variant="warning">
                         <Edit />
                       </Button>
@@ -112,12 +114,14 @@ const ArticlesList: FC<Props> = ({ categories }) => {
                           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                           <AlertDialogDescription>
                             <p>This action cannot be undone.</p>
-                            <p> This will permanently delete your article and data from our servers will deleted forever.</p>
+                            <p> This will permanently delete this user and data from our servers will deleted forever.</p>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteCategory(category.id!)}>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteUser(user.id!)}
+                          >
                             Continue
                           </AlertDialogAction>
                         </AlertDialogFooter>
@@ -134,4 +138,4 @@ const ArticlesList: FC<Props> = ({ categories }) => {
   );
 };
 
-export default ArticlesList;
+export default UsersList;
