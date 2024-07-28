@@ -1,7 +1,29 @@
 "use server";
 
-import { Article } from "@/interfaces";
+import { Article, Category, Robots } from "@/interfaces";
 import { prisma } from "@/lib";
+
+export type ArticlesPublic = {
+  id?: string;
+  title: string;
+  slug: string;
+  image: string;
+  description: string;
+  content: string;
+  category: Category;
+  tags: string[];
+  publishedAt: Date | null;
+  author: string;
+  robots: Robots;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+type ResponseFetchArticlesPublic = {
+  ok: boolean;
+  articles: ArticlesPublic[];
+  message: string;
+};
 
 export type ArticlesForList = {
   id: string;
@@ -41,6 +63,30 @@ type ResponseFetchArticleMetadata = {
 
 type Params = {
   isPublished: boolean;
+};
+
+export const getArticlesPublic = async (params: Params = {
+  isPublished: true,
+}): Promise<ResponseFetchArticlesPublic> =>
+{
+  try {
+    const articles = await prisma.article.findMany({
+      include: { category: true }
+    }) as ArticlesPublic[];
+
+    return {
+      ok: true,
+      articles,
+      message: "Articles fetched successfully 👍",
+    };
+  } catch(error) {
+    console.error(error);
+    return {
+      ok: false,
+      articles: [],
+      message: "Something went wrong !, check logs for details",
+    };
+  }
 };
 
 export const getArticles = async (params: Params = {
