@@ -1,22 +1,143 @@
-import { Article } from "../interfaces";
+import { Category, ArticleSeed } from '../interfaces';
 
-interface SeedData {
-  articles: Article[];
-}
+
+type SeedData = {
+  categories: Category[];
+  articles: ArticleSeed[];
+};
+
+const categories: Category[] = [
+  {
+    name: "Javascript",
+    slug: "javascript",
+    description: "JavaScript is a high-level, interpreted programming language that conforms to the ECMAScript specification. It is a language that is also characterized as dynamic, weakly typed, prototype-based, and multi-paradigm.",
+  },
+  {
+    name: "React",
+    slug: "react",
+    description: "React is an open-source, front end, JavaScript library for building user interfaces or UI components. It is maintained by Facebook and a community of individual developers and companies.",
+  },
+  {
+    name: "Typescript",
+    slug: "typescript",
+    description: "TypeScript is a strict syntactical superset of JavaScript that adds optional static typing to the language. TypeScript is designed for the development of large applications and transcompiles to JavaScript.",
+  },
+];
+
+const articles: ArticleSeed[] = [
+  {
+    title: "Understanding the Basic Data Types in JavaScript",
+    slug: "javascript-data-types",
+    image: "javascript-datatypes.jpg",
+    description: "Learn about the fundamental data types in JavaScript and how they are used in programming.",
+    category: "Javascript",
+    content: `\
+<p><b>JavaScript</b> is one of the most popular programming languages, has several fundamental data types that every developer should understand.</p>
+<p>These data types are essential for building robust applications and managing data effectively.</p>
+<p>Let's dive into the basic data types in JavaScript.</p>
+<h2>Primitive Data Types</h2>
+<p>Primitive data types are the simplest types of data and are immutable, meaning their values cannot be changed.</p>
+<h3>Number</h3>
+<p>Represents both integers and floating-point numbers.</p>
+<pre><code class="language-javascript">const regex = /ab+c/;
+console.log(regex);\n
+// output -&gt; /ab+c/</code></pre>
+<h2>String</h2>
+<p>Represents a sequence of characters.</p>
+<pre><code class="language-js">const title = "James Web discover life in a new new planet";
+console.log(title);\n
+// output -&gt; James Web discover life in a new new planet</code></pre>
+<h3>Boolean</h3>
+<p>Represents a logical entity and can have two values: true or false.</p>
+<pre><code class="language-javascript">let isEnabled = true;
+console.log(isEnabled);\n
+// output -&gt; true</code></pre>
+<h3>Undefined</h3>
+<p>Is a data type where the value is undefined but the variable is assigned.</p>
+<p>You can assign explicitly undefined but unnecessary because javascript can assign undefined explicitly.</p>
+<pre><code class="language-javascript">// Explicit
+let title = undefined;console.log(title);\n
+// output -&gt; undefined\n
+// Implicit
+let age;
+console.log(age);\n
+// output -&gt; undefined</code></pre>
+<h3>Null</h3>
+<p>Represents the intentional absence of any object value.</p><pre><code class="language-javascript">let address = null;
+console.log(address);\n
+// output -&gt; null</code></pre>
+<h3>Symbol</h3>
+<p>It is commonly used as key in an object.</p><pre><code class="language-javascript">const PRICE = Symbol('price');
+const object = { [PRICE]: 14.25 };
+console.log(object[PRICE]);\n
+// output -&gt; 14.25</code></pre>
+<h2>BigInt</h2>
+<p>Introduced in ES2020, represents integers with arbitrary precision.</p>
+<pre><code class="language-javascript">let bigInt = 1234567890123456789012345678901234567890n;
+console.log(bigInt);\n
+// output -&gt; 1234567890123456789012345678901234567890n</code></pre>
+<h3>Non-Primitive Data Types</h3>
+<p>These types are objects and can store collections of data and more complex entities.</p>
+<h3>Object</h3>
+<p>An unordered collection of key-value pairs.</p>
+<pre><code class="language-javascript">const person = { name: "Stan Lee", age: 75 };
+console.log(person.name);
+console.log(person["age"]);\n
+// ==== output ====
+// Stan Lee
+// 75</code></pre>
+<h3>Array</h3>
+<p>A special type of object that holds an ordered list of values.</p>
+<pre><code class="language-javascript">// ==== Numbers Array ====
+const numbers = [ 1, 2, 3 ];
+console.log(numbers);\n
+// output -&gt; [ 1, 2, 3 ]\n
+// ==== Strings Array ====
+const colors = [ 'red', 'green', 'blue' ];
+console.log(colors);\n
+// output -&gt; [ 'red', 'green', 'blue' ]</code></pre>
+<h3>Function</h3>
+<p>A special type of object that can be invoked.</p>
+<pre><code class="language-javascript">function greeting(name) {
+  console.log("Hello" + " " + name);
+}\n
+greeting("Daniel"); }\n
+// output -&gt; Hello Daniel\n
+// ==== Arrow Function Syntax ====
+const greeting = (name) =&gt; {
+  console.log(\`Hello \${name}\`);
+};\n
+// output -&gt; Hello Daniel</code></pre>
+<h3>Date</h3>
+<p>Represents dates and times.</p>
+<pre><code class="language-javascript">const date = new Date();
+console.log(date);\n
+// ==== output example ====
+// 2024-07-14T14:02:25.324Z</code></pre>
+<h3>RegExp</h3>
+<p>Represents regular expressions, used for pattern matching.</p>
+<pre><code class="language-javascript">const regex = /ab+c/;
+console.log(regex);\n
+// output -&gt; /ab+c/</code></pre>
+<h3>Special Cases</h3>
+<p>NaN (not a number) is a special numeric value that represents an undefined or un-representable value in arithmetic operations.</p>
+<p>Infinity and -Infinity: Special numeric values representing positive and negative infinity.</p>
+<pre><code class="language-javascript">// ==== NaN ====
+console.log(5 * 'abc');\n
+// output -&gt; NaN\n
+// ==== Infinity ====
+const a = 2 / 0; console.log(a);\n
+// output -&gt; Infinity const b = -2 / 0;\n
+console.log(b);\n
+// output -&gt; -Infinity</code></pre>`,
+    tags: ["javascript"],
+    author: "Daniel González",
+    publishedAt: "2024-07-15T14:02:25.324Z",
+    robots: "index, follow"
+  },
+];
 
 export const initialData: SeedData = {
-  articles: [
-    {
-      title: "Understanding the Basic Data Types in JavaScript",
-      slug: "javascript-data-types",
-      image: "javascript-datatypes.jpg",
-      description: "Learn about the fundamental data types in JavaScript and how they are used in programming.",
-      content: "<p class=\"mb-5\">JavaScript is one of the most popular programming languages, has several fundamental data types that every developer should understand.</p><p class=\"mb-5\">These data types are essential for building robust applications and managing data effectively. Let&apos;s dive into the basic data types in JavaScript.</p><h2 class=\"h2 mb-5\">Primitive Data Types</h2><p class=\"mb-5\">Primitive data types are the simplest types of data and are immutable, meaning their values cannot be changed.</p><h3 class=\"h3 mb-5\">Number</h3><p class=\"mb-5\">Represents both integers and floating-point numbers.</p><code>const regex = /ab+c/;\n\nconsole.log(regex);\n\n// output -> /ab+c/</code><h3 class=\"h3 mb-5\">String</h3><p class=\"mb-5\">Represents a sequence of characters.</p><code>const title = \"James Web discover life in a new new planet\";\nconsole.log(title);\n// output -> James Web discover life in a new new planet</code><h3 class=\"h3 mb-5\">Boolean</h3><p class=\"mb-5\">Represents a logical entity and can have two values: true or false.</p><code>let isEnabled = true;\nconsole.log(isEnabled);\n// output -> true</code><h3 class=\"h3 mb-5\">Undefined</h3><p class=\"mb-5\">Is a data type where the value is undefined but the variable is assigned.</p><p class=\"mb-5\">You can assign explicitly undefined but unnecessary because javascript can assign undefined explicitly.</p><code>// Explicit\nlet title = undefined;\nconsole.log(title);\n// output -> undefined\n\n// Implicit\nlet age;\nconsole.log(age);\n// output -> undefined</code><h3 class=\"h3 mb-5\">Null</h3><p class=\"mb-5\">Represents the intentional absence of any object value.</p><code>let address = null;\nconsole.log(address);\n// output -> null</code><h3 class=\"h3 mb-5\">Symbol</h3><p class=\"mb-5\">It is commonly used as key in an object.</p><code>const PRICE = Symbol('price');\nconst object = { [PRICE]: 14.25, };\nconsole.log(object[PRICE]);// output -> 14.25</code><h3 class=\"h3 mb-5\">BigInt</h3><p class=\"mb-5\">Introduced in ES2020, represents integers with arbitrary precision.</p><code>let bigInt = 1234567890123456789012345678901234567890n;\nconsole.log(bigInt);\n// output -> 1234567890123456789012345678901234567890n</code><h3 class=\"subheading mb-5\">Non-Primitive Data Types</h3><p class=\"mb-5\"> These types are objects and can store collections of data and more complex entities.</p><h3 class=\"h3 mb-5\">Object</h3><p class=\"mb-5\">An unordered collection of key-value pairs.</p><code>const person = {\n\tname: \"Stan Lee\",\n\tage: 75\n};\n\nconsole.log(person.name);\nconsole.log(person[\"age\"]);\n\n// ==== output ====\n// Stan Lee\n// 75</code><h3 class=\"h3 mb-5v\">Array</h3><p class=\"mb-5\">A special type of object that holds an ordered list of values.</p><code>// ==== Numbers Array ====\n\nconst numbers = [ 1, 2, 3 ];\nconsole.log(numbers);\n\n// output -> [ 1, 2, 3 ]\n\n// ==== Strings Array ====\n\nconst colors = [ 'red', 'green', 'blue' ];\nconsole.log(colors);\n\n// output -> [ 'red', 'green', 'blue' ]</code><h3 class=\"h3 mb-5\">Function</h3><p class=\"mb-5\">A special type of object that can be invoked.</p><code>function greeting(name) {\n\tconsole.log(\"Hello\" + \" \" + name); }\n\tgreeting(\"Daniel\");\n}\n\n// output -> Hello Daniel\n\n// ==== Arrow Function Syntax ====\n\nconst greeting = (name) => {\n\tconsole.log(`Hello ${name}`);\n};\n\n// output -> Hello Daniel</code><h3 class=\"h3 mb-5\">Date</h3><p class=\"mb-5\">Represents dates and times.</p><code>const date = new Date();\nconsole.log(date);\n\n// ==== output example ====\n// 2024-07-14T14:02:25.324Z</code><h3 class=\"h3 mb-5\">RegExp</h3><p class=\"mb-5\">Represents regular expressions, used for pattern matching.</p><code>const regex = /ab+c/;\nconsole.log(regex);\n\n// output -> /ab+c/</code><h3 class=\"h3 mb-5\">Special Cases</h3><p class=\"mb-5\">NaN <span class=\"text-sm italic\">(not a number)</span> is a special numeric value that represents an <span class=\"font-semibold italic\">undefined</span> or <span class=\"font-semibold italic\">un-representable</span> value in arithmetic operations. </p><p class=\"mb-5\">Infinity and -Infinity: Special numeric values representing positive and negative infinity.</p><code>// ==== NaN ====\nconsole.log(5 * 'abc');\n\n// output -> NaN\n\n// ==== Infinity ====\nconst a = 2 / 0;\nconsole.log(a);\n\n// output -> Infinity\n\nconst b = -2 / 0;\nconsole.log(b);\n\n// output -> -Infinity</code>",
-      category: "javascript",
-      tags: ["javascript"],
-      author: "Daniel González",
-      publishedAt: new Date("2024-07-15T14:02:25.324Z"),
-      robots: "index, follow"
-    }
-  ],
+  categories,
+  articles,
 };

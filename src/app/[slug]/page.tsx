@@ -91,7 +91,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                 {/* CATEGORY */}
                 <p className="space-x-2">
                   <span className="font-semibold">Category:</span>
-                  <Link href="#">{ article.category }</Link>
+                  <Link href="#">{ article.category.name }</Link>
                 </p>
 
                 {/* DATE */}

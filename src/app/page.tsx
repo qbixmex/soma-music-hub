@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Title } from "@/components/text";
-import { getArticles } from "@/actions";
+import { getArticlesPublic } from "@/actions";
 
 const HomePage = async () => {
 
-  const { articles } = await getArticles();
+  const { articles } = await getArticlesPublic();
 
   return (
     <div className="container mx-auto px-4">
