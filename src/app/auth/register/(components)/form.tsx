@@ -166,7 +166,7 @@ const RegisterForm = () => {
           <div>
             <p className="flex justify-center gap-3 mt-5">
               <span>Do you have an account ?</span>
-              <Link href="/login" className="text-blue-400 hover:underline">Sign In</Link>
+              <Link href="/auth/login" className="text-blue-400 hover:underline">Sign In</Link>
             </p>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import LoginForm from "./(components)/form";
 
 export const metadata: Metadata = {
-  title: "Quantic Coders - Login",
+  title: "Login",
   description: "Login Page",
   robots: "noindex, nofollow",
 };
