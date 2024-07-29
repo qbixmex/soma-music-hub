@@ -25,7 +25,9 @@ const Editor: FC<Props> = ({ content, onChange }) => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure(),
+      StarterKit.configure({
+        paragraph: false,
+      }),
       Underline,
       CustomBold,
       Paragraph,
@@ -35,6 +37,7 @@ const Editor: FC<Props> = ({ content, onChange }) => {
     onUpdate: ({ editor }) => {
       handleChange(editor.getHTML());
     },
+    immediatelyRender: false,
   });
 
   if (!editor) {
