@@ -106,6 +106,8 @@ export const authConfig: NextAuthConfig = {
           return isLoggedIn && isAdmin;
         case nextUrl.pathname.startsWith('/admin/profile'):
           return isLoggedIn;
+        case nextUrl.pathname.startsWith('/'):
+          return true;
         default:
           return false;
       }
