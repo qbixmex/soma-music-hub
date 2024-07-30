@@ -1,11 +1,13 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { createUser, updateUser } from "@/actions";
-import userSchema from "@/actions/users/users.schema";
 import { Button } from "@/components/ui/button";
+import userCreateSchema from "@/actions/users/users_create.schema";
+import userUpdateSchema from "@/actions/users/users_update.schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { Input } from "@/components/ui/input";
 import { User } from "@/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +16,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Role } from "@/actions/users/role.enum";
+import { Switch } from "@/components/ui/switch";
+
+type FormValues = z.infer<typeof userUpdateSchema> | z.infer<typeof userCreateSchema>;
 
 type Props = {
   user?: User;
@@ -23,8 +28,12 @@ const UserForm: FC<Props> = ({ user }) => {
 
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof userSchema>>({
-    resolver: zodResolver(userSchema),
+  const [isPasswordVisible, setPasswordIsVisible] = useState(false);
+  const [isPasswordConfirmVisible, setPasswordConfirmIsVisible] = useState(false);
+  const [editPassword, setEditPassword] = useState(false);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(user ? userUpdateSchema : userCreateSchema),
 
     defaultValues: {
       name: user?.name ?? "",
@@ -35,7 +44,25 @@ const UserForm: FC<Props> = ({ user }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof userSchema>) => {
+  useEffect(() => {
+    if (!user) {
+      setEditPassword(true);
+    }
+  }, [user]);
+
+  const handlePasswordVisibly = () => {
+    return setPasswordIsVisible(prev => !prev);
+  };
+
+  const handlePasswordConfirmVisibly = () => {
+    return setPasswordConfirmIsVisible(prev => !prev);
+  };
+
+  const handleDisplayChangePassword = () => {
+    setEditPassword(prev => !prev);
+  };
+
+  const onSubmit = async (values: FormValues) => {
     const formData = new FormData();
 
     formData.append('name', values.name);
@@ -113,23 +140,6 @@ const UserForm: FC<Props> = ({ user }) => {
           />
           <FormField
             control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    autoComplete="off"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="role"
             render={({ field }) => (
               <FormItem>
@@ -168,6 +178,62 @@ const UserForm: FC<Props> = ({ user }) => {
               </FormItem>
             )}
           />
+          {user && (
+            <div className="flex gap-x-3">
+              <p className="text-sm">change password</p>
+              <Switch onCheckedChange={handleDisplayChangePassword} />
+            </div>
+          )}
+          {editPassword && (
+            <>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={isPasswordVisible ? "text" : "password"}
+                          autoComplete="off"
+                          {...field}
+                        />
+                        {(isPasswordVisible)
+                          ? <IoEye onClick={handlePasswordVisibly} className="absolute top-0 right-3 bottom-0 m-auto cursor-pointer" />
+                          : <IoEyeOff onClick={handlePasswordVisibly} className="absolute top-0 right-3 bottom-0 m-auto cursor-pointer" />
+                        }
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="passwordConfirmation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type={isPasswordConfirmVisible ? "text" : "password"}
+                          autoComplete="off"
+                          {...field}
+                        />
+                        {(isPasswordConfirmVisible)
+                          ? <IoEye onClick={handlePasswordConfirmVisibly} className="absolute top-0 right-3 bottom-0 m-auto cursor-pointer" />
+                          : <IoEyeOff onClick={handlePasswordConfirmVisibly} className="absolute top-0 right-3 bottom-0 m-auto cursor-pointer" />
+                        }
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
           <div className="text-left md:text-right">
             <Button
               type="button"

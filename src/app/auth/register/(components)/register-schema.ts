@@ -9,8 +9,8 @@ const loginSchema = z.object({
     .min(8, 'The password must contain at lest 8 characters long')
     .max(24, 'The password must be less than 24 characters long'),
   passwordConfirmation: z.string()
-    .min(8, 'The password must contain at lest 8 characters long')
-    .max(24, 'The password must be less than 24 characters long'),
+    .min(8, 'The password confirmation must contain at lest 8 characters long')
+    .max(24, 'The password confirmation must be less than 24 characters long'),
 }).refine(data => data.password === data.passwordConfirmation, {
   message: 'The passwords must match',
   path: ['passwordConfirmation'],
