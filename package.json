@@ -1,6 +1,6 @@
 {
   "name": "quantic_coders",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,6 +21,7 @@
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tailwindcss/typography": "^0.5.13",
     "@tiptap/extension-code": "^2.5.6",
