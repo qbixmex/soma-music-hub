@@ -13,7 +13,7 @@ export type ArticlesPublic = {
   category: Category;
   tags: string[];
   publishedAt: Date | null;
-  author: string;
+  author: { name: string };
   robots: Robots;
   createdAt?: Date;
   updatedAt?: Date;
@@ -33,6 +33,9 @@ export type ArticlesForList = {
     name: string;
     slug: string;
   };
+  author: {
+    name: string;
+  },
   publishedAt: Date;
 };
 
@@ -40,6 +43,10 @@ type ResponseFetchArticles = {
   ok: boolean;
   articles: ArticlesForList[];
   message: string;
+};
+
+type ArticleDB = {
+
 };
 
 type ResponseFetchArticle = {
@@ -71,7 +78,14 @@ export const getArticlesPublic = async (params: Params = {
 {
   try {
     const articles = await prisma.article.findMany({
-      include: { category: true }
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          }
+        },
+      }
     }) as ArticlesPublic[];
 
     return {
@@ -99,14 +113,19 @@ export const getArticles = async (params: Params = {
         id: true,
         title: true,
         slug: true,
+        publishedAt: true,
         category: {
           select: {
             name: true,
             slug: true,
           }
         },
-        publishedAt: true,
-      }
+        author: {
+          select: {
+            name: true,
+          }
+        },
+      },
     }) as ArticlesForList[];
 
     return {
@@ -128,6 +147,20 @@ export const getArticleById = async (id: string): Promise<ResponseFetchArticle> 
   try {
     const article = await prisma.article.findUnique({
       where: { id },
+      include: {
+        category: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+      }
     }) as Article | null;
   
     if (!article) {
@@ -163,6 +196,12 @@ export const getArticleBySlug = async (slug: string): Promise<ResponseFetchArtic
             id: true,
             name: true,
             slug: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       }
