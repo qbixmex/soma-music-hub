@@ -17,7 +17,10 @@ export interface Article {
   category: Category;
   tags: string[];
   publishedAt: Date | null;
-  author: string;
+  author: {
+    id: string;
+    name: string
+  };
   robots: Robots;
   createdAt?: Date;
   updatedAt?: Date;

@@ -13,8 +13,6 @@ const authenticate = async (formData: FormData): Promise<string> => {
       redirect: false,
     });
 
-    revalidatePath('/admin/dashboard', 'layout');
-
     return 'Signin Successful 👍';
   } catch (error) {
     if (error instanceof AuthError) {

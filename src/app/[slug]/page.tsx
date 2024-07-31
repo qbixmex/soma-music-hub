@@ -83,7 +83,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                       <FaUser />
                     </div>
                     <p className="italic mb-0 group-hover:text-slate-200 text-slate-500 transition-colors">
-                      { article.author }
+                      { article.author.name }
                     </p>
                   </div>
                 </Link>

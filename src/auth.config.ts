@@ -96,6 +96,8 @@ export const authConfig: NextAuthConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isAdmin = auth?.user.role === 'admin';
+      const isAuthor = auth?.user.role === 'author';
+      const isSubscriber = auth?.user.role === 'subscriber';
 
       switch (true) {
         case nextUrl.pathname.startsWith('/admin/dashboard'):
@@ -103,9 +105,9 @@ export const authConfig: NextAuthConfig = {
         case nextUrl.pathname.startsWith('/admin/categories'):
         case nextUrl.pathname.startsWith('/admin/articles'):
         case nextUrl.pathname.startsWith('/admin/tags'):
-          return isLoggedIn && isAdmin;
+          return isLoggedIn && isAdmin || isLoggedIn && isAuthor;
         case nextUrl.pathname.startsWith('/admin/profile'):
-          return isLoggedIn;
+          return isLoggedIn && isAdmin || isLoggedIn && isAuthor || isLoggedIn && isSubscriber;
         case nextUrl.pathname.startsWith('/'):
           return true;
         default:

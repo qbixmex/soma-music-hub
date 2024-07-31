@@ -83,6 +83,7 @@ const ArticlesList: FC<Props> = ({ articles }) => {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead className="hidden sm:table-cell">Category</TableHead>
+              <TableHead className="hidden sm:table-cell">author</TableHead>
               <TableHead className="hidden sm:table-cell">Status</TableHead>
               <TableHead className="hidden sm:table-cell">Published Date</TableHead>
               <TableHead className="text-center">Actions</TableHead>
@@ -101,6 +102,11 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
+                    <Badge className="text-xs" variant="info">
+                      { article.author.name }
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
                     <Badge
                       className="text-xs"
                       variant={article.publishedAt ? "success" : "warning"}
@@ -109,7 +115,10 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    { format(new Date(article.publishedAt!), "PPP") }
+                    {article.publishedAt
+                      ? format(new Date(article.publishedAt), "PPP")
+                      : 'none'
+                    }
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-center">
                     <Link href={`/admin/articles/${article.slug}/edit/`}>
