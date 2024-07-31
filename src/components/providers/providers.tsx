@@ -1,8 +1,9 @@
+import { FC, ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-import { FC, ReactNode } from "react";
 
-const Providers: FC<{children: ReactNode}> = (props) => {
+const Providers: FC<{children: ReactNode}> = async ({ children }) => {
+
   return (
     <SessionProvider>
       <ThemeProvider
@@ -11,10 +12,11 @@ const Providers: FC<{children: ReactNode}> = (props) => {
         enableSystem
         disableTransitionOnChange
       >
-        {props.children}
+        {children}
       </ThemeProvider>
     </SessionProvider>
   );
+
 };
 
 export default Providers;

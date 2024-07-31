@@ -20,12 +20,12 @@ const articleSchema = z.object({
     .uuid({ message: 'The category must be an valid uuid' }),
   author: z
     .string({ message: 'The author must be an string' })
-    .min(3, 'The author must contain at lest 3 characters long'),
+    .min(3, 'The author must contain at lest 3 characters long')
+    .or(z.literal('')),
   content: z
     .string({ message: 'The content must be an string' })
     .min(8, 'The content must contain at lest 8 characters long'),
-  tags: z
-    .string({ message: 'The tags must be an string' }),
+  tags: z .string({ message: 'The tags must be an string' }),
   publishedAt: z
     .date({ required_error: 'The published at is required' })
     .optional(),

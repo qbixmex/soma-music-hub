@@ -22,8 +22,9 @@ const updateArticle = async (id: string, formData: FormData) => {
     };
   }
 
-  const articleToSave = articleParsed.data;
+  const { author, ...articleToSave } = articleParsed.data;
   articleToSave.slug = slugFormat(articleToSave.slug);
+
 
   const tagsArray = articleToSave.tags
     .split(",")
@@ -37,6 +38,7 @@ const updateArticle = async (id: string, formData: FormData) => {
         data: {
           ...articleToSave,
           tags: { set: tagsArray },
+          authorId: author,
         },
       });
 

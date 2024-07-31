@@ -18,7 +18,6 @@ import clsx from "clsx";
 
 import loginSchema from "./login-schema";
 import { authenticate } from "@/actions";
-import { revalidatePath } from "next/cache";
 
 const LoginForm = () => {
   const [ isPending, setIsPending ] = useState(false);
