@@ -40,15 +40,14 @@ model Article {
   content     String    @db.Text
   tags        String[]
   publishedAt DateTime? @map("published_at")
-  author      String
   robots      String?   @default("noindex, nofollow")
 
   // Relations
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -74,7 +73,15 @@ model User {
   role          Role      @default(subscriber)
   image         String?
 
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   // Relationship
   articles Article[]
+
+  // Indexes
+  @@index([email, role])
+  // Remap table name
   @@map("users")
 }

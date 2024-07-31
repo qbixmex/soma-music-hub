@@ -1,11 +1,17 @@
 "use server";
 
-import { Category } from "@/interfaces";
+import { Category, Author } from "@/interfaces";
 import { prisma } from "@/lib";
 
 type ResponseFetchCategories = {
   ok: boolean;
   categories: Category[];
+  message: string;
+};
+
+type ResponseFetchAuthors= {
+  ok: boolean;
+  authors: Author[];
   message: string;
 };
 
@@ -45,6 +51,31 @@ export const getCategories = async (): Promise<ResponseFetchCategories> =>
     };
   }
 };
+
+export const getAuthors = async (): Promise<ResponseFetchAuthors> =>
+  {
+    try {
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      }) as Author[];
+
+      return {
+        ok: true,
+        authors: users,
+        message: "Authors fetched successfully 👍",
+      };
+    } catch(error) {
+      console.error(error);
+      return {
+        ok: false,
+        authors: [],
+        message: "Something went wrong !, check logs for details",
+      };
+    }
+  };
 
 export const getCategoryById = async (id: string): Promise<ResponseFetchCategory> => {
   try {

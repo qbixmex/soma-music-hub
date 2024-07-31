@@ -1,6 +1,6 @@
 {
   "name": "quantic_coders",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -33,6 +33,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "he": "^1.2.0",
