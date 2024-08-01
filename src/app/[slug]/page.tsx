@@ -66,7 +66,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
           <div className="lg:flex lg:gap-8">
             <div className="lg:w-1/2">
               <Image
-                src={`/images/javascript-datatypes.jpg`}
+                src={`/images/${article.image}`}
                 className="rounded-lg object-cover mb-5 md:object-contain lg:order-first"
                 alt={article.title}
                 width={1280}
