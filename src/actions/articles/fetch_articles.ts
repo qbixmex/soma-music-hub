@@ -229,6 +229,52 @@ export const getArticleById = async (id: string): Promise<ResponseFetchArticle> 
   }
 };
 
+export const getArticleBySlugPublic = async (slug: string)
+: Promise<ResponseFetchArticle> => {
+
+  try {
+    const article = await prisma.article.findUnique({
+      where: { slug },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      }
+    }) as Article | null;
+
+    if (!article) {
+      return {
+        ok: false,
+        article: null,
+        message: "Article not found with slug: " + slug,
+      };
+    }
+
+    return {
+      ok: true,
+      article,
+      message: "Article fetched successfully 👍",
+    };
+  } catch(error) {
+    console.error(error);
+    return {
+      ok: false,
+      article: null,
+      message: "Something went wrong !, check logs for details",
+    };
+  }
+};
+
 type EditParams = {
   slug: string;  
   authorId: string;
