@@ -91,15 +91,9 @@ export const authConfig: NextAuthConfig = {
       const isLoggedIn = !!auth?.user;
 
       switch (true) {
-        case nextUrl.pathname.startsWith('/admin/dashboard'):
-        case nextUrl.pathname.startsWith('/admin/users'):
-        case nextUrl.pathname.startsWith('/admin/categories'):
-        case nextUrl.pathname.startsWith('/admin/articles'):
-        case nextUrl.pathname.startsWith('/admin/tags'):
-        case nextUrl.pathname.startsWith('/admin/profile'):
+        case nextUrl.pathname.startsWith('/admin'):
           return isLoggedIn;
-        case nextUrl.pathname.startsWith('/auth/login'):
-        case nextUrl.pathname.startsWith('/auth/register'):
+        case nextUrl.pathname.startsWith('/auth'):
           return isLoggedIn && Response.redirect(new URL('/admin/dashboard', nextUrl));
         case nextUrl.pathname.startsWith('/'):
           return true;
