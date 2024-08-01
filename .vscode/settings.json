@@ -8,7 +8,8 @@
     "Signin",
     "sonner",
     "tailwindcss",
-    "tiptap"
+    "tiptap",
+    "topbar"
   ],
   "tailwindCSS.experimental.classRegex": [
     "class:\\s*?[\"'`]([^\"'`]*).*?,"

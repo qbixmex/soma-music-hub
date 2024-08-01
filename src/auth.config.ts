@@ -71,12 +71,6 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    redirect({ url, baseUrl }) {
-      if (!url.startsWith(baseUrl)) {
-        return baseUrl;
-      }
-      return url;
-    },
     jwt({ token, user }) {
       // If we have a user authenticated,
       if (user) {
@@ -108,6 +102,9 @@ export const authConfig: NextAuthConfig = {
           return isLoggedIn && isAdmin || isLoggedIn && isAuthor;
         case nextUrl.pathname.startsWith('/admin/profile'):
           return isLoggedIn && isAdmin || isLoggedIn && isAuthor || isLoggedIn && isSubscriber;
+        case nextUrl.pathname.startsWith('/auth/login'):
+        case nextUrl.pathname.startsWith('/auth/register'):
+          return isLoggedIn && Response.redirect(new URL('/admin/dashboard', nextUrl));
         case nextUrl.pathname.startsWith('/'):
           return true;
         default:
