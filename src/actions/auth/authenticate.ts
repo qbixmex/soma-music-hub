@@ -3,14 +3,13 @@
 import { signIn } from '@/auth.config';
 // import { sleep } from '@/utils'; // Debugging
 import { AuthError } from 'next-auth';
-import { revalidatePath } from 'next/cache';
  
 const authenticate = async (formData: FormData): Promise<string> => {
   try {
     // await sleep(2); // Debugging
     await signIn('credentials',{
       ...Object.fromEntries(formData),
-      redirect: false,
+      redirect: true,
     });
 
     return 'Signin Successful 👍';

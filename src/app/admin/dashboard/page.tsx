@@ -2,7 +2,7 @@ import { LatestArticles } from "./(components)";
 
 const DashboardPage = () => {
   return (
-    <LatestArticles />
+  <LatestArticles />
   );
 };
 
