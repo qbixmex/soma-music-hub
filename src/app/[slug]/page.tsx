@@ -6,7 +6,7 @@ import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
-import { getArticleBySlug, getArticleMetadataBySlug } from "@/actions";
+import { getArticleBySlugPublic, getArticleMetadataBySlug } from "@/actions";
 import { Metadata } from "next";
 import "./article.css";
 import PublicLayout from "../(public)/public.layout";
@@ -47,7 +47,7 @@ export const revalidate = 604800;
 
 const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
 
-  const response = await getArticleBySlug(slug);
+  const response = await getArticleBySlugPublic(slug);
   const { article } = response;
 
   if (!article || !article?.publishedAt) {
