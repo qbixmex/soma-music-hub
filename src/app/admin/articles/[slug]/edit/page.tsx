@@ -8,8 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ArticleForm from "../../(components)/article-form";
-import { getArticleBySlug, getCategories } from "@/actions";
+import { getArticleBySlug, getCategories, getAuthors } from "@/actions";
 import { redirect } from "next/navigation";
+import { auth } from "@/auth.config";
 
 type Props = {
   params: {
@@ -19,8 +20,15 @@ type Props = {
 
 const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
 
-  const { article } = await getArticleBySlug(slug);
+  const session = await auth();
+
+  const { article } = await getArticleBySlug({
+    slug,
+    role: session?.user.role!,
+    authorId: session?.user.id!,
+  });
   const { categories } = await getCategories();
+  const { authors } = await getAuthors();
 
   if (!article) {
     redirect('/admin/articles');
@@ -32,7 +40,11 @@ const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
         <CardTitle className="text-4xl">Edit Article</CardTitle>
       </CardHeader>
       <CardContent>
-        <ArticleForm article={article} categories={categories} />
+        <ArticleForm
+          article={article}
+          categories={categories}
+          authors={authors}
+        />
       </CardContent>
       <CardFooter></CardFooter>
     </Card>

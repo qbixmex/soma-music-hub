@@ -27,6 +27,8 @@ const Editor: FC<Props> = ({ content, onChange }) => {
     extensions: [
       StarterKit.configure({
         paragraph: false,
+        bold: false,
+        codeBlock: false,
       }),
       Underline,
       CustomBold,

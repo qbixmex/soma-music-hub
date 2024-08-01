@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { CircleUser, Menu, Search } from "lucide-react";
@@ -15,27 +14,8 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { logout } from "@/actions";
 import { ToggleMode } from "@/app/admin/(components)";
 import MobileSidebar from "./mobile-sidebar";
-import { useEffect, useState } from "react";
-import { Role } from "@/interfaces";
-
-type AuthenticatedUser = {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-}
-
 
 const TopNavigation = () => {
-
-  const { data: session } = useSession();
-  const [ user, setUser ] = useState<AuthenticatedUser|null>(null);
-
-  useEffect(() => {
-    if (session?.user) {
-      setUser(session.user as AuthenticatedUser);
-    }
-  }, [session]);
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -74,7 +54,7 @@ const TopNavigation = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem className="cursor-pointer">
-            <Link href="/admin/profile">Profile ({ user?.name })</Link>
+            <Link href="/admin/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

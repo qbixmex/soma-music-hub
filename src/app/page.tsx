@@ -1,66 +1,32 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Title } from "@/components/text";
 import { getArticlesPublic } from "@/actions";
+import PublicLayout from "./(public)/public.layout";
+import { Title } from "@/components/text";
+import { Article } from "./(public)/components";
 
 const HomePage = async () => {
 
-  const { articles } = await getArticlesPublic();
+  const { articles } = await getArticlesPublic({ isPublished: true });
 
   return (
-    <div className="container mx-auto px-4">
-      <Title heading="h1" className="text-5xl font-bold mb-10">
-        Quantic Coders
-      </Title>
+    <PublicLayout>
+      <div className="container px-5 sm:mx-auto sm:px-6 md:px-8 lg:px-10 xl:px-20">
+        <Title heading="h1" className="text-5xl font-bold mb-10">
+          Quantic Coders Blog
+        </Title>
 
-      {articles.length === 0 && (
-        <p className="paragraph">No articles found.</p>
-      )}
+        {articles.length === 0 && (
+          <p className="paragraph">No articles found.</p>
+        )}
 
-      <section className="flex flex-col gap-y-5">
-        {
-          articles.length > 0 && articles.map((article) => (
-            <article key={article.id} className="grid grid-cols-1 gap-5 md:grid-cols-4">
-              <div className="col-span-4 lg:col-span-2">
-                <Link
-                  href={`/articles/${article.slug}`}
-                  title={`read more about "${article.title}"`}
-                >
-                  <Image
-                    src={`/images/${article.image}`}
-                    className="w-[640px] h-[360px] rounded-lg object-cover"
-                    alt={article.title}
-                    width={640}
-                    height={360}
-                  />
-                </Link>
-              </div>
-              <div className="col-span-4 lg:col-span-2 flex flex-col gap-5 justify-center">
-                <Link href={`/${article.slug}`}>
-                  <Title
-                    heading="h2"
-                    className="font-semibold text-3xl lg:text-5xl hover:underline"
-                  >{article.title}</Title>
-                </Link>
-                <p className="paragraph mb-5">{article.description}</p>
-                <p className="text-right">
-                  <Link
-                    href={`/${article.slug}`}
-                    title={`read more about "${article.title}"`}
-                  >
-                    <Button variant="outline">
-                      read more
-                    </Button>
-                  </Link>
-                </p>
-              </div>
-            </article>
-          ))
-        }
-      </section>
-    </div>
+        <section className="grid grid-cols-1 sm:gap-x-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          { articles && articles.map((article) => (
+            <Article key={article.id} article={article} />
+          ))}
+        </section>
+      </div>
+    </PublicLayout>
   );
+
 };
 
 export default HomePage;

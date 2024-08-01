@@ -9,6 +9,7 @@ import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } fr
 import { getArticleBySlug, getArticleMetadataBySlug } from "@/actions";
 import { Metadata } from "next";
 import "./article.css";
+import PublicLayout from "../(public)/public.layout";
 
 type Props = {
   params: {
@@ -16,7 +17,7 @@ type Props = {
   };
 };
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata>  => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   // read route params
   const slug = params.slug;
 
@@ -54,112 +55,114 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
   }
 
   return (
-    <article className="container mx-auto px-4">
-      <header>
-        <Title
-          heading="h1"
-          className="font-bold text-3xl mb-5 lg:text-4xl"
-        >{article.title}</Title>
+    <PublicLayout>
+      <article className="container px-5 sm:mx-auto sm:px-6 md:px-8 lg:px-10 xl:px-20">
+        <header>
+          <Title
+            heading="h1"
+            className="font-bold text-3xl mb-5 lg:text-4xl"
+          >{article.title}</Title>
 
-        <div className="lg:flex lg:gap-8">
-          <div className="lg:w-1/2">
-            <Image
-              src={`/images/${article.image}`}
-              className="rounded-lg object-cover mb-5 md:object-contain lg:order-first"
-              alt={article.title}
-              width={1280}
-              height={720}
-              priority
-            />
-          </div>
-
-          <section className="lg:w-1/2">
-            <div className="block sm:grid sm:grid-cols-2 lg:block">
-              <div className="gap-x-3 mb-8 lg:text-left">
-                {/* Author */}
-                <Link className="no-underline group" href="#">
-                  <div className="flex items-center gap-3 mb-4 group">
-                    <div className="text-slate-300 bg-slate-800 group-hover:text-slate-200 p-3 rounded-full text-lg transition-colors">
-                      <FaUser />
-                    </div>
-                    <p className="italic mb-0 group-hover:text-slate-200 text-slate-500 transition-colors">
-                      { article.author }
-                    </p>
-                  </div>
-                </Link>
-
-                {/* CATEGORY */}
-                <p className="space-x-2">
-                  <span className="font-semibold">Category:</span>
-                  <Link href="#">{ article.category.name }</Link>
-                </p>
-
-                {/* DATE */}
-                <p className="space-x-2">
-                  <span className="font-semibold">Date:</span>
-                  <span className="italic text-base">
-                    { article.publishedAt.toDateString() }
-                  </span>
-                </p>
-              </div>
-
-              <div className="mb-8 lg:justify-start">
-                {/* TAGS */}
-                <div className="mb-4">
-                  <p className="font-semibold mb-4">Tags</p>
-                  <div className="flex flex-wrap gap-2">
-                    {
-                      article.tags.map((tag, i) => (
-                        <Link
-                          key={`${tag}-${i}`}
-                          className="text-sm font-semibold px-3 py-2 bg-slate-800 rounded"
-                          href="#"
-                        >
-                          { tag }
-                        </Link>
-                      ))
-                    }
-                  </div>
-                </div>
-
-                {/* SHARE SOCIAL MEDIA */}
-                <div className="mb-8 lg:justify-start">
-                  <p className="font-semibold mb-3">Share Article</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Link className="social-link" href="#" title="Share on Facebook">
-                      <FaFacebook />
-                    </Link>
-                    <Link className="social-link" href="#" title="Share on Twitter">
-                      <FaTwitter />
-                    </Link>
-                    <Link className="social-link" href="#" title="Share on Instagram">
-                      <FaInstagram />
-                    </Link>
-                    <Link className="social-link" href="#" title="Share on Linkedin">
-                      <FaLinkedin />
-                    </Link>
-                    <Link className="social-link" href="#" title="Share on Email">
-                      <FaEnvelope />
-                    </Link>
-                  </div>
-                </div>
-              </div>
+          <div className="lg:flex lg:gap-8">
+            <div className="lg:w-1/2">
+              <Image
+                src={`/images/javascript-datatypes.jpg`}
+                className="rounded-lg object-cover mb-5 md:object-contain lg:order-first"
+                alt={article.title}
+                width={1280}
+                height={720}
+                priority
+              />
             </div>
-          </section>
-        </div>
-      </header>
 
-      <main>
-        <Content id={article.id!} content={article.content} />
-      </main>
+            <section className="lg:w-1/2">
+              <div className="block sm:grid sm:grid-cols-2 lg:block">
+                <div className="gap-x-3 mb-8 lg:text-left">
+                  {/* Author */}
+                  <Link className="no-underline group" href="#">
+                    <div className="flex items-center gap-3 mb-4 group">
+                      <div className="text-slate-300 bg-slate-800 group-hover:text-slate-200 p-3 rounded-full text-lg transition-colors">
+                        <FaUser />
+                      </div>
+                      <p className="italic mb-0 group-hover:text-slate-200 text-slate-500 transition-colors">
+                        {article.author.name}
+                      </p>
+                    </div>
+                  </Link>
 
-      <p className="text-right mb-5">
-        <Button variant="outline">
-          <Link href="/articles" className="no-underline text-white">back to articles</Link>
-        </Button>
-      </p>
+                  {/* CATEGORY */}
+                  <p className="space-x-2">
+                    <span className="font-semibold">Category:</span>
+                    <Link href="#">{article.category.name}</Link>
+                  </p>
 
-    </article>
+                  {/* DATE */}
+                  <p className="space-x-2">
+                    <span className="font-semibold">Date:</span>
+                    <span className="italic text-base">
+                      {article.publishedAt.toDateString()}
+                    </span>
+                  </p>
+                </div>
+
+                <div className="mb-8 lg:justify-start">
+                  {/* TAGS */}
+                  <div className="mb-4">
+                    <p className="font-semibold mb-4">Tags</p>
+                    <div className="flex flex-wrap gap-2">
+                      {
+                        article.tags.map((tag, i) => (
+                          <Link
+                            key={`${tag}-${i}`}
+                            className="text-sm font-semibold px-3 py-2 bg-slate-800 rounded"
+                            href="#"
+                          >
+                            {tag}
+                          </Link>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  {/* SHARE SOCIAL MEDIA */}
+                  <div className="mb-8 lg:justify-start">
+                    <p className="font-semibold mb-3">Share Article</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Link className="social-link" href="#" title="Share on Facebook">
+                        <FaFacebook />
+                      </Link>
+                      <Link className="social-link" href="#" title="Share on Twitter">
+                        <FaTwitter />
+                      </Link>
+                      <Link className="social-link" href="#" title="Share on Instagram">
+                        <FaInstagram />
+                      </Link>
+                      <Link className="social-link" href="#" title="Share on Linkedin">
+                        <FaLinkedin />
+                      </Link>
+                      <Link className="social-link" href="#" title="Share on Email">
+                        <FaEnvelope />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </header>
+
+        <main>
+          <Content id={article.id!} content={article.content} />
+        </main>
+
+        <p className="text-right mb-5">
+          <Button variant="outline">
+            <Link href="/articles" className="no-underline text-white">back to articles</Link>
+          </Button>
+        </p>
+
+      </article>
+    </PublicLayout>
   );
 
 };

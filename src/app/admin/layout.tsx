@@ -5,8 +5,6 @@ import Link from "next/link"
 import { SideNav, TopNavigation } from "@/app/admin/(components)";
 import { Toaster } from "@/components/ui/sonner";
 
-// import { auth } from "@/auth.config";
-
 export const metadata: Metadata = {
   title: {
     template: '%s | Admin',
@@ -18,9 +16,6 @@ export const metadata: Metadata = {
 };
 
 const AdminLayout: FC<{ children: ReactNode }> = async ({ children }) => {
-
-  // const session = await auth();
-
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -40,11 +35,11 @@ const AdminLayout: FC<{ children: ReactNode }> = async ({ children }) => {
       </div>
       <div className="flex flex-col">
         <TopNavigation />
+        <Toaster richColors />
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           {children}
         </main>
       </div>
-      <Toaster richColors />
     </div>
   );
 };

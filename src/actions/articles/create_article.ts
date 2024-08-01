@@ -4,9 +4,14 @@ import { prisma } from '@/lib';
 import articleSchema from './article.schema';
 import { slugFormat } from '@/utils';
 import { revalidatePath } from 'next/cache';
+import { auth } from '@/auth.config';
 
 const createArticle = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
+
+  const session = await auth();
+
+  console.log("USER ID:", session?.user.id);
 
   const articleParsed = articleSchema.safeParse({
     ...data,
@@ -22,7 +27,7 @@ const createArticle = async (formData: FormData) => {
     };
   }
 
-  const articleToSave = articleParsed.data;
+  const { author: _, ...articleToSave} = articleParsed.data;
   articleToSave.slug = slugFormat(articleToSave.slug);
 
   const tagsArray = articleToSave.tags
@@ -32,9 +37,12 @@ const createArticle = async (formData: FormData) => {
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
 
+      const authorId = `${session?.user.id}`;
+
       const createdArticle = await prisma.article.create({
         data: {
           ...articleToSave,
+          authorId,
           tags: { set: tagsArray },
         },
       });
@@ -52,7 +60,7 @@ const createArticle = async (formData: FormData) => {
 
     return prismaTransaction;
   } catch (error) {
-    console.error(error);
+    console.error((error as Error)?.message.toString());
     return {
       ok: false,
       message: 'Error creating an article',

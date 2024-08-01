@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { createArticle, updateArticle } from "@/actions";
 import articleSchema from "@/actions/articles/article.schema";
 import { TimePicker } from "@/components/time-picker";
@@ -22,25 +22,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Article, Category } from "@/interfaces";
+import { Article, Category, Author } from "@/interfaces";
 import { cn } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Editor } from "../../(components)";
+import { useSession } from "next-auth/react";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
 type Props = {
-  article?: Article;
   categories: Category[];
+  article?: Article;
+  authors?: Author[];
 };
 
-const ArticleForm: FC<Props> = ({ article, categories }) => {
+const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
 
   const router = useRouter();
+
+  const { data: session } = useSession({ required: true });
+  const [authorOpen, setAuthorOpen] = useState(false)
 
   const form = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
@@ -50,12 +57,12 @@ const ArticleForm: FC<Props> = ({ article, categories }) => {
       slug: article?.slug ?? "",
       image: article?.image ?? "",
       categoryId: article?.category.id ?? "",
-      author: article?.author ?? "",
       description: article?.description ?? "",
+      author: article?.author.id ?? "",
       content: article?.content ?? "",
       robots: article?.robots ?? "noindex, nofollow",
       publishedAt: article?.publishedAt ? new Date(article.publishedAt) : undefined,
-      tags: article?.tags ? (article?.tags as string[]).join(', ') : "",
+      tags: article?.tags ? article?.tags.join(', ') : "",
     },
   });
 
@@ -184,11 +191,11 @@ const ArticleForm: FC<Props> = ({ article, categories }) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        { categories.map((category) => (
+                        {categories.map((category) => (
                           <SelectItem
                             key={category.id}
-                            value={ category.id! }
-                          >{ category.name }</SelectItem>
+                            value={category.id!}
+                          >{category.name}</SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>
@@ -201,24 +208,78 @@ const ArticleForm: FC<Props> = ({ article, categories }) => {
         </div>
 
         <div className="block md:grid md:grid-cols-2 md:gap-x-4">
-          <FormField
-            control={form.control}
-            name="author"
-            render={({ field }) => (
-              <FormItem className="mb-4 md:mb-0">
-                <FormLabel>Author</FormLabel>
-                <FormControl>
-                  <Input autoComplete="off" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {session?.user.role === 'admin' && authors.length > 0 && (
+            <FormField
+              control={form.control}
+              name="author"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Author</FormLabel>
+                  <Popover open={authorOpen} onOpenChange={setAuthorOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-[200px] justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? authors.find((author) => author.id === field.value)?.name
+                            : "select an author"
+                          }
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search author ..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>No author found.</CommandEmpty>
+                          <CommandGroup>
+                            {authors.map((author) => (
+                              <CommandItem
+                                key={author.id}
+                                value={author.name}
+                                onSelect={() => {
+                                  form.setValue("author", author.id);
+                                  setAuthorOpen(false);
+                                }}
+                                disabled={author.id === field.value}
+                              >
+                                {author.name}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    author.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
           <FormField
             control={form.control}
             name="tags"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="mb-4 md:mb-0">
                 <FormLabel>Tags</FormLabel>
                 <FormControl>
                   <Input {...field} autoComplete="off" />
@@ -344,7 +405,7 @@ const ArticleForm: FC<Props> = ({ article, categories }) => {
             Close
           </Button>
           <Button type="submit" variant="success" className="w-full md:w-fit">
-            { article ? 'Save' : 'Create' }
+            {article ? 'Save' : 'Create'}
           </Button>
         </div>
       </form>

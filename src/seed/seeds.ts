@@ -8,10 +8,10 @@ type SeedData = {
 
 const users: UserSeed[] = [
   {
-    name: 'Daniel González',
+    name: 'Daniel Gonzalez',
     email: 'daniel@gmail.com',
     emailVerified: new Date('2024-07-18T02:05:38.742Z'),
-    password: 'abc123',
+    password: '12345678',
     role: 'admin',
     image: 'daniel.jpg'
   },
@@ -19,7 +19,7 @@ const users: UserSeed[] = [
     name: 'James Smith',
     email: 'james@gmail.com',
     emailVerified: new Date('2024-07-18T02:08:44.224Z'),
-    password: 'abc123',
+    password: '12345678',
     role: 'author',
     image: 'james.jpg'
   },
@@ -27,7 +27,7 @@ const users: UserSeed[] = [
     name: 'Alice Johnson',
     email: 'alice@gmail.com',
     emailVerified: new Date('2024-07-18T02:10:15.145Z'),
-    password: 'abc123',
+    password: '12345678',
     role: 'subscriber',
     image: 'alice.jpg'
   },
@@ -163,7 +163,7 @@ console.log(b);
 
 // output: -Infinity</code></pre>`,
     tags: ["javascript"],
-    author: "Daniel González",
+    author: "Daniel Gonzalez",
     publishedAt: "2024-07-15T14:02:25.324Z",
     robots: "index, follow"
   },

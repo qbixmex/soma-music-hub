@@ -7,8 +7,8 @@ const main = async () => {
 
   console.log('Clearing data 🧹');
 
-  await prisma.user.deleteMany();
   await prisma.article.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.category.deleteMany();
 
   console.log('Deleted all tables 👍');
@@ -66,13 +66,13 @@ const main = async () => {
   );
 
   articles.forEach(async (article) => {
-    const { category, ...attributesRest } = article;
+    const { category, author, ...attributesRest } = article;
 
     await prisma.article.create({
       data: {
         ...attributesRest,
         categoryId: categoriesMap[category.toLowerCase()],
-        userId: usersMap[article.author.toLowerCase()],
+        authorId: usersMap[author.toLowerCase()],
       }
     });
   });

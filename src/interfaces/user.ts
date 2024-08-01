@@ -11,6 +11,14 @@ export interface User {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface AuthenticatedUser {
+  id: string;
+  name: string;
+  email: string;
+  role?: Role;
+}
+
 export interface UserSeed {
   name: string;
   email: string;
@@ -18,4 +26,9 @@ export interface UserSeed {
   password: string;
   role: Role;
   image: string;
+}
+
+export interface Author {
+  id: string;
+  name: string;
 }

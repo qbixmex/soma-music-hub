@@ -2,6 +2,8 @@
 
 import { signOut } from "@/auth.config";
 
-const logout = async () => signOut();
+const logout = async () => {
+  await signOut({ redirectTo: "/auth/login" });
+};
 
 export default logout;
