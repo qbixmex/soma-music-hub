@@ -10,6 +10,7 @@ import {
 import ArticleForm from "../../(components)/article-form";
 import { getArticleBySlug, getCategories, getAuthors } from "@/actions";
 import { redirect } from "next/navigation";
+import { auth } from "@/auth.config";
 
 type Props = {
   params: {
@@ -19,7 +20,13 @@ type Props = {
 
 const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
 
-  const { article } = await getArticleBySlug(slug);
+  const session = await auth();
+
+  const { article } = await getArticleBySlug({
+    slug,
+    role: session?.user.role!,
+    authorId: session?.user.id!,
+  });
   const { categories } = await getCategories();
   const { authors } = await getAuthors();
 

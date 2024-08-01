@@ -5,7 +5,7 @@ import { Article } from "./(public)/components";
 
 const HomePage = async () => {
 
-  const { articles } = await getArticlesPublic();
+  const { articles } = await getArticlesPublic({ isPublished: true });
 
   return (
     <PublicLayout>
