@@ -3,7 +3,7 @@
 import { Article, Category, Robots } from "@/interfaces";
 import { prisma } from "@/lib";
 
-export type ArticlesPublic = {
+export type ArticlePublic = {
   id?: string;
   title: string;
   slug: string;
@@ -21,7 +21,7 @@ export type ArticlesPublic = {
 
 type ResponseFetchArticlesPublic = {
   ok: boolean;
-  articles: ArticlesPublic[];
+  articles: ArticlePublic[];
   message: string;
 };
 
@@ -86,7 +86,7 @@ export const getArticlesPublic = async (params: Params = {
           }
         },
       }
-    }) as ArticlesPublic[];
+    }) as ArticlePublic[];
 
     return {
       ok: true,

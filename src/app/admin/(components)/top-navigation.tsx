@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import { CircleUser, Menu, Search } from "lucide-react";
@@ -17,8 +16,6 @@ import { ToggleMode } from "@/app/admin/(components)";
 import MobileSidebar from "./mobile-sidebar";
 
 const TopNavigation = () => {
-
-  const { data: session } = useSession({ required: true });
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -57,7 +54,7 @@ const TopNavigation = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem className="cursor-pointer">
-            <Link href="/admin/profile">Profile ({ session?.user?.name })</Link>
+            <Link href="/admin/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
