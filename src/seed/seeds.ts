@@ -55,7 +55,8 @@ const articles: ArticleSeed[] = [
   {
     title: "Understanding the Basic Data Types in JavaScript",
     slug: "javascript-data-types",
-    image: "javascript-datatypes.jpg",
+    imageUrl: "javascript-datatypes.jpg",
+    imagePublicId: "80021e2a7e964ceca85dca0c4be47cef",
     description: "Learn about the fundamental data types in JavaScript and how they are used in programming.",
     category: "Javascript",
     content: `\

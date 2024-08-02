@@ -25,7 +25,7 @@ const articleSchema = z.object({
       return !file || file.size <= MAX_UPLOAD_SIZE;
     }, 'File size must be less than 1MB')
     .refine((file) => {
-      return file ? ACCEPTED_FILE_TYPES.includes(file.type) : true;
+      return file && ACCEPTED_FILE_TYPES.includes(file.type);
     }, 'File must be a PNG'),
   description: z
     .string({ message: 'The description must be an string' })
