@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth.config";
 import { prisma } from "@/lib";
+import deleteImage from "@/utils/delete-image";
 import { revalidatePath } from "next/cache";
 
 const deleteArticle = async ( articleId: string ) => {
@@ -32,6 +33,9 @@ const deleteArticle = async ( articleId: string ) => {
     const articleDeleted = await prisma.article.delete({
       where: whereClause,
     });
+
+    // Delete image from cloudinary.
+    await deleteImage(articleDeleted.imagePublicId);
 
     if (!articleDeleted) {
       return {

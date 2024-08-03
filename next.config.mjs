@@ -3,13 +3,10 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     remotePatterns: [
-      // Example
-      // {
-      //   protocol: 'https',
-      //   hostname: 's3.amazonaws.com',
-      //   port: '',
-      //   pathname: '/my-bucket/**',
-      // },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
 };
