@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib';
 import articleSchema from './article.schema';
-import { slugFormat } from '@/utils';
+import { slugFormat, uploadImage } from '@/utils';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/auth.config';
 
@@ -10,8 +10,6 @@ const createArticle = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
 
   const session = await auth();
-
-  console.log("USER ID:", session?.user.id);
 
   const articleParsed = articleSchema.safeParse({
     ...data,
@@ -27,8 +25,15 @@ const createArticle = async (formData: FormData) => {
     };
   }
 
-  const { author: _, ...articleToSave} = articleParsed.data;
+  const { author: _, image, ...articleToSave} = articleParsed.data;
   articleToSave.slug = slugFormat(articleToSave.slug);
+
+  // Upload Image to third-party storage (cloudinary).
+  const imageUploaded = await uploadImage(image!, 'articles');
+  
+  if (!imageUploaded) {
+    throw 'Error uploading image to cloudinary';
+  }
 
   const tagsArray = articleToSave.tags
     .split(",")
@@ -43,6 +48,8 @@ const createArticle = async (formData: FormData) => {
         data: {
           ...articleToSave,
           authorId,
+          imageUrl: imageUploaded.secureUrl,
+          imagePublicId: imageUploaded.publicId,
           tags: { set: tagsArray },
         },
       });
