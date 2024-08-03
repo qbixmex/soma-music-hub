@@ -115,8 +115,6 @@ export const getArticlesPublic = async (params: PublicParams = {}):
       }
     }) as ArticlePublic[];
 
-    console.log(articles);
-
     return {
       ok: true,
       articles,
