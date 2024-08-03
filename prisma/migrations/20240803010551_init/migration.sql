@@ -19,7 +19,7 @@ CREATE TABLE "articles" (
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "image_url" TEXT NOT NULL,
-    "image_public_url" TEXT NOT NULL,
+    "image_public_id" TEXT NOT NULL,
     "description" TEXT NOT NULL DEFAULT 'no_image.jpg',
     "content" TEXT NOT NULL,
     "tags" TEXT[],
