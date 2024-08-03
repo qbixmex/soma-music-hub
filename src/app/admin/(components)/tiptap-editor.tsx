@@ -10,9 +10,9 @@ import Bold from '@tiptap/extension-bold';
 import "./tiptap-editor.css";
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 
-import { all, createLowlight } from 'lowlight';
+import { common, createLowlight } from 'lowlight';
 
-const lowlight = createLowlight(all);
+const lowlight = createLowlight(common);
 
 type Props = {
   content: string;

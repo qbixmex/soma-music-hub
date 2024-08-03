@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import { FC, Fragment } from "react";
 import CodeSnippet from "@/app/code-snippet.component";
 
@@ -19,7 +18,7 @@ const Content: FC<Props> = ({ id, content }) => {
     if (offset > lastIndex) {
       elements.push(
         <section
-          key={crypto.randomUUID()}
+          key={id}
           dangerouslySetInnerHTML={{ __html: content.slice(lastIndex, offset) }}
         />
       );
@@ -28,7 +27,7 @@ const Content: FC<Props> = ({ id, content }) => {
     // Add the code snippet
     elements.push(
       <CodeSnippet
-        key={crypto.randomUUID()}
+        key={id}
         language={language}
         snippet={codeContent}
       />
@@ -44,7 +43,7 @@ const Content: FC<Props> = ({ id, content }) => {
   if (lastIndex < content.length) {
     elements.push(
       <section
-        key={crypto.randomUUID()}
+        key={id}
         dangerouslySetInnerHTML={{ __html: content.slice(lastIndex) }}
       />
     );

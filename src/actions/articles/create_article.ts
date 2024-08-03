@@ -44,7 +44,7 @@ const createArticle = async (formData: FormData) => {
 
       const authorId = `${session?.user.id}`;
 
-      const createdArticle = await prisma.article.create({
+      const createdArticle = await transaction.article.create({
         data: {
           ...articleToSave,
           authorId,
