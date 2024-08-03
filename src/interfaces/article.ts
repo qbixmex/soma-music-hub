@@ -11,7 +11,8 @@ export interface Article {
   id?: string;
   title: string;
   slug: string;
-  image: string;
+  imageUrl: string;
+  imagePublicId: string;
   description: string;
   content: string;
   category: Category;
@@ -29,7 +30,8 @@ export interface Article {
 export interface ArticleSeed {
   title: string;
   slug: string;
-  image: string;
+  imageUrl: string;
+  imagePublicId: string;
   description: string;
   content: string;
   category: string;
