@@ -16,6 +16,8 @@ import {
   Redo,
   Code,
   CodeXml,
+  ArrowUpAZ,
+  Pilcrow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -57,8 +59,18 @@ const Toolbar: FC<Props> = ({ editor }) => {
       <Button
         type="button"
         size="icon"
+        variant={ editor?.isActive('paragraph') ? "info" : 'secondary'}
+        onClick={() => editor?.chain().focus().setParagraph().run()}
+      >
+        <Pilcrow size={16} />
+      </Button>
+      <Button
+        type="button"
+        size="icon"
         variant={ editor?.isActive('bulletList') ? "info" : 'secondary'}
-        onClick={() => editor?.chain().focus().toggleBulletList().run()}
+        onClick={() => {
+          editor?.chain().focus().toggleBulletList().run();
+        }}
       >
         <List size={16} />
       </Button>
@@ -69,6 +81,15 @@ const Toolbar: FC<Props> = ({ editor }) => {
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
       >
         <ListOrdered size={16} />
+      </Button>
+      <Button
+        type="button"
+        size="icon"
+        variant={ editor?.isActive('listItem') ? "info" : 'secondary'}
+        onClick={() => editor.chain().focus().liftListItem('listItem').run()}
+        disabled={!editor.can().liftListItem('listItem')}
+      >
+        <ArrowUpAZ size={16} />
       </Button>
       <Button
         type="button"
@@ -132,7 +153,9 @@ const Toolbar: FC<Props> = ({ editor }) => {
         variant={editor?.isActive('codeBlock') ? 'info': "secondary"}
         onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
       >
-        { editor?.isActive('codeBlock') ? <CodeXml size={16} /> : <Code size={16} /> }
+        { editor?.isActive('codeBlock')
+          ? <CodeXml size={16} />
+          : <Code size={16} /> }
       </Button>
     </div>
   );
