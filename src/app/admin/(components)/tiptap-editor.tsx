@@ -5,10 +5,11 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Paragraph from '@tiptap/extension-paragraph';
+import ListItem from '@tiptap/extension-list-item';
 import Toolbar from "./tiptap-toolbar";
 import Bold from '@tiptap/extension-bold';
-import "./tiptap-editor.css";
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import "./tiptap-editor.css";
 
 import { common, createLowlight } from 'lowlight';
 
@@ -29,15 +30,19 @@ const Editor: FC<Props> = ({ content, onChange }) => {
         paragraph: false,
         bold: false,
         codeBlock: false,
+        listItem: false,
       }),
       Underline,
       CustomBold,
       Paragraph,
       CodeBlockLowlight.configure({ lowlight }),
+      ListItem,
     ],
     content,
     onUpdate: ({ editor }) => {
-      handleChange(editor.getHTML());
+      const html = editor.getHTML();
+      // console.log(html); Debug
+      handleChange(html);
     },
     immediatelyRender: false,
   });
@@ -66,6 +71,6 @@ const CustomBold = Bold.extend({
     // return ['strong', HTMLAttributes, 0]
     return ['b', HTMLAttributes, 0]
   },
-})
+});
 
 export default Editor;

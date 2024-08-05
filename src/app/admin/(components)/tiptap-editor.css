@@ -17,6 +17,23 @@
     @apply mb-5 leading-normal;
   }
 
+  ul, ol {
+    margin-left: 2rem !important;
+    margin-bottom: 1rem;
+  }
+
+  ul li {
+    list-style: disc;
+  }
+
+  ol li {
+    list-style: decimal;
+  }
+
+  li p {
+    margin-bottom: 0 !important;
+  }
+
   pre {
     background: #222;
     border-radius: 0.5rem;
