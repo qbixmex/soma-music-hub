@@ -32,7 +32,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Editor } from "../../(components)";
 import { useSession } from "next-auth/react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -58,15 +57,15 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
     resolver: zodResolver(article ? articleUpdateSchema : articleCreateSchema),
 
     defaultValues: {
-      title: article?.title ?? "My new article",
-      slug: article?.slug ?? "new-article",
-      categoryId: article?.category.id ?? "0faf3fc3-7541-4598-9396-0a9fbe2ec15c",
-      description: article?.description ?? "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      author: article?.author.id ?? "9b02d9c3-e1f0-4a33-ad30-223ecfd51e8d",
-      content: article?.content ?? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      title: article?.title ?? "",
+      slug: article?.slug ?? "",
+      categoryId: article?.category.id ?? "",
+      description: article?.description ?? "",
+      author: article?.author.id ?? "",
+      content: article?.content ?? "",
       robots: article?.robots ?? "noindex, nofollow",
       publishedAt: article?.publishedAt ? new Date(article.publishedAt) : undefined,
-      tags: article?.tags ? article?.tags.join(', ') : "javascript, react, nextjs",
+      tags: article?.tags ? article?.tags.join(', ') : "",
     },
   });
 
@@ -413,7 +412,7 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Editor content={field.value} onChange={field.onChange} />
+                <Textarea {...field} rows={10} className="resize-none" />
               </FormControl>
               <FormMessage />
             </FormItem>
