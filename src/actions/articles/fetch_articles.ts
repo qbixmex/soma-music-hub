@@ -266,8 +266,6 @@ export const getArticleBySlugPublic = async (slug: string)
       },
     }) as Article | null;
 
-    console.log(article);
-
     if (!article) {
       return {
         ok: false,
