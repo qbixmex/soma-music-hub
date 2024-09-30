@@ -1,6 +1,6 @@
 const Divisor = () => {
   return (
-    <div className="w-full h-0.5 bg-gray-700 my-5"></div>
+    <div className="w-full h-0.5 bg-slate-200 dark:bg-slate-50 my-5"></div>
   );
 };
 
