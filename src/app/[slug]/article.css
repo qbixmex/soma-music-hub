@@ -1,0 +1,19 @@
+*:first-child {
+  margin-top: 0;
+}
+
+h2 {
+  @apply text-3xl font-bold mb-3;
+}
+
+h3 {
+  @apply text-2xl font-bold mb-4;
+}
+
+p {
+  @apply mb-5 leading-normal;
+}
+
+pre {
+  @apply my-5;
+}

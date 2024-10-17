@@ -1,6 +1,18 @@
 {
   "cSpell.words": [
+    "cloudinary",
     "clsx",
-    "tailwindcss"
+    "hookform",
+    "Linkedin",
+    "lowlight",
+    "lucide",
+    "Signin",
+    "sonner",
+    "tailwindcss",
+    "tiptap",
+    "topbar"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    "class:\\s*?[\"'`]([^\"'`]*).*?,"
   ]
 }
