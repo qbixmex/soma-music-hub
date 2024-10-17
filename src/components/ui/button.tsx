@@ -11,28 +11,6 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-<<<<<<< HEAD
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        primary:
-          "bg-blue-500 text-blue-50 shadow hover:bg-blue-600",
-        success:
-          "bg-emerald-500 text-emerald-50 shadow hover:bg-emerald-600",
-        warning:
-          "bg-amber-500 text-amber-50 shadow hover:bg-amber-600",
-        danger:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        "outline--primary":
-          "border-2 border-blue-500 text-blue-700 bg-transparent hover:bg-blue-500 hover:text-blue-50",
-        "outline--success":
-          "border-2 border-emerald-500 text-emerald-700 bg-transparent hover:bg-emerald-500 hover:text-emerald-50",
-        "outline--warning":
-          "border-2 border-amber-500 text-amber-700 bg-transparent hover:bg-amber-500 hover:text-amber-50",
-        "outline--danger":
-          "border-2 border-red-500 text-red-700 bg-transparent hover:bg-red-500 hover:text-red-50",
-=======
           outline:
           "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
           primary:
@@ -47,7 +25,6 @@ const buttonVariants = cva(
             "bg-emerald-500 dark:bg-emerald-400/70 dark:text-emerald-50 text-primary-foreground shadow hover:bg-emerald-300 hover:dark:bg-emerald-400/80",
           danger:
             "bg-red-600 text-destructive-foreground shadow-sm dark:bg-red-500 hover:bg-red-500/90 hover:dark:bg-red-400",
->>>>>>> dev
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
