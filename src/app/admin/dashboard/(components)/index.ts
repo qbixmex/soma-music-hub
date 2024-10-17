@@ -1,1 +1,1 @@
-export { default as LatestArticles } from "./latest-articles";
+export { default as DashboardArticles } from "./latest-articles";

@@ -55,7 +55,8 @@ const articles: ArticleSeed[] = [
   {
     title: "Understanding the Basic Data Types in JavaScript",
     slug: "javascript-data-types",
-    image: "javascript-datatypes.jpg",
+    imageUrl: "/images/javascript-datatypes.jpg",
+    imagePublicId: "80021e2a7e964ceca85dca0c4be47cef",
     description: "Learn about the fundamental data types in JavaScript and how they are used in programming.",
     category: "Javascript",
     content: `\
@@ -166,6 +167,129 @@ console.log(b);
     author: "Daniel Gonzalez",
     publishedAt: "2024-07-15T14:02:25.324Z",
     robots: "index, follow"
+  },
+  {
+    title: "What's the benefits of using Typescript ?",
+    slug: "benefits-using-typescript",
+    imageUrl: "/images/typescript-benefits.jpg",
+    imagePublicId: "abc123",
+    description: "Discover the advantages of using TypeScript for your next project.",
+    category: "typescript",
+    content: `<h2>Introduction to TypeScript</h2><p>TypeScript is a superset of JavaScript that adds static typing and other features to the language. Here are some of the key benefits of using TypeScript:</p><h3>Static Typing</h3><p>Static typing helps catch errors at compile time, which can save a lot of debugging time. Here's an example:</p><pre><code class="language-typescript">const add = (a: number, b: number): number =&gt; {
+  return a + b;
+};
+
+let result = add(5, 10);
+
+// Valid
+
+let wrongResult = add(5, "10");
+
+// Error: Argument of type 'string' is not assignable to parameter of type 'number'.</code></pre><h3>Enhanced IDE Support</h3><p>TypeScript provides better autocompletion and IntelliSense features in modern IDEs, which can increase productivity. It also assists with safe refactoring.</p><h3>Better Code Maintainability</h3><p>The use of types makes the code more self-documenting, reducing the need for additional comments. It also makes collaboration easier:</p><pre><code class="language-typescript">// Example of a self-documenting function signature
+
+interface User {
+  name: string;
+  age: number;
+}
+
+const createUser = ({ name, age }: { name: string, age: number }): User =&gt; {
+  return { name, age };
+};</code></pre><h3>Modern JavaScript Features</h3><p>TypeScript supports features from the latest versions of JavaScript, including classes, modules, and async/await:</p><pre><code class="language-typescript">class Person {
+  constructor(private readonly name: string, private readonly age: number) {}
+
+  greet() {
+    console.log(\`Hello, my name is \${this.name} and I am \${this.age} years old.\`);
+  }
+}
+
+let john = new Person('John', 30);
+
+john.greet();
+
+// Output: Hello, my name is John and I am 30 years old.</code></pre><h3>Large Scale Application Support</h3><p><b>TypeScript's features</b> are particularly beneficial for large-scale applications, where codebases are complex and many developers are involved. It encourages modularity and reuse, helping manage complexity in large projects.</p><h3>Optional Typing</h3><p>TypeScript allows incremental typing, meaning you can start with plain JavaScript and add types over time. This provides flexibility in adopting TypeScript:</p><pre><code class="language-typescript">// Plain JavaScript
+
+let message = "Hello, World!";
+
+// With type annotations
+
+let typedMessage: string = "Hello, Tony Stark !";</code></pre><h3>Community and Ecosystem</h3><p>TypeScript has a large and active community. Many libraries and frameworks are adopting it, and the DefinitelyTyped project provides type definitions for a vast number of JavaScript libraries:</p><pre><code class="language-typescript">// Using type definitions from DefinitelyTyped
+
+import * as _ from 'lodash';
+
+let numbers: number[] = [ 1, 2, 3 ];
+let doubledNumbers = _.map(numbers, n =&gt; n * 2);
+
+// [2, 4, 6]</code></pre><h3>Conclusion</h3><p>Overall, TypeScript enhances the development experience by making the code more predictable, maintainable, and scalable. Whether you're working on a small project or a large-scale application, TypeScript can provide significant benefits.</p>`,
+    tags: ["typescript"],
+    author: "Daniel Gonzalez",
+    publishedAt: "2024-07-18T14:00:00.000Z",
+    robots: "index, follow",
+  },
+  {
+    title: "How to create a React Component",
+    slug: "how-to-create-a-react-component",
+    imageUrl: "/images/how-to-create-a-react-component.jpg",
+    imagePublicId: "abc123",
+    description: "In this article I'll show you how to create a React Component with Typescript with Functional Components and Class Components.",
+    category: "react",
+    content: `<h2>Setting Up Your Environment</h2><p>Before creating a React component with TypeScript, ensure you have Node.js installed. Then, set up a new React project using Create React App with TypeScript template by running the following commands in your terminal:</p><pre><code class="language-bash">npx create-react-app my-app --template typescript
+cd my-app npm start</code></pre><p>This will create a new React application with TypeScript support and start a development server.</p><h2>Creating a Functional Component</h2><p>Functional components with TypeScript are similar to JavaScript functional components, but with added type annotations.</p><p></p><h3>1. Create a Functional Component:</h3><p>Create a new file, e.g., MyComponent.tsx in the src folder:</p><pre><code class="language-tsx">// MyComponent.tsx
+import React from 'react';
+
+const MyComponent: React.FC = () =&gt; {
+  return (
+    &lt;React.Fragment&gt;
+      &lt;h1&gt;Hello, this is a Functional Component!&lt;/h1&gt;
+    &lt;/React.Fragment&gt;
+   );
+};
+
+export default MyComponent;</code></pre><h3>2. <b>Use the Functional Component:</b></h3><p>Import and use this component in your main App.tsx file:</p><pre><code class="language-tsx">// App.tsx
+import React from 'react';
+import MyComponent from './MyComponent';
+
+const App: React.FC = () =&gt; {
+  return (
+    &lt;React.Fragment&gt;
+      &lt;MyComponent /&gt;
+    &lt;/React.Fragment&gt;
+  );
+};
+
+export default App;</code></pre><h2><b>Creating a Class Component</b></h2><p>Class components in TypeScript are similar to JavaScript class components, but with added type annotations.</p><h3>1. <b>Create a Class Component:</b></h3><p>Create a new file, e.g., MyClassComponent.tsx in the src folder:</p><pre><code class="language-tsx">// MyClassComponent.tsx
+import React, { Component } from 'react';
+
+interface MyClassComponentProps {}
+interface MyClassComponentState {}
+
+class MyClassComponent extends Component&lt;MyClassComponentProps, MyClassComponentState&gt; {
+  render() {
+    return (
+      &lt;React.Fragment&gt;
+        &lt;h1&gt;Hello, this is a Class Component!&lt;/h1&gt;
+      &lt;/React.Fragment &gt;
+    );
+  }
+}
+
+export default MyClassComponent;</code></pre><h3>2. <b>Use the Class Component:</b></h3><p>Import and use this component in your main App.tsx file:</p><pre><code class="language-tsx">// App.tsx
+
+import React from 'react';
+import MyClassComponent from './MyClassComponent';
+
+const App: React.FC = () =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;MyClassComponent /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;</code></pre><h2><b>Running Your App</b></h2><p>Once you have created your components and used them in your App.tsx, your application should automatically reload in the browser (if not, manually refresh the browser). You should see the output from your components.</p><h2><b>Summary</b></h2><ul><li><p>• <b>Functional Component</b>: A simple TypeScript function that returns <b>JSX</b>, using the React.FC type.</p></li><li><p>• <b>Class Component</b>: An ES6 class that extends React.Component with type annotations for props and state.</p></li><li><p>Both types of components can manage state and lifecycle methods, and <b>TypeScript</b> helps by providing type safety and autocompletion.</p></li></ul>`,
+    tags: ["javascript", "typescript", "react"],
+    author: "Daniel Gonzalez",
+    publishedAt: "2024-07-17T08:00:00.000Z",
+    robots: "index, follow",
   },
 ];
 

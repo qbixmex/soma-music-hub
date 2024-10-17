@@ -7,7 +7,8 @@ export type ArticlePublic = {
   id?: string;
   title: string;
   slug: string;
-  image: string;
+  imageUrl: string;
+  imagePublicId: string;
   description: string;
   content: string;
   category: Category;
@@ -100,7 +101,11 @@ export const getArticlesPublic = async (params: PublicParams = {}):
   try {
     const articles = await prisma.article.findMany({
       where: whereClause,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        imageUrl: true,
         category: true,
         author: {
           select: {
@@ -235,7 +240,16 @@ export const getArticleBySlugPublic = async (slug: string)
   try {
     const article = await prisma.article.findUnique({
       where: { slug },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        imageUrl: true,
+        description: true,
+        content: true,
+        tags: true,
+        publishedAt: true,
+        robots: true,
         category: {
           select: {
             id: true,
@@ -248,8 +262,8 @@ export const getArticleBySlugPublic = async (slug: string)
             id: true,
             name: true,
           },
-        },
-      }
+        },  
+      },
     }) as Article | null;
 
     if (!article) {

@@ -2,8 +2,9 @@
 
 import { prisma } from '@/lib';
 import articleSchema from './article.schema';
-import { slugFormat } from '@/utils';
+import { slugFormat, uploadImage } from '@/utils';
 import { revalidatePath } from 'next/cache';
+import deleteImage from '@/utils/delete-image';
 
 const updateArticle = async (id: string, formData: FormData) => {
   const data = Object.fromEntries(formData);
@@ -22,9 +23,8 @@ const updateArticle = async (id: string, formData: FormData) => {
     };
   }
 
-  const { author, ...articleToSave } = articleParsed.data;
+  const { author, image, ...articleToSave } = articleParsed.data;
   articleToSave.slug = slugFormat(articleToSave.slug);
-
 
   const tagsArray = articleToSave.tags
     .split(",")
@@ -33,7 +33,7 @@ const updateArticle = async (id: string, formData: FormData) => {
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
 
-      const updatedArticle = await prisma.article.update({
+      const updatedArticle = await transaction.article.update({
         where: { id },
         data: {
           ...articleToSave,
@@ -42,10 +42,40 @@ const updateArticle = async (id: string, formData: FormData) => {
         },
       });
 
+      if (image) {
+        // Delete previous image from cloudinary.
+        const response = await deleteImage(updatedArticle.imagePublicId);
+
+        if (!response.ok) {
+          throw 'Error deleting image from cloudinary';
+        }
+    
+        // Upload Image to third-party storage (cloudinary).
+        const imageUploaded = await uploadImage(image, 'articles');
+    
+        if (!imageUploaded) {
+          throw 'Error uploading image to cloudinary';
+        }
+
+        // Update article with new image.
+        await transaction.article.update({
+          where: { id },
+          data: {
+            imageUrl: imageUploaded.secureUrl,
+            imagePublicId: imageUploaded.publicId,
+          },
+        });
+
+        // Update article object to return.
+        updatedArticle.imageUrl = imageUploaded.secureUrl;
+      }
+
+      const { imagePublicId: _, ...articleResponse } = updatedArticle;
+
       return {
         ok: true,
         message: 'Article updated successfully',
-        article: updatedArticle,
+        article: articleResponse,
       }
     });
     
