@@ -18,7 +18,7 @@ const Article: React.FC<Readonly<Props>> = ({ article }) => {
           title={`read more about ${article.title}`}
         >
           <Image
-            src={`/images/${article.image}`}
+            src={article.imageUrl}
             className="w-[640px] h-[360px] sm:w-[320] sm:h-[180px] rounded-lg object-cover"
             alt={article.title}
             width={320}

@@ -1,8 +1,9 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { createArticle, updateArticle } from "@/actions";
-import articleSchema from "@/actions/articles/article.schema";
+import articleCreateSchema from "@/actions/articles/article_create.schema";
+import articleUpdateSchema from "@/actions/articles/article_update.schema";
 import { TimePicker } from "@/components/time-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -31,10 +32,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Editor } from "../../(components)";
 import { useSession } from "next-auth/react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import Spinner from "@/components/ui/spinner";
 
 type Props = {
   categories: Category[];
@@ -42,20 +43,22 @@ type Props = {
   authors?: Author[];
 };
 
+type FormValues = z.infer<typeof articleCreateSchema> | z.infer<typeof articleUpdateSchema>;
+
 const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
 
   const router = useRouter();
 
   const { data: session } = useSession({ required: true });
-  const [authorOpen, setAuthorOpen] = useState(false)
-
-  const form = useForm<z.infer<typeof articleSchema>>({
-    resolver: zodResolver(articleSchema),
+  const [authorOpen, setAuthorOpen] = useState(false);
+  const [imageFieldMounted, setImageFieldMounted] = useState(false);
+  
+  const form = useForm<FormValues>({
+    resolver: zodResolver(article ? articleUpdateSchema : articleCreateSchema),
 
     defaultValues: {
       title: article?.title ?? "",
       slug: article?.slug ?? "",
-      image: article?.image ?? "",
       categoryId: article?.category.id ?? "",
       description: article?.description ?? "",
       author: article?.author.id ?? "",
@@ -66,21 +69,27 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof articleSchema>) => {
-    const formData = new FormData();
+  useEffect(() => {
+    setImageFieldMounted(true);
+  }, []);
 
-    // TODO: Add image to the form data
-    // const { image, ...articleToSave } = data;
+  const onSubmit = async (values: FormValues) => {
+    const formData = new FormData();
 
     formData.append('title', values.title);
     formData.append('slug', values.slug);
-    formData.append('image', values.image);
     formData.append('categoryId', values.categoryId);
     formData.append('author', values.author);
     formData.append('description', values.description);
     formData.append('content', values.content);
     formData.append('tags', values.tags);
     formData.append('robots', values.robots ?? "noindex, nofollow");
+
+    if (values.image) {
+      console.log("Image was provided");
+      console.log("IMAGE:", values.image);
+      formData.append('image', values.image);
+    }
 
     if (values.publishedAt) {
       formData.append('publishedAt', values.publishedAt.toISOString());
@@ -93,6 +102,7 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
     }
 
     if (article && article.id) {
+      setImageFieldMounted(false);
       response = await updateArticle(article.id, formData);
     }
 
@@ -110,10 +120,10 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
         position: "top-right",
         className: "bg-green-500 text-white",
       });
+      setImageFieldMounted(true);
     }
 
     // Redirect to articles page if article is created
-    // so if you are updating an article, you will stay on the same page. 
     if (!article) {
       form.reset();
       router.replace('/admin/articles');
@@ -161,19 +171,33 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
 
         <div className="block md:grid md:grid-cols-2 md:gap-x-4">
 
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }) => (
-              <FormItem className="mb-4 md:mb-0">
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <Input autoComplete="off" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {imageFieldMounted ? (
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="mb-4 md:mb-0">
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : (
+            <div className="w-full flex flex-col gap-y-2">
+              <div className="w-24 h-5 bg-slate-500 rounded animate-pulse" />
+              <div className="w-full h-8 bg-slate-500 rounded animate-pulse" />
+            </div>
+          )}
+          
           <FormField
             control={form.control}
             name="categoryId"
@@ -388,24 +412,38 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Editor content={field.value} onChange={field.onChange} />
+                <Textarea {...field} rows={10} className="resize-none" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="text-left md:text-right">
+        <div className="flex gap-4 items-center md:justify-end">
           <Button
             type="button"
             onClick={onClose}
             variant="primary"
-            className="w-full md:w-fit mr-4 mb-4 md:mb-0"
+            className="w-full md:w-fit"
+            disabled={form.formState.isSubmitting}
           >
             Close
           </Button>
-          <Button type="submit" variant="success" className="w-full md:w-fit">
-            {article ? 'Save' : 'Create'}
+          <Button
+            type="submit"
+            variant="success"
+            className="w-full md:w-fit"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <Spinner />
+                  <span className="animate-pulse">wait ...</span>
+                </span>
+              ) : (
+                <span>{article ? 'Save' : 'Create'}</span>
+              )
+            }
           </Button>
         </div>
       </form>

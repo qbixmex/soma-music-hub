@@ -50,7 +50,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
   const response = await getArticleBySlugPublic(slug);
   const { article } = response;
 
-  if (!article || !article?.publishedAt) {
+  if (!article) {
     redirect("/");
   }
 
@@ -66,11 +66,11 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
           <div className="lg:flex lg:gap-8">
             <div className="lg:w-1/2">
               <Image
-                src={`/images/${article.image}`}
-                className="rounded-lg object-cover mb-5 md:object-contain lg:order-first"
+                src={article.imageUrl}
+                className="w-auto h-auto rounded-lg object-cover mb-5 md:object-contain lg:order-first"
                 alt={article.title}
-                width={1280}
-                height={720}
+                width={640}
+                height={360}
                 priority
               />
             </div>
@@ -100,7 +100,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                   <p className="space-x-2">
                     <span className="font-semibold">Date:</span>
                     <span className="italic text-base">
-                      {article.publishedAt.toDateString()}
+                      {`${article.publishedAt ?? 'Unknown'}`}
                     </span>
                   </p>
                 </div>
