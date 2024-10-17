@@ -1,10 +1,10 @@
 {
   "name": "quantic_coders",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run prisma:deploy && next build",
+    "build": "npm run next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:deploy": "npx prisma migrate deploy && prisma generate",
