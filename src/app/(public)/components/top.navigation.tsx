@@ -63,6 +63,9 @@ const TopNavigation = () => {
           {session.status === "authenticated" && (
             <>
               <DropdownMenuItem>
+                <Link href="/admin/dashboard">Dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
                 <Link href="/admin/profile">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

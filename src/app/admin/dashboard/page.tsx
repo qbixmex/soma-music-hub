@@ -1,23 +1,23 @@
-import { getPublishedDashboardArticles, getDraftDashboardArticles } from "@/actions";
-import { DashboardArticles } from "./(components)";
+import { getPublishedDashboardEvents, getDraftDashboardEvents } from "@/actions";
+import { DashboardEvents } from "./(components)";
 
 const DashboardPage = async () => {
-  const { articles: productionArticles } = await getPublishedDashboardArticles();
-  const { articles: draftArticles } = await getDraftDashboardArticles();
+  const { events: productionEvents } = await getPublishedDashboardEvents();
+  const { events: draftEvents } = await getDraftDashboardEvents();
 
   return (
     <section className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-      <DashboardArticles
-        title="Published Articles"
-        subTitle="articles on production"
-        articles={productionArticles ?? []}
-        emptyMessage="No articles on production"
+      <DashboardEvents
+        title="Published Events"
+        subTitle="events list"
+        events={productionEvents ?? []}
+        emptyMessage="No events found"
       />
-      <DashboardArticles
-        title="Queue Articles"
-        subTitle="articles on draft"
-        articles={draftArticles ?? []}
-        emptyMessage="No articles on draft"
+      <DashboardEvents
+        title="Draft Events"
+        subTitle="events on draft"
+        events={draftEvents ?? []}
+        emptyMessage="No events on draft"
       />
     </section>
   );

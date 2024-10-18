@@ -16,19 +16,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DashboardArticle } from "@/actions";
+import { DashboardEvent } from "@/actions";
 import Link from "next/link";
-import { FileX } from "lucide-react";
+import { CalendarX as Calendar } from "lucide-react";
 import clsx from "clsx";
 
 type Props = {
   title: string;
   subTitle: string;
   emptyMessage: string;
-  articles: DashboardArticle[];
+  events: DashboardEvent[];
 };
 
-const DashboardArticles: FC<Props> = ({ title, subTitle, emptyMessage, articles }) => {
+export const DashboardEvents: FC<Props> = ({ title, subTitle, emptyMessage, events }) => {
   return (
     <Card className="flex flex-col h-full">
       <CardHeader className="px-7">
@@ -36,9 +36,9 @@ const DashboardArticles: FC<Props> = ({ title, subTitle, emptyMessage, articles 
         <CardDescription>{subTitle}</CardDescription>
       </CardHeader>
       <CardContent className={clsx("flex-grow flex flex-col p-0", {
-        "justify-center pb-6": articles.length === 0,
+        "justify-center pb-6": events.length === 0,
       })}>
-        {articles.length > 0 ? (
+        {events.length > 0 ? (
           <div className="p-6 pt-0">
             <Table>
               <TableHeader>
@@ -48,18 +48,18 @@ const DashboardArticles: FC<Props> = ({ title, subTitle, emptyMessage, articles 
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {articles.map((article, index) => (
-                  <TableRow key={article.id} className={index % 2 === 0 ? 'bg-muted/80' : 'bg-muted/60'}>
+                {events.map((event, index) => (
+                  <TableRow key={event.id} className={index % 2 === 0 ? 'bg-muted/80' : 'bg-muted/60'}>
                     <TableCell className="font-medium">
                       <Link
-                        href={`/${article.slug}`}
+                        href={`/${event.permalink}`}
                         className="text-blue-500 dark:text-blue-400 hover:underline"
                       >
-                        {article.title}
+                        {event.title}
                       </Link>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {article.category.name}
+                      {event.category.name}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -71,7 +71,7 @@ const DashboardArticles: FC<Props> = ({ title, subTitle, emptyMessage, articles 
             <h3 className="text-3xl font-bold tracking-tight">
               { emptyMessage }
             </h3>
-            <FileX size={100} />
+            <Calendar size={100} />
           </div>
         )}
       </CardContent>
@@ -79,4 +79,4 @@ const DashboardArticles: FC<Props> = ({ title, subTitle, emptyMessage, articles 
   );
 };
 
-export default DashboardArticles;
+export default DashboardEvents;

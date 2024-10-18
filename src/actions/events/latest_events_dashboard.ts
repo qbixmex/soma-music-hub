@@ -2,93 +2,93 @@
 
 import { prisma } from "@/lib";
 
-export type DashboardArticle = {
+export type DashboardEvent = {
   id: string;
   title: string;
-  slug: string;
+  permalink: string;
   category: {
     name: string;
-    slug: string;
+    permalink: string;
   };
 };
 
-type ResponseArticles = {
+type ResponseEvents = {
   ok: boolean;
-  articles: DashboardArticle[] | null;
+  events: DashboardEvent[] | null;
   message: string;
 };
 
-export const getPublishedDashboardArticles = async (quantity = 5): Promise<ResponseArticles> => {
+export const getPublishedDashboardEvents = async (quantity = 5): Promise<ResponseEvents> => {
   try {
-    const articles = await prisma.article.findMany({
+    const events = await prisma.event.findMany({
       take: quantity,
       where: { publishedAt: { not: null } },
       orderBy: { publishedAt: "desc" },
       include: {
         category: {
-          select: { name: true, slug: true },
+          select: { name: true, permalink: true },
         },
       }
     });
 
-    const latestArticles: DashboardArticle[] = articles.map((article) => ({
-      id: article.id,
-      title: article.title,
-      slug: article.slug,
+    const latestEvents: DashboardEvent[] = events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      permalink: event.permalink,
       category: {
-        name: article.category.name,
-        slug: article.category.slug,
+        name: event.category.name,
+        permalink: event.category.permalink,
       },
     }));
 
     return {
       ok: true,
-      articles: latestArticles,
-      message: "Latest published articles fetched successfully 👍",
+      events: latestEvents,
+      message: "Latest published events fetched successfully 👍",
     };
   } catch (error) {
     console.log(`${error}`);
     return {
       ok: false,
-      articles: null,
+      events: null,
       message: "Something went wrong !, check logs for details",
     };
   }
 };
 
-export const getDraftDashboardArticles = async (quantity = 5): Promise<ResponseArticles> => {
+export const getDraftDashboardEvents = async (quantity = 5): Promise<ResponseEvents> => {
   try {
-    const articles = await prisma.article.findMany({
+    const events = await prisma.event.findMany({
       take: quantity,
       where: { publishedAt: null },
       orderBy: { createdAt: "desc" },
       include: {
         category: {
-          select: { name: true, slug: true },
+          select: { name: true, permalink: true },
         },
       }
     });
 
-    const latestArticles: DashboardArticle[] = articles.map((article) => ({
-      id: article.id,
-      title: article.title,
-      slug: article.slug,
+    const latestEvents: DashboardEvent[] = events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      permalink: event.permalink,
       category: {
-        name: article.category.name,
-        slug: article.category.slug,
+        name: event.category.name,
+        permalink: event.category.permalink,
       },
     }));
 
     return {
       ok: true,
-      articles: latestArticles,
-      message: "Latest unpublished articles fetched successfully 👍",
+      events: latestEvents,
+      message: "Latest unpublished events fetched successfully 👍",
     };
   } catch (error) {
     console.log(`${error}`);
     return {
       ok: false,
-      articles: null,
+      events: null,
       message: "Something went wrong !, check logs for details",
     };
   }
