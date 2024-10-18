@@ -1,41 +1,41 @@
 "use server";
 
 import { prisma } from '@/lib';
-import articleSchema from './article.schema';
+import eventSchema from './event.schema';
 import { slugFormat, uploadImage } from '@/utils';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/auth.config';
 
-const createArticle = async (formData: FormData) => {
+const createEvent = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
 
   const session = await auth();
 
-  const articleParsed = articleSchema.safeParse({
+  const eventParsed = eventSchema.safeParse({
     ...data,
     publishedAt: data.publishedAt
       ? new Date(`${data.publishedAt}`)
       : undefined,
   });
 
-  if (!articleParsed.success) {
+  if (!eventParsed.success) {
     return {
       ok: false,
-      message: articleParsed.error.errors[0].message,
+      message: eventParsed.error.errors[0].message,
     };
   }
 
-  const { author: _, image, ...articleToSave} = articleParsed.data;
-  articleToSave.slug = slugFormat(articleToSave.slug);
+  const { author: _, image, ...eventToSave} = eventParsed.data;
+  eventToSave.permalink = slugFormat(eventToSave.permalink);
 
   // Upload Image to third-party storage (cloudinary).
-  const imageUploaded = await uploadImage(image!, 'articles');
+  const imageUploaded = await uploadImage(image!, 'events');
   
   if (!imageUploaded) {
     throw 'Error uploading image to cloudinary';
   }
 
-  const tagsArray = articleToSave.tags
+  const tagsArray = eventToSave.tags
     .split(",")
     .map(tag => tag.trim().toLowerCase());
 
@@ -44,9 +44,9 @@ const createArticle = async (formData: FormData) => {
 
       const authorId = `${session?.user.id}`;
 
-      const createdArticle = await transaction.article.create({
+      const createdEvent = await transaction.event.create({
         data: {
-          ...articleToSave,
+          ...eventToSave,
           authorId,
           imageUrl: imageUploaded.secureUrl,
           imagePublicId: imageUploaded.publicId,
@@ -56,24 +56,24 @@ const createArticle = async (formData: FormData) => {
 
       return {
         ok: true,
-        message: 'Article created successfully',
-        article: createdArticle,
+        message: 'Event created successfully',
+        article: createdEvent,
       }
     });
     
     // Revalidate Paths
-    revalidatePath('/articles');
-    revalidatePath('/admin/articles');
+    revalidatePath('/events');
+    revalidatePath('/admin/events');
 
     return prismaTransaction;
   } catch (error) {
     console.error((error as Error)?.message.toString());
     return {
       ok: false,
-      message: 'Error creating an article',
+      message: 'Error creating an event',
     };
   }
 };
 
-export default createArticle;
+export default createEvent;
 
