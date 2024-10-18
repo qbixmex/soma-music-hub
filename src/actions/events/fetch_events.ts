@@ -1,12 +1,12 @@
 "use server";
 
-import { Article, Category, Robots } from "@/interfaces";
+import { Event, Category, Robots } from "@/interfaces";
 import { prisma } from "@/lib";
 
-export type ArticlePublic = {
+export type EventPublic = {
   id?: string;
   title: string;
-  slug: string;
+  permalink: string;
   imageUrl: string;
   imagePublicId: string;
   description: string;
@@ -20,19 +20,19 @@ export type ArticlePublic = {
   updatedAt?: Date;
 };
 
-type ResponseFetchArticlesPublic = {
+type ResponseFetchEventsPublic = {
   ok: boolean;
-  articles: ArticlePublic[];
+  events: EventPublic[];
   message: string;
 };
 
-export type ArticlesForList = {
+export type EventsForList = {
   id: string;
   title: string;
-  slug: string;
+  permalink: string;
   category: {
     name: string;
-    slug: string;
+    permalink: string;
   };
   author: {
     name: string;
@@ -40,19 +40,15 @@ export type ArticlesForList = {
   publishedAt: Date;
 };
 
-type ResponseFetchArticles = {
+type ResponseFetchEvents = {
   ok: boolean;
-  articles: ArticlesForList[];
+  events: EventsForList[];
   message: string;
 };
 
-type ArticleDB = {
-
-};
-
-type ResponseFetchArticle = {
+type ResponseFetchEvent = {
   ok: boolean;
-  article: Article | null;
+  event: Event | null;
   message: string;
 };
 
@@ -63,7 +59,7 @@ type Metadata = {
   author: string;
 };
 
-type ResponseFetchArticleMetadata = {
+type ResponseFetchEventMetadata = {
   ok: boolean;
   metadata: Metadata | null;
   message: string;
@@ -74,20 +70,20 @@ type PublicParams = {
 };
 
 /**
- * Get all articles with the option to filter by published status
+ * Get all events with the option to filter by published status
  * 
  * @param params
  * isPublished - filter by published status
  * 
  * @example ```ts
- * getArticlesPublic(); // get all published articles without filtering.
- * getArticlesPublic({ isPublished: true }); // get all published articles.
- * getArticlesPublic({ isPublished: false }); // get all unpublished articles.
+ * getEventPublic(); // get all published event without filtering.
+ * getEventPublic({ isPublished: true }); // get all published event.
+ * getEventPublic({ isPublished: false }); // get all unpublished event.
  * ```
  * @returns 
  */
-export const getArticlesPublic = async (params: PublicParams = {}):
-  Promise<ResponseFetchArticlesPublic> =>
+export const getEventsPublic = async (params: PublicParams = {}):
+  Promise<ResponseFetchEventsPublic> =>
 {
   const { isPublished } = params;
   let whereClause = {};
@@ -99,32 +95,33 @@ export const getArticlesPublic = async (params: PublicParams = {}):
   }
 
   try {
-    const articles = await prisma.article.findMany({
+    const events = await prisma.event.findMany({
       where: whereClause,
       select: {
         id: true,
         title: true,
-        slug: true,
+        permalink: true,
         imageUrl: true,
         category: true,
+        description: true,
         author: {
           select: {
             name: true,
           }
         },
       }
-    }) as ArticlePublic[];
+    }) as EventPublic[];
 
     return {
       ok: true,
-      articles,
-      message: "Articles fetched successfully 👍",
+      events,
+      message: "Events fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);
     return {
       ok: false,
-      articles: [],
+      events: [],
       message: "Something went wrong !, check logs for details",
     };
   }
@@ -135,8 +132,8 @@ type AdminParams = {
   authorId?: string;
 };
 
-export const getArticles = async (params: AdminParams = {})
-:Promise<ResponseFetchArticles> =>
+export const getEvents = async (params: AdminParams = {})
+:Promise<ResponseFetchEvents> =>
 {
   const {
     role = 'subscriber',
@@ -150,22 +147,22 @@ export const getArticles = async (params: AdminParams = {})
   } else if (role === 'author') {
     whereClause = { authorId };
   } else if (role === 'subscriber') {
-    // No articles will match this condition
+    // No events will match this condition
     whereClause = { id: -1 };
   }
 
   try {
-    const articles = await prisma.article.findMany({
+    const events = await prisma.event.findMany({
       where: whereClause,
       select: {
         id: true,
         title: true,
-        slug: true,
+        permalink: true,
         publishedAt: true,
         category: {
           select: {
             name: true,
-            slug: true,
+            permalink: true,
           }
         },
         author: {
@@ -174,32 +171,32 @@ export const getArticles = async (params: AdminParams = {})
           }
         },
       },
-    }) as ArticlesForList[];
+    }) as EventsForList[];
 
     return {
       ok: true,
-      articles,
-      message: "Articles fetched successfully 👍",
+      events,
+      message: "Events fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);
     return {
       ok: false,
-      articles: [],
+      events: [],
       message: "Something went wrong !, check logs for details",
     };
   }
 };
 
-export const getArticleById = async (id: string): Promise<ResponseFetchArticle> => {
+export const getEventById = async (id: string): Promise<ResponseFetchEvent> => {
   try {
-    const article = await prisma.article.findUnique({
+    const event = await prisma.event.findUnique({
       where: { id },
       include: {
         category: {
           select: {
             name: true,
-            slug: true,
+            permalink: true,
           },
         },
         author: {
@@ -209,41 +206,41 @@ export const getArticleById = async (id: string): Promise<ResponseFetchArticle> 
           }
         },
       }
-    }) as Article | null;
+    }) as Event | null;
   
-    if (!article) {
+    if (!event) {
       return {
         ok: false,
-        article: null,
-        message: "Article not found with id: " + id,
+        event: null,
+        message: "Event not found with id: " + id,
       };
     }
 
     return {
       ok: true,
-      article: null,
-      message: "Article fetched successfully 👍",
+      event: null,
+      message: "Event fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);
     return {
       ok: false,
-      article: null,
+      event: null,
       message: "Something went wrong !, check logs for details",
     };
   }
 };
 
-export const getArticleBySlugPublic = async (slug: string)
-: Promise<ResponseFetchArticle> => {
+export const getEventByPermalinkPublic = async (permalink: string)
+: Promise<ResponseFetchEvent> => {
 
   try {
-    const article = await prisma.article.findUnique({
-      where: { slug },
+    const event = await prisma.event.findUnique({
+      where: { permalink },
       select: {
         id: true,
         title: true,
-        slug: true,
+        permalink: true,
         imageUrl: true,
         description: true,
         content: true,
@@ -254,7 +251,7 @@ export const getArticleBySlugPublic = async (slug: string)
           select: {
             id: true,
             name: true,
-            slug: true,
+            permalink: true,
           },
         },
         author: {
@@ -264,72 +261,68 @@ export const getArticleBySlugPublic = async (slug: string)
           },
         },  
       },
-    }) as Article | null;
+    }) as Event | null;
 
-    if (!article) {
+    if (!event) {
       return {
         ok: false,
-        article: null,
-        message: "Article not found with slug: " + slug,
+        event: null,
+        message: "Event not found with permalink: " + permalink,
       };
     }
 
     return {
       ok: true,
-      article,
-      message: "Article fetched successfully 👍",
+      event: event,
+      message: "Event fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);
     return {
       ok: false,
-      article: null,
+      event: null,
       message: "Something went wrong !, check logs for details",
     };
   }
 };
 
 type EditParams = {
-  slug: string;  
+  permalink: string;  
   authorId: string;
   role: 'admin' | 'author' | 'subscriber';
 };
 
-export const getArticleBySlug = async (params: EditParams)
-: Promise<ResponseFetchArticle> => {
+export const getEventByPermalink = async (params: EditParams)
+: Promise<ResponseFetchEvent> => {
 
-  const {
-    slug,
-    role,
-    authorId,
-  } = params;
+  const { permalink, role, authorId } = params;
 
   let whereClause: {
-    slug: string;
+    permalink: string;
     authorId?: string;
-  } = { slug: "" };
+  } = { permalink: "" };
 
   if (role === 'admin') {
-    whereClause = { slug };
+    whereClause = { permalink };
   } else if (role === 'author') {
-    whereClause = { slug, authorId };
+    whereClause = { permalink, authorId };
   } else if (role === 'subscriber') {
     return {
       ok: false,
-      article: null,
-      message: "You are not authorized to edit this article",
+      event: null,
+      message: "You are not authorized to edit this event",
     };
   }
 
   try {
-    const article = await prisma.article.findUnique({
+    const event = await prisma.event.findUnique({
       where: whereClause,
       include: {
         category: {
           select: {
             id: true,
             name: true,
-            slug: true,
+            permalink: true,
           },
         },
         author: {
@@ -339,35 +332,35 @@ export const getArticleBySlug = async (params: EditParams)
           },
         },
       }
-    }) as Article | null;
+    }) as Event | null;
 
-    if (!article) {
+    if (!event) {
       return {
         ok: false,
-        article: null,
-        message: "Article not found with slug: " + slug,
+        event: null,
+        message: "Event not found with permalink: " + permalink,
       };
     }
 
     return {
       ok: true,
-      article,
-      message: "Article fetched successfully 👍",
+      event: event,
+      message: "Event fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);
     return {
       ok: false,
-      article: null,
+      event: null,
       message: "Something went wrong !, check logs for details",
     };
   }
 };
 
-export const getArticleMetadataBySlug = async (slug: string): Promise<ResponseFetchArticleMetadata> => {
+export const getEventMetadataByPermalink = async (permalink: string): Promise<ResponseFetchEventMetadata> => {
   try {
-    const metadata = await prisma.article.findUnique({
-      where: { slug },
+    const metadata = await prisma.event.findUnique({
+      where: { permalink },
       select: {
         title: true,
         description: true,
@@ -380,14 +373,14 @@ export const getArticleMetadataBySlug = async (slug: string): Promise<ResponseFe
       return {
         ok: false,
         metadata: null,
-        message: "Article not found with slug: " + slug,
+        message: "Event not found with slug: " + permalink,
       };
     }
 
     return {
       ok: true,
       metadata,
-      message: "Article fetched successfully 👍",
+      message: "Event fetched successfully 👍",
     };
   } catch(error) {
     console.error(error);

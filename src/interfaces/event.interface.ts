@@ -1,4 +1,4 @@
-import { Category } from "./category";
+import { Category } from "./category.interface";
 
 export type Robots =
   | "index, follow"
@@ -7,10 +7,10 @@ export type Robots =
   | "noindex, nofollow"
   | undefined;
 
-export interface Article {
+export interface Event {
   id?: string;
   title: string;
-  slug: string;
+  permalink: string;
   imageUrl: string;
   imagePublicId: string;
   description: string;
@@ -27,9 +27,9 @@ export interface Article {
   updatedAt?: Date;
 }
 
-export interface ArticleSeed {
+export interface EventSeed {
   title: string;
-  slug: string;
+  permalink: string;
   imageUrl: string;
   imagePublicId: string;
   description: string;

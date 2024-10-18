@@ -89,17 +89,15 @@ export const authConfig: NextAuthConfig = {
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/admin/dashboard');
-      const isOnCategories = nextUrl.pathname.startsWith('/admin/categories');
-      const isOnArticles = nextUrl.pathname.startsWith('/admin/articles');
-      const isOnTags = nextUrl.pathname.startsWith('/admin/tags');
-      const isOnUsers = nextUrl.pathname.startsWith('/admin/users');
+      const isOnAdmin = nextUrl.pathname.startsWith('/admin');
+      const isOnLogin = nextUrl.pathname === '/auth/login';
+      const isOnRegister = nextUrl.pathname === '/auth/register';
 
-      if (isOnDashboard || isOnCategories || isOnArticles || isOnTags || isOnUsers) {
+      if (isOnAdmin) {
         // Redirect unauthenticated users to login page if they're not logged in.
         return isLoggedIn ? true : false;
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/admin/dashboard', nextUrl));
+      } else if (isLoggedIn && (isOnLogin || isOnRegister)) {
+        return Response.redirect(new URL('/admin/dashboard', nextUrl))
       }
 
       return true;

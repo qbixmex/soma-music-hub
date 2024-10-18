@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,23 +7,23 @@ import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
-import { getArticleBySlugPublic, getArticleMetadataBySlug } from "@/actions";
-import { Metadata } from "next";
-import "./article.css";
+import { getEventByPermalinkPublic, getEventMetadataByPermalink } from "@/actions";
 import PublicLayout from "../(public)/public.layout";
+import { getImageUrl } from "@/utils";
+import "./event.css";
 
 type Props = {
   params: {
-    slug: string;
+    permalink: string;
   };
 };
 
 export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   // read route params
-  const slug = params.slug;
+  const permalink = params.permalink;
 
   // fetch data
-  const { metadata } = await getArticleMetadataBySlug(slug);
+  const { metadata } = await getEventMetadataByPermalink(permalink);
 
   const metaTitle = metadata?.title;
   const metaDescription = metadata?.description;
@@ -45,14 +46,17 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 //* This re-validates the page every 7 days
 export const revalidate = 604800;
 
-const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
+const EventPage: FC<Props> = async ({ params: { permalink } }) => {
 
-  const response = await getArticleBySlugPublic(slug);
-  const { article } = response;
+  const response = await getEventByPermalinkPublic(permalink);
 
-  if (!article) {
+  const { event } = response;
+
+  if (!event) {
     redirect("/");
   }
+
+  const eventImage = getImageUrl(event.imageUrl);
 
   return (
     <PublicLayout>
@@ -61,14 +65,14 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
           <Title
             heading="h1"
             className="font-bold text-3xl mb-5 lg:text-4xl"
-          >{article.title}</Title>
+          >{event.title}</Title>
 
           <div className="lg:flex lg:gap-8">
             <div className="lg:w-1/2">
               <Image
-                src={article.imageUrl}
+                src={eventImage}
                 className="w-auto h-auto rounded-lg object-cover mb-5 md:object-contain lg:order-first"
-                alt={article.title}
+                alt={event.title}
                 width={640}
                 height={360}
                 priority
@@ -85,7 +89,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                         <FaUser />
                       </div>
                       <p className="italic mb-0 group-hover:text-slate-200 text-slate-500 transition-colors">
-                        {article.author.name}
+                        {event.author.name}
                       </p>
                     </div>
                   </Link>
@@ -93,14 +97,14 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                   {/* CATEGORY */}
                   <p className="space-x-2">
                     <span className="font-semibold">Category:</span>
-                    <Link href="#">{article.category.name}</Link>
+                    <Link href="#">{event.category.name}</Link>
                   </p>
 
                   {/* DATE */}
                   <p className="space-x-2">
                     <span className="font-semibold">Date:</span>
                     <span className="italic text-base">
-                      {`${article.publishedAt ?? 'Unknown'}`}
+                      {`${event.publishedAt ?? 'Unknown'}`}
                     </span>
                   </p>
                 </div>
@@ -111,7 +115,7 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
                     <p className="font-semibold mb-4">Tags</p>
                     <div className="flex flex-wrap gap-2">
                       {
-                        article.tags.map((tag, i) => (
+                        event.tags.map((tag, i) => (
                           <Link
                             key={`${tag}-${i}`}
                             className="text-sm font-semibold px-3 py-2 bg-slate-800 rounded"
@@ -152,12 +156,12 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
         </header>
 
         <main>
-          <Content id={article.id!} content={article.content} />
+          <Content id={event.id!} content={event.content} />
         </main>
 
         <p className="text-right mb-5">
           <Button variant="outline">
-            <Link href="/articles" className="no-underline text-white">back to articles</Link>
+            <Link href="/events" className="no-underline text-white">back to events</Link>
           </Button>
         </p>
 
@@ -167,4 +171,4 @@ const ArticlePage: FC<Props> = async ({ params: { slug } }) => {
 
 };
 
-export default ArticlePage;
+export default EventPage;

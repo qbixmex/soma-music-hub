@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { createArticle, updateArticle } from "@/actions";
-import articleCreateSchema from "@/actions/articles/article_create.schema";
-import articleUpdateSchema from "@/actions/articles/article_update.schema";
+import { createEvent, updateEvent } from "@/actions";
+import eventCreateSchema from "@/actions/events/event_create.schema";
+import eventUpdateSchema from "@/actions/events/event_update.schema";
 import { TimePicker } from "@/components/time-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Article, Category, Author } from "@/interfaces";
+import { Event, Category, Author } from "@/interfaces";
 import { cn } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -39,13 +39,13 @@ import Spinner from "@/components/ui/spinner";
 
 type Props = {
   categories: Category[];
-  article?: Article;
+  event?: Event;
   authors?: Author[];
 };
 
-type FormValues = z.infer<typeof articleCreateSchema> | z.infer<typeof articleUpdateSchema>;
+type FormValues = z.infer<typeof eventCreateSchema> | z.infer<typeof eventUpdateSchema>;
 
-const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
+const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
 
   const router = useRouter();
 
@@ -54,18 +54,18 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
   const [imageFieldMounted, setImageFieldMounted] = useState(false);
   
   const form = useForm<FormValues>({
-    resolver: zodResolver(article ? articleUpdateSchema : articleCreateSchema),
+    resolver: zodResolver(event ? eventUpdateSchema : eventCreateSchema),
 
     defaultValues: {
-      title: article?.title ?? "",
-      slug: article?.slug ?? "",
-      categoryId: article?.category.id ?? "",
-      description: article?.description ?? "",
-      author: article?.author.id ?? "",
-      content: article?.content ?? "",
-      robots: article?.robots ?? "noindex, nofollow",
-      publishedAt: article?.publishedAt ? new Date(article.publishedAt) : undefined,
-      tags: article?.tags ? article?.tags.join(', ') : "",
+      title: event?.title ?? "",
+      permalink: event?.permalink ?? "",
+      categoryId: event?.category.id ?? "",
+      description: event?.description ?? "",
+      author: event?.author.id ?? "",
+      content: event?.content ?? "",
+      robots: event?.robots ?? "noindex, nofollow",
+      publishedAt: event?.publishedAt ? new Date(event.publishedAt) : undefined,
+      tags: event?.tags ? event?.tags.join(', ') : "",
     },
   });
 
@@ -77,7 +77,7 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
     const formData = new FormData();
 
     formData.append('title', values.title);
-    formData.append('slug', values.slug);
+    formData.append('permalink', values.permalink);
     formData.append('categoryId', values.categoryId);
     formData.append('author', values.author);
     formData.append('description', values.description);
@@ -97,13 +97,13 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
 
     let response: any;
 
-    if (!article) {
-      response = await createArticle(formData);
+    if (!event) {
+      response = await createEvent(formData);
     }
 
-    if (article && article.id) {
+    if (event && event.id) {
       setImageFieldMounted(false);
-      response = await updateArticle(article.id, formData);
+      response = await updateEvent(event.id, formData);
     }
 
     if (!response.ok) {
@@ -123,15 +123,15 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
       setImageFieldMounted(true);
     }
 
-    // Redirect to articles page if article is created
-    if (!article) {
+    // Redirect to events page if event is created
+    if (!event) {
       form.reset();
-      router.replace('/admin/articles');
+      router.replace('/admin/events');
     }
   };
 
   const onClose = () => {
-    router.replace('/admin/articles');
+    router.replace('/admin/events');
   };
 
   return (
@@ -156,10 +156,10 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
           />
           <FormField
             control={form.control}
-            name="slug"
+            name="permalink"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Permalink</FormLabel>
                 <FormControl>
                   <Input autoComplete="off" {...field} />
                 </FormControl>
@@ -304,7 +304,7 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
             name="tags"
             render={({ field }) => (
               <FormItem className="mb-4 md:mb-0">
-                <FormLabel>Tags</FormLabel>
+                <FormLabel>Tags <span className="text-sm text-gray-400/80 italic">(separate tags by commas)</span></FormLabel>
                 <FormControl>
                   <Input {...field} autoComplete="off" />
                 </FormControl>
@@ -441,7 +441,7 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
                   <span className="animate-pulse">wait ...</span>
                 </span>
               ) : (
-                <span>{article ? 'Save' : 'Create'}</span>
+                <span>{event ? 'Save' : 'Create'}</span>
               )
             }
           </Button>
@@ -451,4 +451,4 @@ const ArticleForm: FC<Props> = ({ article, categories, authors = [] }) => {
   );
 };
 
-export default ArticleForm;
+export default EventForm;

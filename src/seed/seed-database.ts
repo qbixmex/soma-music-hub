@@ -7,7 +7,7 @@ const main = async () => {
 
   console.log('Clearing data 🧹');
 
-  await prisma.article.deleteMany();
+  await prisma.event.deleteMany();
   await prisma.user.deleteMany();
   await prisma.category.deleteMany();
 
@@ -15,7 +15,7 @@ const main = async () => {
 
   console.log('Seed started 🚀');
 
-  const { categories, articles, users } = initialData;
+  const { categories, events, users } = initialData;
 
   const usersData = users.map(user => {
     const encryptedPassword = bcrypt.hashSync(user.password, 10);  
@@ -57,18 +57,19 @@ const main = async () => {
   );
 
   const categoriesMap = categoriesDB.reduce((map, category) => {
-    map[category.name.toLowerCase()] = category.id;
-    return map;
-  },
+      const categoryName = category.name.replaceAll(" ", "_").toLowerCase();
+      map[categoryName] = category.id;
+      return map;
+    },
     // <category_name, category_id>
     // example -> { id: '569202b7-...', name: 'Javascript' },
     {} as Record<string, string>
   );
 
-  articles.forEach(async (article) => {
-    const { category, author, ...attributesRest } = article;
+  events.forEach(async (event) => {
+    const { category, author, ...attributesRest } = event;
 
-    await prisma.article.create({
+    await prisma.event.create({
       data: {
         ...attributesRest,
         categoryId: categoriesMap[category.toLowerCase()],
@@ -77,7 +78,7 @@ const main = async () => {
     });
   });
 
-  console.log('Articles Inserted 👍');
+  console.log('Events Inserted 👍');
 
   console.log('Seed executed 🎉');
 }

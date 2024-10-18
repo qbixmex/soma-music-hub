@@ -16,7 +16,7 @@ datasource db {
 model Category {
   id          String @id @default(uuid())
   name        String
-  slug        String @unique
+  permalink   String @unique
   description String
 
   // Timestamps
@@ -24,17 +24,17 @@ model Category {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  articles Article[]
+  events Event[]
 
   // Indexes
-  @@index([name, slug])
+  @@index([name, permalink])
   @@map("categories")
 }
 
-model Article {
+model Event {
   id            String    @id @default(uuid())
   title         String
-  slug          String    @unique
+  permalink     String    @unique
   imageUrl      String    @map("image_url")
   imagePublicId String    @map("image_public_id")
   description   String    @default("no_image.jpg")
@@ -55,8 +55,8 @@ model Article {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Indexes
-  @@index([title, slug])
-  @@map("articles")
+  @@index([title, permalink])
+  @@map("events")
 }
 
 enum Role {
@@ -79,7 +79,7 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relationship
-  articles Article[]
+  events Event[]
 
   // Indexes
   @@index([email, role])

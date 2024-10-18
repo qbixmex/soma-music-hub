@@ -5,7 +5,7 @@ import { prisma } from "@/lib";
 import deleteImage from "@/utils/delete-image";
 import { revalidatePath } from "next/cache";
 
-const deleteArticle = async ( articleId: string ) => {
+const deleteEvent = async ( eventId: string ) => {
   
   const session = await auth();
 
@@ -18,47 +18,47 @@ const deleteArticle = async ( articleId: string ) => {
   } = { id: "" };
 
   if (authorRole === 'admin') {
-    whereClause = { id: articleId };
+    whereClause = { id: eventId };
   } else if (authorRole === 'author') {
-    whereClause = { id: articleId, authorId };
+    whereClause = { id: eventId, authorId };
   } else if (authorRole === 'subscriber') {
     return {
       ok: false,
       article: null,
-      message: "You are not authorized to delete this article",
+      message: "You are not authorized to delete this event",
     };
   }
 
   try {
-    const articleDeleted = await prisma.article.delete({
+    const eventDeleted = await prisma.event.delete({
       where: whereClause,
     });
 
     // Delete image from cloudinary.
-    await deleteImage(articleDeleted.imagePublicId);
+    await deleteImage(eventDeleted.imagePublicId);
 
-    if (!articleDeleted) {
+    if (!eventDeleted) {
       return {
         ok: false,
-        message: `Article not found with id: ${articleId}`,
+        message: `Event not found with id: ${eventId}`,
       };
     }
 
     // Revalidate Paths
     revalidatePath('/');
-    revalidatePath('/admin/articles');
+    revalidatePath('/admin/events');
 
     return {
       ok: true,
-      message: "Article deleted successfully",
+      message: "Event deleted successfully",
     };
   } catch (error) {
     console.log(error);
     return {
       ok: false,
-      message: `Unable to delete article, check the logs for more information`,
+      message: `Unable to delete event, check the logs for more information`,
     };
   }
 };
 
-export default deleteArticle;
+export default deleteEvent;

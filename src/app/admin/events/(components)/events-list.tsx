@@ -18,18 +18,18 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Edit, Trash2 } from "lucide-react";
-import { ArticlesForList, deleteArticle } from "@/actions";
+import { EventsForList, deleteEvent } from "@/actions";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
 type Props = {
-  articles: ArticlesForList[];
+  events: EventsForList[];
 };
 
-const ArticlesList: FC<Props> = ({ articles }) => {
+const EventsList: FC<Props> = ({ events }) => {
 
-  const handleDeleteArticle = async (id: string) => {
-    const response = await deleteArticle(id);
+  const handleDeleteEvent = async (id: string) => {
+    const response = await deleteEvent(id);
 
     if (!response.ok) {
       toast.error(response.message, {
@@ -48,15 +48,15 @@ const ArticlesList: FC<Props> = ({ articles }) => {
     }
   };
 
-  if (articles.length === 0) {
+  if (events.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
-            You have no articles create yet.
+            You have no events created yet.
           </h3>
-          <Link href="/admin/articles/new">
-            <Button className="mt-4" variant="primary">Create Article</Button>
+          <Link href="/admin/events/new">
+            <Button className="mt-4" variant="primary">Create Event</Button>
           </Link>
         </div>
       </div>
@@ -67,12 +67,12 @@ const ArticlesList: FC<Props> = ({ articles }) => {
     <Card>
       <CardHeader className="px-7">
         <CardTitle className="text-4xl">
-          Articles
+          Events
         </CardTitle>
         <CardDescription className="text-right">
-        <Link href="/admin/articles/new">
+        <Link href="/admin/events/new">
           <Button variant="primary" className="w-full md:w-fit">
-            Add an Article
+            Add an Event
           </Button>
         </Link>
         </CardDescription>
@@ -83,7 +83,7 @@ const ArticlesList: FC<Props> = ({ articles }) => {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead className="hidden sm:table-cell">Category</TableHead>
-              <TableHead className="hidden sm:table-cell">author</TableHead>
+              <TableHead className="hidden sm:table-cell">Author</TableHead>
               <TableHead className="hidden sm:table-cell">Status</TableHead>
               <TableHead className="hidden sm:table-cell">Published Date</TableHead>
               <TableHead className="text-center">Actions</TableHead>
@@ -91,37 +91,37 @@ const ArticlesList: FC<Props> = ({ articles }) => {
           </TableHeader>
           <TableBody>
             {
-              articles.map((article) => (
-                <TableRow key={article.id} className="bg-secondary/50">
+              events.map((event) => (
+                <TableRow key={event.id} className="bg-secondary/50">
                   <TableCell>
-                    <span className="font-medium">{ article.title }</span>
+                    <span className="font-medium">{ event.title }</span>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <Badge className="text-xs" variant="info">
-                      { article.category.name }
+                      { event.category.name }
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <Badge className="text-xs" variant="info">
-                      { article.author.name }
+                      { event.author.name }
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <Badge
                       className="text-xs"
-                      variant={article.publishedAt ? "success" : "warning"}
+                      variant={event.publishedAt ? "success" : "warning"}
                     >
-                      { article.publishedAt ? "Published" : "Draft" }
+                      { event.publishedAt ? "Published" : "Draft" }
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {article.publishedAt
-                      ? format(new Date(article.publishedAt), "PPP")
-                      : 'none'
+                    {event.publishedAt
+                      ? format(new Date(event.publishedAt), "PPP")
+                      : 'not published yet'
                     }
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-center">
-                    <Link href={`/admin/articles/${article.slug}/edit/`}>
+                    <Link href={`/admin/events/${event.permalink}/edit/`}>
                       <Button variant="warning">
                         <Edit />
                       </Button>
@@ -135,12 +135,12 @@ const ArticlesList: FC<Props> = ({ articles }) => {
                           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                           <AlertDialogDescription>
                             <p>This action cannot be undone.</p>
-                            <p> This will permanently delete your article and data from our servers will deleted forever.</p>
+                            <p> This will permanently delete your event and data from our servers will deleted forever.</p>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteArticle(article.id!)}>
+                          <AlertDialogAction onClick={() => handleDeleteEvent(event.id!)}>
                             Continue
                           </AlertDialogAction>
                         </AlertDialogFooter>
@@ -157,4 +157,4 @@ const ArticlesList: FC<Props> = ({ articles }) => {
   );
 };
 
-export default ArticlesList;
+export default EventsList;

@@ -1,7 +1,7 @@
 export interface Category {
   id?: string;
   name: string;
-  slug: string;
+  permalink: string;
   description: string;
   createdAt?: Date;
   updatedAt?: Date;

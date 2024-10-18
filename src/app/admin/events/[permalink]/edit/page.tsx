@@ -7,31 +7,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ArticleForm from "../../(components)/article-form";
-import { getArticleBySlug, getCategories, getAuthors } from "@/actions";
+import EventForm from "../../(components)/event-form";
+import { getEventByPermalink, getCategories, getAuthors } from "@/actions";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
 
 type Props = {
   params: {
-    slug: string;
+    permalink: string;
   };
 };
 
-const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
+const EventEditPage: FC<Props> = async ({ params: { permalink } }) => {
 
   const session = await auth();
 
-  const { article } = await getArticleBySlug({
-    slug,
+  const { event } = await getEventByPermalink({
+    permalink,
     role: session?.user.role!,
     authorId: session?.user.id!,
   });
   const { categories } = await getCategories();
   const { authors } = await getAuthors();
 
-  if (!article) {
-    redirect('/admin/articles');
+  if (!event) {
+    redirect('/admin/events');
   }
 
   return (
@@ -40,8 +40,8 @@ const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
         <CardTitle className="text-4xl">Edit Article</CardTitle>
       </CardHeader>
       <CardContent>
-        <ArticleForm
-          article={article}
+        <EventForm
+          event={event}
           categories={categories}
           authors={authors}
         />
@@ -51,4 +51,4 @@ const ArticleEditPage: FC<Props> = async ({ params: { slug } }) => {
   );
 };
 
-export default ArticleEditPage;
+export default EventEditPage;
