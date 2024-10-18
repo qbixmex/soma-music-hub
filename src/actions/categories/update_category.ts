@@ -18,12 +18,12 @@ const updateCategory = async (id: string, formData: FormData) => {
   }
 
   const categoryToSave = categoryParsed.data;
-  categoryToSave.slug = slugFormat(categoryToSave.slug);
+  categoryToSave.permalink = slugFormat(categoryToSave.permalink);
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {
 
-      const updatedCategory = await prisma.category.update({
+      const updatedCategory = await transaction.category.update({
         where: { id },
         data: categoryToSave,
       });
@@ -37,7 +37,7 @@ const updateCategory = async (id: string, formData: FormData) => {
     
     // Revalidate Paths
     revalidatePath('/admin/categories');
-    revalidatePath(`/admin/categories/${data.slug}`);
+    revalidatePath(`/admin/categories/${data.permalink}`);
 
     return prismaTransaction;
   } catch (error) {
