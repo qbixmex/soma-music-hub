@@ -12,11 +12,11 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Quantic Coders',
-    absolute: 'Quantic Coders',
-    default: 'Quantic Coders',
+    template: '%s | Soma Music Club',
+    absolute: 'Soma Music Hub',
+    default: 'Soma Music Hub',
   },
-  description: "A blog about software development and programming.",
+  description: "Welcome to Soma Music Hub, a sanctuary for those who truly appreciate the essence of underground electronic music",
 };
 
 const RootLayout: FC<{children: ReactNode}> = ({ children }) => {

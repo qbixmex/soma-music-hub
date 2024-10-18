@@ -32,14 +32,14 @@ const SideNav = () => {
         Categories
       </Link>
       <Link
-        href="/admin/articles"
+        href="/admin/events"
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-muted-foreground hover:text-primary",
-          { "bg-muted text-primary": pathname.startsWith("/admin/articles") }
+          { "bg-muted text-primary": pathname.startsWith("/admin/events") }
         )}
       >
         <Files className="h-4 w-4" />
-        Articles{" "}
+        Events{" "}
       </Link>
       <Link
         href="/admin/tags"

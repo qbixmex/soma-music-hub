@@ -14,6 +14,7 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { logout } from "@/actions";
 import { ToggleMode } from "@/app/admin/(components)";
 import MobileSidebar from "./mobile-sidebar";
+import { Globe } from "lucide-react";
 
 const TopNavigation = () => {
 
@@ -33,7 +34,10 @@ const TopNavigation = () => {
         <MobileSidebar />
       </Sheet>
       <div className="w-full flex-1">
-        <form>
+        {/*
+          // TODO: SEARCH FUNCTIONALITY
+        */}
+        <form className="hidden">
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -44,6 +48,9 @@ const TopNavigation = () => {
           </div>
         </form>
       </div>
+      <Link href="/" target="_blank">
+        <Globe />
+      </Link>
       <ToggleMode />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

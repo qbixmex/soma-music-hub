@@ -23,8 +23,8 @@ const TopNavigation = () => {
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 mb-5">
       <section className="px-5 text-center">
         <Link href="/" className="font-bold text-accent-foreground hover:text-slate-300 transition-colors">
-          <span className="hidden sm:inline">QUANTIC CODERS</span>
-          <span className="sm:hidden">QC</span>
+          <span className="hidden sm:inline">SOMA</span>
+          <span className="sm:hidden">SOM</span>
         </Link>
       </section>
       {/* <Sheet>
@@ -62,6 +62,9 @@ const TopNavigation = () => {
         <DropdownMenuContent align="end">
           {session.status === "authenticated" && (
             <>
+              <DropdownMenuItem>
+                <Link href="/admin/dashboard">Dashboard</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link href="/admin/profile">Profile</Link>
               </DropdownMenuItem>
