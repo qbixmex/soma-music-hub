@@ -9,7 +9,7 @@
  * // output -> lap-top
  * ```
  */
-const slugFormat = (text: string) => {
+export const slugFormat = (text: string) => {
   return text.trim().toLowerCase().replace(/ /g, '-');
 };
 

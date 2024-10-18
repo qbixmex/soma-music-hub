@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,9 +8,9 @@ import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
 import { getEventByPermalinkPublic, getEventMetadataByPermalink } from "@/actions";
-import { Metadata } from "next";
-import "./event.css";
 import PublicLayout from "../(public)/public.layout";
+import { getImageUrl } from "@/utils";
+import "./event.css";
 
 type Props = {
   params: {
@@ -50,9 +51,12 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
   const response = await getEventByPermalinkPublic(permalink);
 
   const { event } = response;
+
   if (!event) {
     redirect("/");
   }
+
+  const eventImage = getImageUrl(event.imageUrl);
 
   return (
     <PublicLayout>
@@ -66,7 +70,7 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
           <div className="lg:flex lg:gap-8">
             <div className="lg:w-1/2">
               <Image
-                src={`/images/${event.imageUrl}`}
+                src={eventImage}
                 className="w-auto h-auto rounded-lg object-cover mb-5 md:object-contain lg:order-first"
                 alt={event.title}
                 width={640}

@@ -57,15 +57,15 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
     resolver: zodResolver(event ? eventUpdateSchema : eventCreateSchema),
 
     defaultValues: {
-      title: event?.title ?? "Mi First Event",
-      permalink: event?.permalink ?? "mi-first-event",
+      title: event?.title ?? "",
+      permalink: event?.permalink ?? "",
       categoryId: event?.category.id ?? "",
-      description: event?.description ?? "Lorem ipsum dolor dolem",
+      description: event?.description ?? "",
       author: event?.author.id ?? "",
-      content: event?.content ?? "Dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque.",
+      content: event?.content ?? "",
       robots: event?.robots ?? "noindex, nofollow",
       publishedAt: event?.publishedAt ? new Date(event.publishedAt) : undefined,
-      tags: event?.tags ? event?.tags.join(', ') : "techno, house, trance, edm",
+      tags: event?.tags ? event?.tags.join(', ') : "",
     },
   });
 
@@ -304,7 +304,7 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
             name="tags"
             render={({ field }) => (
               <FormItem className="mb-4 md:mb-0">
-                <FormLabel>Tags</FormLabel>
+                <FormLabel>Tags <span className="text-sm text-gray-400/80 italic">(separate tags by commas)</span></FormLabel>
                 <FormControl>
                   <Input {...field} autoComplete="off" />
                 </FormControl>

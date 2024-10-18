@@ -3,12 +3,15 @@ import Image from "next/image";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { EventPublic } from "@/actions/events/fetch_events";
+import { getImageUrl } from "@/utils";
 
 type Props = {
   event: EventPublic;
 };
 
 const Event: React.FC<Readonly<Props>> = ({ event }) => {
+
+  const eventImage = getImageUrl(event.imageUrl);
 
   return (
     <article className="flex flex-col md:flex-row gap-10">
@@ -19,7 +22,7 @@ const Event: React.FC<Readonly<Props>> = ({ event }) => {
             title={`read more about ${event.title}`}
           >
             <Image
-              src={`/images/${event.imageUrl}`}
+              src={eventImage}
               className="w-full h-auto rounded-lg"
               alt={event.title}
               width={640}

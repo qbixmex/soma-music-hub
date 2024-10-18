@@ -31,11 +31,11 @@ const createEvent = async (formData: FormData) => {
   eventToSave.permalink = slugFormat(eventToSave.permalink);
 
   // Upload Image to third-party storage (cloudinary).
-  // const imageUploaded = await uploadImage(image!, 'events');
+  const imageUploaded = await uploadImage(image!, 'events');
   
-  // if (!imageUploaded) {
-  //   throw 'Error uploading image to cloudinary';
-  // }
+  if (!imageUploaded) {
+    throw 'Error uploading image to cloudinary';
+  }
 
   const tagsArray = eventToSave.tags
     .split(",")
@@ -50,10 +50,8 @@ const createEvent = async (formData: FormData) => {
         data: {
           ...eventToSave,
           authorId,
-          // imageUrl: imageUploaded.secureUrl,
-          // imagePublicId: imageUploaded.publicId,
-          imageUrl: 'https://via.placeholder.com/150',
-          imagePublicId: "6eb4593-47d0-4b1f-8b27-5cc4c68a9be5",
+          imageUrl: imageUploaded.secureUrl,
+          imagePublicId: imageUploaded.publicId,
           tags: { set: tagsArray },
         },
       });

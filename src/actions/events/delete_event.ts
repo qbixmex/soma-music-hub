@@ -35,7 +35,7 @@ const deleteEvent = async ( eventId: string ) => {
     });
 
     // Delete image from cloudinary.
-    // await deleteImage(articleDeleted.imagePublicId);
+    await deleteImage(eventDeleted.imagePublicId);
 
     if (!eventDeleted) {
       return {
