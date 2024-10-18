@@ -80,7 +80,7 @@ const updateEvent = async (id: string, formData: FormData) => {
     });
     
     // Revalidate Paths
-    revalidatePath('/events');
+    revalidatePath('/');
     revalidatePath('/admin/events');
     revalidatePath(`/admin/events/${data.permalink}`);
 
