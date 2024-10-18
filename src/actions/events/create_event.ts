@@ -64,7 +64,7 @@ const createEvent = async (formData: FormData) => {
     });
     
     // Revalidate Paths
-    revalidatePath('/events');
+    revalidatePath('/');
     revalidatePath('/admin/events');
 
     return prismaTransaction;
