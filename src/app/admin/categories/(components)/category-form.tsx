@@ -27,7 +27,7 @@ const CategoryForm: FC<Props> = ({ category }) => {
 
     defaultValues: {
       name: category?.name ?? "",
-      slug: category?.slug ?? "",
+      permalink: category?.permalink ?? "",
       description: category?.description ?? "",
     },
   });
@@ -36,7 +36,7 @@ const CategoryForm: FC<Props> = ({ category }) => {
     const formData = new FormData();
 
     formData.append('name', values.name);
-    formData.append('slug', values.slug);
+    formData.append('permalink', values.permalink);
     formData.append('description', values.description);
 
     let response: any;
@@ -95,7 +95,7 @@ const CategoryForm: FC<Props> = ({ category }) => {
           />
           <FormField
             control={form.control}
-            name="slug"
+            name="permalink"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Slug</FormLabel>

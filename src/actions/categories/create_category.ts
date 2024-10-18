@@ -23,7 +23,7 @@ const createCategory = async (formData: FormData) => {
   }
 
   const categoryToSave = categoryParsed.data;
-  categoryToSave.slug = slugFormat(categoryToSave.slug);
+  categoryToSave.permalink = slugFormat(categoryToSave.permalink);
 
   try {
     const prismaTransaction = await prisma.$transaction(async (transaction) => {

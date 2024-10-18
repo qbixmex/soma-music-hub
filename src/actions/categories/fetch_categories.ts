@@ -106,17 +106,17 @@ export const getCategoryById = async (id: string): Promise<ResponseFetchCategory
   }
 };
 
-export const getCategoryBySlug = async (slug: string): Promise<ResponseFetchCategory> => {
+export const getCategoryBySlug = async (permalink: string): Promise<ResponseFetchCategory> => {
   try {
     const category = await prisma.category.findUnique({
-      where: { slug },
+      where: { permalink },
     }) as Category | null;
   
     if (!category) {
       return {
         ok: false,
         category: null,
-        message: "Category not found with slug: " + slug,
+        message: "Category not found with permalink: " + permalink,
       };
     }
 
@@ -135,10 +135,10 @@ export const getCategoryBySlug = async (slug: string): Promise<ResponseFetchCate
   }
 };
 
-export const getCategoryMetadataBySlug = async (slug: string): Promise<ResponseFetchCategoryMetadata> => {
+export const getCategoryMetadataBySlug = async (permalink: string): Promise<ResponseFetchCategoryMetadata> => {
   try {
     const metadata = await prisma.category.findUnique({
-      where: { slug },
+      where: { permalink },
       select: {
         name: true,
         description: true,
@@ -149,7 +149,7 @@ export const getCategoryMetadataBySlug = async (slug: string): Promise<ResponseF
       return {
         ok: false,
         metadata: null,
-        message: "Category not found with slug: " + slug,
+        message: "Category not found with permalink: " + permalink,
       };
     }
 

@@ -2,7 +2,6 @@
 
 import { FC } from "react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -21,7 +20,6 @@ import { Edit, Trash2 } from "lucide-react";
 import { Category } from "@/interfaces";
 import { deleteCategory } from "@/actions";
 import { toast } from "sonner";
-import { format } from "date-fns";
 
 type Props = {
   categories: Category[];
@@ -98,7 +96,7 @@ const ArticlesList: FC<Props> = ({ categories }) => {
                     <span className="font-medium">{ category.description }</span>
                   </TableCell>
                   <TableCell className="flex gap-x-2 justify-end">
-                    <Link href={`/admin/categories/${category.slug}/edit/`}>
+                    <Link href={`/admin/categories/${category.permalink}/edit/`}>
                       <Button variant="warning">
                         <Edit />
                       </Button>
