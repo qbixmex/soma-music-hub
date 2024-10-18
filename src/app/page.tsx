@@ -1,11 +1,23 @@
-import { getEventsPublic } from "@/actions";
+import { type EventPublic, getEventsPublic } from "@/actions";
 import PublicLayout from "./(public)/public.layout";
 import { Title } from "@/components/text";
 import { Event } from "./(public)/components";
 
-const HomePage = async () => {
-
+export const getServerSideProps = async () => {
   const { events } = await getEventsPublic({ isPublished: true });
+
+  return {
+    props: {
+      events,
+    },
+  };
+};
+
+type Props = {
+  events: EventPublic[];
+};
+
+const HomePage: React.FC<Props> = async ({ events }) => {
 
   return (
     <PublicLayout>
@@ -19,7 +31,7 @@ const HomePage = async () => {
         )}
 
         <section>
-          { events && events.map((event) => (
+          {events && events.map((event) => (
             <Event key={event.id} event={event} />
           ))}
         </section>

@@ -98,7 +98,7 @@ const CategoryForm: FC<Props> = ({ category }) => {
             name="permalink"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Permalink</FormLabel>
                 <FormControl>
                   <Input autoComplete="off" {...field} />
                 </FormControl>
