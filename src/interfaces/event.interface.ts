@@ -15,6 +15,11 @@ export interface Event {
   imagePublicId: string;
   description: string;
   content: string;
+  artist: string;
+  lineUp: string[];
+  ticketUrl: string;
+  location: string;
+  eventDate: Date | null;
   category: Category;
   tags: string[];
   publishedAt: Date | null;

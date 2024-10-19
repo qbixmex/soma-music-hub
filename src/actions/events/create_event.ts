@@ -13,6 +13,9 @@ const createEvent = async (formData: FormData) => {
 
   const eventParsed = eventSchema.safeParse({
     ...data,
+    eventDate: data.eventDate
+      ? new Date(`${data.eventDate}`)
+      : undefined,
     publishedAt: data.publishedAt
       ? new Date(`${data.publishedAt}`)
       : undefined,
@@ -35,6 +38,10 @@ const createEvent = async (formData: FormData) => {
     throw 'Error uploading image to cloudinary';
   }
 
+  const lineUpArray = eventToSave.lineUp
+    .split(",")
+    .map(item => item.trim().toLowerCase());
+
   const tagsArray = eventToSave.tags
     .split(",")
     .map(tag => tag.trim().toLowerCase());
@@ -50,6 +57,7 @@ const createEvent = async (formData: FormData) => {
           authorId,
           imageUrl: imageUploaded.secureUrl,
           imagePublicId: imageUploaded.publicId,
+          lineUp: { set: lineUpArray },
           tags: { set: tagsArray },
         },
       });
