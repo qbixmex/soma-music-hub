@@ -4,7 +4,10 @@ import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { EventPublic } from "@/actions/events/fetch_events";
 import { getImageUrl } from "@/utils";
-import { CalendarDays as Calendar } from "lucide-react";
+import {
+  CalendarDays as Calendar,
+  MapPin as Location
+} from "lucide-react";
 
 type Props = {
   event: EventPublic;
@@ -42,15 +45,24 @@ const Event: React.FC<Readonly<Props>> = ({ event }) => {
 
         <p className="text-pretty">{event.description}</p>
 
-        <div className="flex gap-2 items-center text-white">
-          <Calendar size={24} className="text-pink-400" />
-          <span className="italic text-gray-300">
-          {
-            new Intl.DateTimeFormat('en-CA', {
-              dateStyle: 'long',
-            }).format(event.publishedAt)
-          }
-          </span>
+        <div className="flex flex-col sm:flex-row gap-5">
+          <div className="flex gap-2 items-center text-white">
+            <Calendar size={24} className="text-pink-400" />
+            <span className="italic text-gray-300">
+            {
+              new Intl.DateTimeFormat('en-CA', {
+                dateStyle: 'long',
+                timeStyle: 'short',
+              }).format(event.eventDate)
+            }
+            </span>
+          </div>
+          <div className="flex gap-2 items-center text-white">
+            <Location size={24} className="text-pink-400" />
+            <span className="italic text-gray-300">
+              { event.location }
+            </span>
+          </div>
         </div>
 
         <div className="text-right">
