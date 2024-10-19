@@ -46,6 +46,7 @@ const deleteEvent = async ( eventId: string ) => {
 
     // Revalidate Paths
     revalidatePath('/');
+    revalidatePath('/admin/dashboard');
     revalidatePath('/admin/events');
 
     return {

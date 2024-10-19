@@ -82,6 +82,7 @@ const updateEvent = async (id: string, formData: FormData) => {
     // Revalidate Paths
     revalidatePath('/');
     revalidatePath('/admin/events');
+    revalidatePath('/admin/dashboard');
     revalidatePath(`/admin/events/${data.permalink}`);
 
     return prismaTransaction;
