@@ -13,7 +13,7 @@ export type EventPublic = {
   content: string;
   category: Category;
   tags: string[];
-  publishedAt: Date | null;
+  publishedAt: Date;
   author: { name: string };
   robots: Robots;
   createdAt?: Date;
@@ -104,6 +104,7 @@ export const getEventsPublic = async (params: PublicParams = {}):
         imageUrl: true,
         category: true,
         description: true,
+        publishedAt: true,
         author: {
           select: {
             name: true,
