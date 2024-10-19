@@ -9,8 +9,6 @@ import { auth } from '@/auth.config';
 const createEvent = async (formData: FormData) => {
   const data = Object.fromEntries(formData);
 
-  console.log(data);
-
   const session = await auth();
 
   const eventParsed = eventSchema.safeParse({
@@ -65,6 +63,7 @@ const createEvent = async (formData: FormData) => {
     
     // Revalidate Paths
     revalidatePath('/');
+    revalidatePath('/admin/dashboard');
     revalidatePath('/admin/events');
 
     return prismaTransaction;
