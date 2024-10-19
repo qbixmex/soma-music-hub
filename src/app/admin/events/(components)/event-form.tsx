@@ -60,10 +60,15 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
       title: event?.title ?? "",
       permalink: event?.permalink ?? "",
       categoryId: event?.category.id ?? "",
+      artist: event?.artist ?? "",
+      lineUp: event?.lineUp ? event?.lineUp.join(', ') : "",
+      ticketUrl: event?.ticketUrl ?? "",
+      location: event?.location ?? "",
       description: event?.description ?? "",
       author: event?.author.id ?? "",
       content: event?.content ?? "",
       robots: event?.robots ?? "noindex, nofollow",
+      eventDate: event?.eventDate ? new Date(event.eventDate) : undefined,
       publishedAt: event?.publishedAt ? new Date(event.publishedAt) : undefined,
       tags: event?.tags ? event?.tags.join(', ') : "",
     },
@@ -79,6 +84,10 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
     formData.append('title', values.title);
     formData.append('permalink', values.permalink);
     formData.append('categoryId', values.categoryId);
+    formData.append("artist", values.artist);
+    formData.append("lineUp", values.lineUp);
+    formData.append("ticketUrl", values.ticketUrl);
+    formData.append("location", values.location);
     formData.append('author', values.author);
     formData.append('description', values.description);
     formData.append('content', values.content);
@@ -93,6 +102,10 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
 
     if (values.publishedAt) {
       formData.append('publishedAt', values.publishedAt.toISOString());
+    }
+
+    if (values.eventDate) {
+      formData.append('eventDate', values.eventDate.toISOString());
     }
 
     let response: any;
@@ -317,6 +330,65 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
         <div className="block md:grid md:grid-cols-2 md:gap-x-4">
           <FormField
             control={form.control}
+            name="artist"
+            render={({ field }) => (
+              <FormItem className="mb-4 md:mb-0">
+                <FormLabel>Artist</FormLabel>
+                <FormControl>
+                  <Input autoComplete="off" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lineUp"
+            render={({ field }) => (
+              <FormItem className="mb-4 md:mb-0">
+                <FormLabel>Line Up <span className="text-sm text-gray-400/80 italic">(separate by commas)</span></FormLabel>
+                <FormControl>
+                  <Input {...field} autoComplete="off" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="block md:grid md:grid-cols-2 md:gap-x-4">
+          <FormField
+            control={form.control}
+            name="ticketUrl"
+            render={({ field }) => (
+              <FormItem className="mb-4 md:mb-0">
+                <FormLabel>Ticket URL</FormLabel>
+                <FormControl>
+                  <Input autoComplete="off" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem className="mb-4 md:mb-0">
+                <FormLabel>Event Location</FormLabel>
+                <FormControl>
+                  <Input autoComplete="off" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="block md:grid md:grid-cols-2 md:gap-x-4">
+          <FormField
+            control={form.control}
             name="description"
             render={({ field }) => (
               <FormItem className="mb-4 md:mb-0">
@@ -328,13 +400,58 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="publishedAt"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Published Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[240px] pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP HH:mm:ss")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        className="rounded-md border mb-4"
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                      <div className="p-3 border-t border-border">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="eventDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Event Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
