@@ -20,7 +20,7 @@ const HomePage = async () => {
           <p className="paragraph">No events found.</p>
         )}
 
-        <section>
+        <section className="grid grid-cols-1 gap-5">
           {events && events.map((event) => (
             <Event key={event.id} event={event} />
           ))}

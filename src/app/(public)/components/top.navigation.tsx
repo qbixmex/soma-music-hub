@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 
 import { CircleUser, Search } from "lucide-react";
@@ -60,33 +59,31 @@ const TopNavigation = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {session.status === "authenticated" && (
-            <>
-              <DropdownMenuItem>
-                <Link href="/admin/dashboard">Dashboard</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/admin/profile">Profile</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={async () => {
-                  await logout();
-                  window.location.replace('/');
-                }}
-                className="cursor-pointer"
-              >
-                Logout
-              </DropdownMenuItem>
-            </>
-          )}
-          {session.status === "unauthenticated" && (
-            <>
-              <DropdownMenuItem className="cursor-pointer">
-                <Link href="/auth/login">Login</Link>
-              </DropdownMenuItem>
-            </>
-          )}
+        {session.status === "authenticated" && (
+          <>
+            <DropdownMenuItem>
+              <Link href="/admin/dashboard">Dashboard</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/admin/profile">Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={async () => {
+                await logout();
+                window.location.replace('/');
+              }}
+            >
+              Logout
+            </DropdownMenuItem>
+          </>
+        )}
+        {session.status === "unauthenticated" && (
+          <DropdownMenuItem className="cursor-pointer">
+            <Link href="/auth/login">Login</Link>
+          </DropdownMenuItem>
+        )}
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

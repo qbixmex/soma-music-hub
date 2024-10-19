@@ -10,6 +10,7 @@ import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } fr
 import { getEventByPermalinkPublic, getEventMetadataByPermalink } from "@/actions";
 import PublicLayout from "../(public)/public.layout";
 import { getImageUrl } from "@/utils";
+import { CalendarDays as Calendar } from "lucide-react";
 import "./event.css";
 
 type Props = {
@@ -101,12 +102,16 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
                   </p>
 
                   {/* DATE */}
-                  <p className="space-x-2">
-                    <span className="font-semibold">Date:</span>
-                    <span className="italic text-base">
-                      {`${event.publishedAt ?? 'Unknown'}`}
+                  <div className="flex gap-2 items-center text-white">
+                    <Calendar size={24} className="text-pink-400" />
+                    <span className="italic text-gray-300">
+                    {
+                      new Intl.DateTimeFormat('en-CA', {
+                        dateStyle: 'long',
+                      }).format(event.publishedAt as Date)
+                    }
                     </span>
-                  </p>
+                  </div>
                 </div>
 
                 <div className="mb-8 lg:justify-start">
@@ -127,28 +132,6 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
                       }
                     </div>
                   </div>
-
-                  {/* SHARE SOCIAL MEDIA */}
-                  <div className="mb-8 lg:justify-start">
-                    <p className="font-semibold mb-3">Share Article</p>
-                    <div className="flex flex-wrap gap-2">
-                      <Link className="social-link" href="#" title="Share on Facebook">
-                        <FaFacebook />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Twitter">
-                        <FaTwitter />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Instagram">
-                        <FaInstagram />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Linkedin">
-                        <FaLinkedin />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Email">
-                        <FaEnvelope />
-                      </Link>
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>
@@ -159,11 +142,11 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
           <Content id={event.id!} content={event.content} />
         </main>
 
-        <p className="text-right mb-5">
-          <Button variant="outline">
-            <Link href="/events" className="no-underline text-white">back to events</Link>
-          </Button>
-        </p>
+        <div className="text-right mb-5">
+          <Link href="/events" className="no-underline text-white">
+            <Button variant="outline">back to events</Button>
+          </Link>
+        </div>
 
       </article>
     </PublicLayout>
