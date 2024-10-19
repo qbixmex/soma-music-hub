@@ -29,7 +29,7 @@ const updateEvent = async (id: string, formData: FormData) => {
   const { author, image, ...eventToSave } = eventParsed.data;
   eventToSave.permalink = slugFormat(eventToSave.permalink);
 
-  const lineUpArray = eventToSave.tags
+  const lineUpArray = eventToSave.lineUp
     .split(",")
     .map(item => item.trim().toLowerCase());
 
