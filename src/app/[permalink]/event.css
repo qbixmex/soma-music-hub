@@ -2,6 +2,10 @@
   margin-top: 0;
 }
 
+h1 {
+  @apply text-4xl font-bold mb-3;
+}
+
 h2 {
   @apply text-3xl font-bold mb-3;
 }
@@ -16,4 +20,8 @@ p {
 
 pre {
   @apply my-5;
+}
+
+hr {
+  @apply h-0.5 bg-gray-400 my-8;
 }

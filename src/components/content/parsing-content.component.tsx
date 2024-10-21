@@ -6,12 +6,10 @@ type Props = {
   content: string;
 };
 
-const Content: FC<Props> = ({ id, content }) => {
+export const Content: FC<Props> = ({ id, content }) => {
   const regex = /<pre><code class="language-([^"]+)">([\s\S]*?)<\/code><\/pre>/g;
   let lastIndex = 0;
   const elements = [];
-
-  // 
 
   content.replace(regex, (match, language, codeContent, offset) => {
     // Add the content before the <pre> tag if there's any
@@ -45,6 +43,7 @@ const Content: FC<Props> = ({ id, content }) => {
       <section
         key={id}
         dangerouslySetInnerHTML={{ __html: content.slice(lastIndex) }}
+        className="content"
       />
     );
   }
