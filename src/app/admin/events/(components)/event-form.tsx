@@ -36,6 +36,7 @@ import { useSession } from "next-auth/react";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import Spinner from "@/components/ui/spinner";
+import { Editor } from "@/components/content"
 
 type Props = {
   categories: Category[];
@@ -529,7 +530,10 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea {...field} rows={10} className="resize-none" />
+                <Editor
+                  defaultContent={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
