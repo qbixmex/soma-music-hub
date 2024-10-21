@@ -41,7 +41,7 @@ const eventSchema = z.object({
   ticketUrl: z
     .string({ message: 'The ticket url must be an string' })
     .min(4, 'The ticket url must contain at lest 4 characters long')
-    .max(150, 'The ticket url must be less than 155 characters long'),
+    .max(255, 'The ticket url must be less than 255 characters long'),
   location: z
     .string({ message: 'The ticket url must be an string' })
     .min(8, 'The location must contain at lest 8 characters long')
