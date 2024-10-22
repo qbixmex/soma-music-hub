@@ -11,12 +11,10 @@ const updateEvent = async (id: string, formData: FormData) => {
 
   const eventParsed = eventSchema.safeParse({
     ...data,
-    publishedAt: data.publishedAt
-      ? new Date(`${data.publishedAt}`)
-      : undefined,
     eventDate: data.eventDate
       ? new Date(`${data.eventDate}`)
       : undefined,
+    active: data.active === 'true' ? true : (data.active === 'false') ? false : undefined,
   });
 
   if (!eventParsed.success) {
@@ -89,6 +87,7 @@ const updateEvent = async (id: string, formData: FormData) => {
     
     // Revalidate Paths
     revalidatePath('/');
+    revalidatePath(`/${data.permalink}`);
     revalidatePath('/admin/events');
     revalidatePath('/admin/dashboard');
     revalidatePath(`/admin/events/${data.permalink}`);

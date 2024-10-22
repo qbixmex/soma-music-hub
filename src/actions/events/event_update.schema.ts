@@ -57,9 +57,7 @@ const eventSchema = z.object({
   eventDate: z
     .date({ required_error: 'The event date is required' })
     .optional(),
-  publishedAt: z
-    .date({ required_error: 'The published at is required' })
-    .optional(),
+  active: z.boolean().optional(),
   robots: z
     .enum([
       "index, follow",

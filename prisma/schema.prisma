@@ -40,13 +40,13 @@ model Event {
   description   String    @default("no_image.jpg")
   content       String    @db.Text
   tags          String[]
-  publishedAt   DateTime? @map("published_at")
   robots        String?   @default("noindex, nofollow")
   artist        String?   @default("not specified yet")
   lineUp        String[]  @default([]) @map("line_up")
   ticketUrl     String?   @map("ticket_url")
   location      String?   @default("not specified yet")
   eventDate     DateTime? @map("event_date")
+  active        Boolean?  @default(false) @map("active")
 
   // Relations
   category   Category @relation(fields: [categoryId], references: [id])

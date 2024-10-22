@@ -18,7 +18,7 @@ export type EventPublic = {
   category: Category;
   tags: string[];
   eventDate: Date;
-  publishedAt: Date;
+  active: boolean;
   author: { name: string };
   robots: Robots;
   createdAt?: Date;
@@ -35,14 +35,10 @@ export type EventsForList = {
   id: string;
   title: string;
   permalink: string;
-  category: {
-    name: string;
-    permalink: string;
-  };
-  author: {
-    name: string;
-  },
-  publishedAt: Date;
+  eventDate: Date;
+  artist: string,
+  imageUrl: string;
+  active: boolean;
 };
 
 type ResponseFetchEvents = {
@@ -71,14 +67,14 @@ type ResponseFetchEventMetadata = {
 };
 
 type PublicParams = {
-  isPublished?: boolean;
+  active?: boolean;
 };
 
 /**
  * Get all events with the option to filter by published status
  * 
  * @param params
- * isPublished - filter by published status
+ * active - filter by active status
  * 
  * @example ```ts
  * getEventPublic(); // get all published event without filtering.
@@ -90,18 +86,11 @@ type PublicParams = {
 export const getEventsPublic = async (params: PublicParams = {}):
   Promise<ResponseFetchEventsPublic> =>
 {
-  const { isPublished } = params;
-  let whereClause = {};
-
-  if (isPublished === true && isPublished !== undefined) {
-    whereClause = { publishedAt: { not: null } };
-  } else if (isPublished === false) {
-    whereClause = { publishedAt: null };
-  }
+  const { active: activeEvent = false } = params;
 
   try {
     const events = await prisma.event.findMany({
-      where: whereClause,
+      where: { active: { equals: activeEvent }},
       select: {
         id: true,
         title: true,
@@ -112,7 +101,7 @@ export const getEventsPublic = async (params: PublicParams = {}):
         category: true,
         description: true,
         eventDate: true,
-        publishedAt: true,
+        active: true,
         author: {
           select: {
             name: true,
@@ -167,18 +156,13 @@ export const getEvents = async (params: AdminParams = {})
         id: true,
         title: true,
         permalink: true,
-        publishedAt: true,
-        category: {
-          select: {
-            name: true,
-            permalink: true,
-          }
-        },
-        author: {
-          select: {
-            name: true,
-          }
-        },
+        active: true,
+        eventDate: true,
+        artist: true,
+        imageUrl: true,
+      },
+      orderBy: {
+        title: 'asc',
       },
     }) as EventsForList[];
 
@@ -259,7 +243,7 @@ export const getEventByPermalinkPublic = async (permalink: string)
         content: true,
         tags: true,
         eventDate: true,
-        publishedAt: true,
+        active: true,
         robots: true,
         category: {
           select: {

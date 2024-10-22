@@ -55,11 +55,12 @@ const eventSchema = z.object({
     .min(8, 'The content must contain at lest 8 characters long'),
   tags: z .string({ message: 'The tags must be an string' }),
   eventDate: z
-    .date({ required_error: 'The event date is required' })
+    .date({
+      required_error: 'The event date is required',
+      message: 'The event date must be an date',
+    })
     .optional(),
-  publishedAt: z
-    .date({ required_error: 'The published at is required' })
-    .optional(),
+  active: z.boolean().optional(),
   robots: z
     .enum([
       "index, follow",

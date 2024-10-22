@@ -2,6 +2,7 @@
 
 import { FC } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +21,8 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import { EventsForList, deleteEvent } from "@/actions";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import ToggleActive from "./toggle-active.component";
+import { getImageUrl } from "@/utils";
 
 type Props = {
   events: EventsForList[];
@@ -81,71 +83,74 @@ const EventsList: FC<Props> = ({ events }) => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="hidden xl:table-cell">Image</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead className="hidden sm:table-cell">Category</TableHead>
-              <TableHead className="hidden sm:table-cell">Author</TableHead>
-              <TableHead className="hidden sm:table-cell">Status</TableHead>
-              <TableHead className="hidden sm:table-cell">Published Date</TableHead>
-              <TableHead className="text-center">Actions</TableHead>
+              <TableHead className="hidden xl:table-cell">Artist</TableHead>
+              <TableHead className="hidden xl:table-cell">Event Date</TableHead>
+              <TableHead className="table-cell">Active</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {
               events.map((event) => (
                 <TableRow key={event.id} className="bg-secondary/50">
+                  <TableCell className="hidden xl:table-cell xl:w-[150px]">
+                    <Image
+                      src={getImageUrl(event.imageUrl)}
+                      alt={event.title}
+                      width={150}
+                      height={100}
+                      className="w-full max-w-[150px] h-[100px] object-cover rounded-lg"
+                    />
+                  </TableCell>
                   <TableCell>
                     <span className="font-medium">{ event.title }</span>
                   </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs" variant="info">
-                      { event.category.name }
-                    </Badge>
+                  <TableCell className="hidden xl:table-cell">
+                    { event.artist }
                   </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs" variant="info">
-                      { event.author.name }
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge
-                      className="text-xs"
-                      variant={event.publishedAt ? "success" : "warning"}
-                    >
-                      { event.publishedAt ? "Published" : "Draft" }
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {event.publishedAt
-                      ? format(new Date(event.publishedAt), "PPP")
-                      : 'not published yet'
+                  <TableCell className="hidden xl:table-cell">
+                    {
+                      event.eventDate
+                        ? new Intl.DateTimeFormat("en-CA", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }).format(event.eventDate)
+                        : "Not assigned yet"
                     }
                   </TableCell>
-                  <TableCell className="flex gap-x-2 justify-center">
-                    <Link href={`/admin/events/${event.permalink}/edit/`}>
-                      <Button variant="warning">
-                        <Edit />
-                      </Button>
-                    </Link>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="danger"><Trash2 /></Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            <p>This action cannot be undone.</p>
-                            <p> This will permanently delete your event and data from our servers will deleted forever.</p>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteEvent(event.id!)}>
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  <TableCell className="table-cell">
+                    <ToggleActive id={event.id} currentStatus={event.active} />
+                  </TableCell>
+                  <TableCell className="md:table-cell">
+                    <div className="flex gap-2 justify-center items-center">
+                      <Link href={`/admin/events/${event.permalink}/edit/`}>
+                        <Button variant="warning">
+                          <Edit />
+                        </Button>
+                      </Link>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="danger"><Trash2 /></Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              <p>This action cannot be undone.</p>
+                              <p> This will permanently delete your event and data from our servers will deleted forever.</p>
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDeleteEvent(event.id!)}>
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
