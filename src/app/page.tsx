@@ -7,7 +7,7 @@ export const fetchCache = 'force-no-store';
 
 const HomePage = async () => {
 
-  const { events } = await getEventsPublic({ isPublished: true });
+  const { events } = await getEventsPublic({ active: true });
 
   return (
     <PublicLayout>

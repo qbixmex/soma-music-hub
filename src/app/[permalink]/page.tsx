@@ -120,10 +120,13 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
                     <Calendar size={24} className="text-pink-400" />
                     <span className="italic text-gray-300">
                     {
-                      new Intl.DateTimeFormat('en-CA', {
-                        dateStyle: 'long',
-                        timeStyle: 'short',
-                      }).format(event.eventDate as Date)
+                      event.eventDate
+                        ? new Intl.DateTimeFormat("en-CA", {
+                            dateStyle: "medium",
+                            timeStyle: "medium",
+                            timeZone: "America/Vancouver"
+                          }).format(event.eventDate)
+                        : "Not assigned yet"
                     }
                     </span>
                   </div>

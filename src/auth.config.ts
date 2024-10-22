@@ -94,7 +94,6 @@ export const authConfig: NextAuthConfig = {
       const isOnRegister = nextUrl.pathname === '/auth/register';
 
       if (isOnAdmin) {
-        console.log("Is on admin route");
         // Redirect unauthenticated users to login page if they're not logged in.
         return isLoggedIn ? true : false;
       } else if (isLoggedIn && (isOnLogin || isOnRegister)) {
