@@ -22,8 +22,8 @@ export const getPublishedDashboardEvents = async (quantity = 5): Promise<Respons
   try {
     const events = await prisma.event.findMany({
       take: quantity,
-      where: { publishedAt: { not: null } },
-      orderBy: { publishedAt: "desc" },
+      where: { active: { equals: true } },
+      orderBy: { createdAt: "desc" },
       include: {
         category: {
           select: { name: true, permalink: true },
@@ -60,7 +60,7 @@ export const getDraftDashboardEvents = async (quantity = 5): Promise<ResponseEve
   try {
     const events = await prisma.event.findMany({
       take: quantity,
-      where: { publishedAt: null },
+      where: { active: { equals: false } },
       orderBy: { createdAt: "desc" },
       include: {
         category: {
