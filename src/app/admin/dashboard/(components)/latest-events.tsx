@@ -20,6 +20,7 @@ import { DashboardEvent } from "@/actions";
 import Link from "next/link";
 import { CalendarX as Calendar } from "lucide-react";
 import clsx from "clsx";
+import { Edit, Globe } from "lucide-react";
 
 type Props = {
   title: string;
@@ -43,23 +44,34 @@ export const DashboardEvents: FC<Props> = ({ title, subTitle, emptyMessage, even
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-full lg:max-w-[400px]">Title</TableHead>
-                  <TableHead className="hidden sm:table-cell">Category</TableHead>
+                  <TableHead className="table-cell">Title</TableHead>
+                  <TableHead className="hidden sm:table-cell">Options</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {events.map((event, index) => (
                   <TableRow key={event.id} className={index % 2 === 0 ? 'bg-muted/80' : 'bg-muted/60'}>
                     <TableCell className="font-medium">
-                      <Link
-                        href={`/${event.permalink}`}
-                        className="text-blue-500 dark:text-blue-400 hover:underline"
-                      >
-                        {event.title}
-                      </Link>
+                      {event.title}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {event.category.name}
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/${event.permalink}`}
+                          className="text-sky-600 dark:text-sky-400 hover:underline"
+                          title="View event"
+                          target="_blank"
+                        >
+                          <Globe />
+                        </Link>
+                        <Link
+                          href={`/admin/events/${event.permalink}/edit`}
+                          className="text-orange-600 dark:text-orange-400 hover:underline"
+                          title="Edit event"
+                        >
+                          <Edit />
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
