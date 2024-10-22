@@ -50,10 +50,13 @@ const Event: React.FC<Readonly<Props>> = ({ event }) => {
             <Calendar size={24} className="text-pink-400" />
             <span className="italic text-gray-300">
             {
-              new Intl.DateTimeFormat('en-CA', {
-                dateStyle: 'long',
-                timeStyle: 'short',
-              }).format(event.eventDate)
+              event.eventDate
+              ? new Intl.DateTimeFormat("en-CA", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "America/Vancouver"
+                }).format(event.eventDate)
+              : "Not assigned yet"
             }
             </span>
           </div>
