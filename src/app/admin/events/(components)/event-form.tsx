@@ -7,7 +7,13 @@ import eventUpdateSchema from "@/actions/events/event_update.schema";
 import { TimePicker } from "@/components/time-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -37,6 +43,7 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import Spinner from "@/components/ui/spinner";
 import { Editor } from "@/components/content"
+import { Switch } from "@/components/ui/switch";
 
 type Props = {
   categories: Category[];
@@ -51,27 +58,27 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
   const router = useRouter();
 
   const { data: session } = useSession({ required: true });
-  const [authorOpen, setAuthorOpen] = useState(false);
-  const [imageFieldMounted, setImageFieldMounted] = useState(false);
+  const [ authorOpen, setAuthorOpen ] = useState(false);
+  const [ imageFieldMounted, setImageFieldMounted ] = useState(false);
   
   const form = useForm<FormValues>({
     resolver: zodResolver(event ? eventUpdateSchema : eventCreateSchema),
 
     defaultValues: {
-      title: event?.title ?? "",
-      permalink: event?.permalink ?? "",
-      categoryId: event?.category.id ?? "",
-      artist: event?.artist ?? "",
-      lineUp: event?.lineUp ? event?.lineUp.join(', ') : "",
-      ticketUrl: event?.ticketUrl ?? "",
-      location: event?.location ?? "",
-      description: event?.description ?? "",
-      author: event?.author.id ?? "",
-      content: event?.content ?? "",
+      title: event?.title ?? "Event title",
+      permalink: event?.permalink ?? "Event title",
+      categoryId: event?.category.id ?? "a7996e71-db12-43b1-95de-d67ca44be68e",
+      artist: event?.artist ?? "Artist",
+      lineUp: event?.lineUp ? event?.lineUp.join(', ') : "artist 1, artist 2, artist 3",
+      ticketUrl: event?.ticketUrl ?? "https://eventtribe.com/123",
+      location: event?.location ?? "Grandville 123, Vancouver, BC",
+      description: event?.description ?? "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      author: event?.author.id ?? "000683b2-e9af-4209-b0a0-aaa6378a070d",
+      content: event?.content ?? "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       robots: event?.robots ?? "noindex, nofollow",
       eventDate: event?.eventDate ? new Date(event.eventDate) : undefined,
-      publishedAt: event?.publishedAt ? new Date(event.publishedAt) : undefined,
-      tags: event?.tags ? event?.tags.join(', ') : "",
+      active: event?.active ?? false,
+      tags: event?.tags ? event?.tags.join(', ') : "tech house, trance, techno",
     },
   });
 
@@ -94,15 +101,12 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
     formData.append('content', values.content);
     formData.append('tags', values.tags);
     formData.append('robots', values.robots ?? "noindex, nofollow");
+    formData.append('active', values.active?.toString() ?? "false");
 
     if (values.image) {
       console.log("Image was provided");
       console.log("IMAGE:", values.image);
       formData.append('image', values.image);
-    }
-
-    if (values.publishedAt) {
-      formData.append('publishedAt', values.publishedAt.toISOString());
     }
 
     if (values.eventDate) {
@@ -404,51 +408,6 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="publishedAt"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Published Date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP HH:mm:ss")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        className="rounded-md border mb-4"
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
-                      <div className="p-3 border-t border-border">
-                        <TimePicker
-                          setDate={field.onChange}
-                          date={field.value}
-                        />
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="eventDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
@@ -517,6 +476,21 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
                     </Select>
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="active"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Active</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />

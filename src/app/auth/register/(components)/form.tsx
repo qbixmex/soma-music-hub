@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import registerSchema from "./register-schema";
 import { z } from "zod";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
 
@@ -42,6 +43,12 @@ const RegisterForm = () => {
     console.log("Password:", formData.get('password'));
 
     // TODO Action Should be called here
+
+    toast.warning("Register Paused", {
+      duration: 3000,
+      position: "top-right",
+      className: "bg-orange-500 text-orange-900",
+    });
 
     // if (!response.ok) {
     //   toast.error(response.message, {
