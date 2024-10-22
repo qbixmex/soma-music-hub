@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+// import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -132,12 +132,12 @@ const LoginForm = () => {
             </form>
           </Form>
 
-          <div>
+          {/* <div>
             <p className="flex items-center justify-center gap-3 mt-5">
               <span>Don&apos;t have an account?</span>
               <Link href="/auth/register" className="text-blue-400 hover:underline">Register</Link>
             </p>
-          </div>
+          </div> */}
         </div>
 
       </div>
