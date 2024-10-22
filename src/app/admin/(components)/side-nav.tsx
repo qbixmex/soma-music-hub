@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib";
-import { Folders, Files, LayoutDashboard, Tags, Users } from "lucide-react";
+import { Folders, Disc3, LayoutDashboard, Tags, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -38,7 +38,7 @@ const SideNav = () => {
           { "bg-muted text-primary": pathname.startsWith("/admin/events") }
         )}
       >
-        <Files className="h-4 w-4" />
+        <Disc3 className="h-4 w-4" />
         Events{" "}
       </Link>
       <Link
