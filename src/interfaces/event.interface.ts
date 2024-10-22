@@ -22,7 +22,7 @@ export interface Event {
   eventDate: Date | null;
   category: Category;
   tags: string[];
-  publishedAt: Date | null;
+  active: boolean;
   author: {
     id: string;
     name: string

@@ -16,9 +16,7 @@ const createEvent = async (formData: FormData) => {
     eventDate: data.eventDate
       ? new Date(`${data.eventDate}`)
       : undefined,
-    publishedAt: data.publishedAt
-      ? new Date(`${data.publishedAt}`)
-      : undefined,
+    active: (data.active === 'true') ? true : (data.active === 'false') ? false : undefined,
   });
 
   if (!eventParsed.success) {
