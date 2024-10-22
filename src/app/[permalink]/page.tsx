@@ -6,10 +6,16 @@ import Image from "next/image";
 import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
-import { FaEnvelope, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaUser } from "react-icons/fa6";
 import { getEventByPermalinkPublic, getEventMetadataByPermalink } from "@/actions";
 import PublicLayout from "../(public)/public.layout";
 import { getImageUrl } from "@/utils";
+import {
+  CalendarDays as Calendar,
+  MapPin as Location,
+  TicketIcon as Ticket,
+  User as Artist,
+  UsersRound as LineUp,
+} from "lucide-react";
 import "./event.css";
 
 type Props = {
@@ -52,6 +58,8 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
 
   const { event } = response;
 
+  console.log(event)
+
   if (!event) {
     redirect("/");
   }
@@ -81,9 +89,22 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
 
             <section className="lg:w-1/2">
               <div className="block sm:grid sm:grid-cols-2 lg:block">
+
+                <div className="flex items-center gap-2 mb-5">
+                 <Artist className="text-pink-400" />
+                 <span className="font-bold italic text-gray-300">Artist:</span>
+                 {event.artist}
+                </div>
+
+                <div className="flex items-center gap-2 mb-5">
+                 <LineUp className="text-pink-400" />
+                 <span className="font-bold italic text-gray-300">Line Up:</span>
+                 {event.lineUp.join(', ')}
+                </div>
+
                 <div className="gap-x-3 mb-8 lg:text-left">
                   {/* Author */}
-                  <Link className="no-underline group" href="#">
+                  {/* <Link className="no-underline group" href="#">
                     <div className="flex items-center gap-3 mb-4 group">
                       <div className="text-slate-300 bg-slate-800 group-hover:text-slate-200 p-3 rounded-full text-lg transition-colors">
                         <FaUser />
@@ -92,22 +113,48 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
                         {event.author.name}
                       </p>
                     </div>
-                  </Link>
-
-                  {/* CATEGORY */}
-                  <p className="space-x-2">
-                    <span className="font-semibold">Category:</span>
-                    <Link href="#">{event.category.name}</Link>
-                  </p>
+                  </Link> */}
 
                   {/* DATE */}
-                  <p className="space-x-2">
-                    <span className="font-semibold">Date:</span>
-                    <span className="italic text-base">
-                      {`${event.publishedAt ?? 'Unknown'}`}
+                  <div className="flex gap-2 items-center text-white mb-5">
+                    <Calendar size={24} className="text-pink-400" />
+                    <span className="italic text-gray-300">
+                    {
+                      new Intl.DateTimeFormat('en-CA', {
+                        dateStyle: 'long',
+                        timeStyle: 'short',
+                      }).format(event.eventDate as Date)
+                    }
                     </span>
-                  </p>
+                  </div>
+
+                  {/* Event Location */}
+                  <div className="flex gap-2 items-center text-white mb-5">
+                    <Location size={24} className="text-pink-400" />
+                    <span className="italic text-gray-300">
+                      { event.location }
+                    </span>
+                  </div>
+
+                  {/* Buy Ticket */}
+                  <div className="flex gap-3 items-center">
+                    <Button variant="primary" >
+                      <a
+                        className="inline-flex items-center gap-3"
+                        href={event.ticketUrl} target="_black"
+                      >
+                        <span>Purchase Ticket</span>
+                        <Ticket size={24} />
+                      </a>
+                    </Button>
+                  </div>
                 </div>
+
+                {/* CATEGORY */}
+                <p className="space-x-2">
+                  <span className="font-semibold">Category:</span>
+                  <Link href="#">{event.category.name}</Link>
+                </p>
 
                 <div className="mb-8 lg:justify-start">
                   {/* TAGS */}
@@ -127,28 +174,6 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
                       }
                     </div>
                   </div>
-
-                  {/* SHARE SOCIAL MEDIA */}
-                  <div className="mb-8 lg:justify-start">
-                    <p className="font-semibold mb-3">Share Article</p>
-                    <div className="flex flex-wrap gap-2">
-                      <Link className="social-link" href="#" title="Share on Facebook">
-                        <FaFacebook />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Twitter">
-                        <FaTwitter />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Instagram">
-                        <FaInstagram />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Linkedin">
-                        <FaLinkedin />
-                      </Link>
-                      <Link className="social-link" href="#" title="Share on Email">
-                        <FaEnvelope />
-                      </Link>
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>
@@ -159,11 +184,11 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
           <Content id={event.id!} content={event.content} />
         </main>
 
-        <p className="text-right mb-5">
-          <Button variant="outline">
-            <Link href="/events" className="no-underline text-white">back to events</Link>
-          </Button>
-        </p>
+        <div className="text-right mb-5">
+          <Link href="/events" className="no-underline text-white">
+            <Button variant="outline">back to events</Button>
+          </Link>
+        </div>
 
       </article>
     </PublicLayout>

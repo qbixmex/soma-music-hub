@@ -14,6 +14,9 @@ const updateEvent = async (id: string, formData: FormData) => {
     publishedAt: data.publishedAt
       ? new Date(`${data.publishedAt}`)
       : undefined,
+    eventDate: data.eventDate
+      ? new Date(`${data.eventDate}`)
+      : undefined,
   });
 
   if (!eventParsed.success) {
@@ -26,6 +29,10 @@ const updateEvent = async (id: string, formData: FormData) => {
   const { author, image, ...eventToSave } = eventParsed.data;
   eventToSave.permalink = slugFormat(eventToSave.permalink);
 
+  const lineUpArray = eventToSave.lineUp
+    .split(",")
+    .map(item => item.trim().toLowerCase());
+
   const tagsArray = eventToSave.tags
     .split(",")
     .map(tag => tag.trim().toLowerCase());
@@ -37,6 +44,7 @@ const updateEvent = async (id: string, formData: FormData) => {
         where: { id },
         data: {
           ...eventToSave,
+          lineUp: { set: lineUpArray },
           tags: { set: tagsArray },
           authorId: author,
         },

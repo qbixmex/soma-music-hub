@@ -10,10 +10,15 @@ export type EventPublic = {
   imageUrl: string;
   imagePublicId: string;
   description: string;
+  ticketUrl: string;
+  artist: string;
+  lineUp: string;
   content: string;
+  location: string;
   category: Category;
   tags: string[];
-  publishedAt: Date | null;
+  eventDate: Date;
+  publishedAt: Date;
   author: { name: string };
   robots: Robots;
   createdAt?: Date;
@@ -101,9 +106,13 @@ export const getEventsPublic = async (params: PublicParams = {}):
         id: true,
         title: true,
         permalink: true,
+        location: true,
         imageUrl: true,
+        ticketUrl: true,
         category: true,
         description: true,
+        eventDate: true,
+        publishedAt: true,
         author: {
           select: {
             name: true,
@@ -241,10 +250,15 @@ export const getEventByPermalinkPublic = async (permalink: string)
         id: true,
         title: true,
         permalink: true,
+        location: true,
+        artist: true,
+        lineUp: true,
+        ticketUrl: true,
         imageUrl: true,
         description: true,
         content: true,
         tags: true,
+        eventDate: true,
         publishedAt: true,
         robots: true,
         category: {

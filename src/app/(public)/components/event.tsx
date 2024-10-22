@@ -4,6 +4,10 @@ import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
 import { EventPublic } from "@/actions/events/fetch_events";
 import { getImageUrl } from "@/utils";
+import {
+  CalendarDays as Calendar,
+  MapPin as Location
+} from "lucide-react";
 
 type Props = {
   event: EventPublic;
@@ -14,8 +18,8 @@ const Event: React.FC<Readonly<Props>> = ({ event }) => {
   const eventImage = getImageUrl(event.imageUrl);
 
   return (
-    <article className="flex flex-col md:flex-row gap-10">
-      <header className="w-full md:w-1/4">
+    <article className="flex flex-col gap-10 md:flex-row">
+      <header className="w-full md:max-w-[480px]">
         <figure>
           <Link
             href={`/${event.permalink}`}
@@ -23,31 +27,53 @@ const Event: React.FC<Readonly<Props>> = ({ event }) => {
           >
             <Image
               src={eventImage}
-              className="w-full h-auto rounded-lg"
+              className="w-full max-w-[480px] h-auto rounded-md border border-gray-600"
               alt={event.title}
-              width={640}
-              height={360}
+              width={480}
+              height={320}
             />
           </Link>
         </figure>
       </header>
-      <section className="w-full md:w-3/4 flex flex-col justify-center">
+      <section className="w-full flex flex-col justify-center gap-2">
         <Link href={`/${event.permalink}`}>
           <Title
             heading="h2"
             className="font-semibold text-xl lg:text-2xl hover:underline"
           >{event.title}</Title>
         </Link>
-        <p className="paragraph">{event.description}</p>
+
+        <p className="text-pretty">{event.description}</p>
+
+        <div className="flex flex-col sm:flex-row gap-5">
+          <div className="flex gap-2 items-center text-white">
+            <Calendar size={24} className="text-pink-400" />
+            <span className="italic text-gray-300">
+            {
+              new Intl.DateTimeFormat('en-CA', {
+                dateStyle: 'long',
+                timeStyle: 'short',
+              }).format(event.eventDate)
+            }
+            </span>
+          </div>
+          <div className="flex gap-2 items-center text-white">
+            <Location size={24} className="text-pink-400" />
+            <span className="italic text-gray-300">
+              { event.location }
+            </span>
+          </div>
+        </div>
+
         <div className="text-right">
-          <Link
-            href={`/${event.permalink}`}
-            title={`read more about ${event.title}`}
-          >
-            <Button variant="outline">
-              read more
-            </Button>
-          </Link>
+          <Button variant="outline">
+            <Link
+              href={`/${event.permalink}`}
+              title={`read more about ${event.title}`}
+            >
+            more info
+            </Link>
+          </Button>
         </div>
       </section>
     </article>
