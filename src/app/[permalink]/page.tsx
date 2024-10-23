@@ -58,9 +58,7 @@ const EventPage: FC<Props> = async ({ params: { permalink } }) => {
 
   const { event } = response;
 
-  console.log(event)
-
-  if (!event) {
+  if (!event || !event.active) {
     redirect("/");
   }
 

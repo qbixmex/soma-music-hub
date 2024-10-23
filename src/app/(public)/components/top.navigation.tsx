@@ -18,6 +18,11 @@ const TopNavigation = () => {
 
   const session = useSession();
 
+  const handleLogout = async () => {
+    await logout();
+    window.location.replace('/');
+  };
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 mb-5">
       <section className="px-5 text-center">
@@ -70,10 +75,7 @@ const TopNavigation = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={async () => {
-                await logout();
-                window.location.replace('/');
-              }}
+              onClick={handleLogout}
             >
               Logout
             </DropdownMenuItem>
