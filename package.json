@@ -1,6 +1,6 @@
 {
-  "name": "quantic_coders",
-  "version": "0.17.2",
+  "name": "soma_music_hub",
+  "version": "0.18.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
