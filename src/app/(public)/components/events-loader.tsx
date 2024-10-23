@@ -4,7 +4,7 @@ const EventsLoader: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      {[1,2].map(() => <EventSkeleton />)}
+      {[1,2].map((i) => <EventSkeleton key={i} />)}
     </div>
   );
 

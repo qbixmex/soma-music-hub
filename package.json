@@ -1,6 +1,6 @@
 {
   "name": "soma_music_hub",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
