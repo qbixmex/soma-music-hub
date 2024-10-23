@@ -1,6 +1,6 @@
 {
   "name": "quantic_coders",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
