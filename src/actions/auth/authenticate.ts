@@ -9,7 +9,7 @@ const authenticate = async (formData: FormData): Promise<string> => {
     // await sleep(2); // Debugging
     await signIn('credentials',{
       ...Object.fromEntries(formData),
-      redirect: true,
+      redirect: false,
     });
 
     return 'Signin Successful 👍';
