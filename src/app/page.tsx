@@ -1,13 +1,10 @@
-import { getEventsPublic } from "@/actions";
+import { Suspense } from "react";
 import PublicLayout from "./(public)/public.layout";
 import { Title } from "@/components/text";
-import { Event } from "./(public)/components";
-
-export const fetchCache = 'force-no-store';
+import EventsList from "./(public)/events-list";
+import EventsLoader from "./(public)/components/events-loader";
 
 const HomePage = async () => {
-
-  const { events } = await getEventsPublic({ active: true });
 
   return (
     <PublicLayout>
@@ -15,16 +12,9 @@ const HomePage = async () => {
         <Title heading="h1" className="text-5xl font-bold mb-10">
           Soma Music Hub
         </Title>
-
-        {events.length === 0 && (
-          <p className="paragraph">No events found.</p>
-        )}
-
-        <section className="grid grid-cols-1 gap-5">
-          {events && events.map((event) => (
-            <Event key={event.id} event={event} />
-          ))}
-        </section>
+        <Suspense fallback={<EventsLoader />}>
+          <EventsList />
+        </Suspense>
       </div>
     </PublicLayout>
   );
