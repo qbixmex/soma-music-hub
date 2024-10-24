@@ -7,6 +7,7 @@ export {
   getEventByPermalink,
   getEventMetadataByPermalink,
   getEventByPermalinkPublic,
+  getStaticEventsPermalinks,
 } from './fetch_events';
 export { default as createEvent } from './create_event';
 export { default as updateEvent } from './update_event';
