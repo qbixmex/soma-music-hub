@@ -389,3 +389,40 @@ export const getEventMetadataByPermalink = async (permalink: string): Promise<Re
     };
   }
 };
+
+/**
+ * Get permalinks of latest events.
+ * 
+ * @param quantity The number of permalinks to fetch.
+ * 
+ * @example ```typescript
+ * getStaticEventsPermalinks(10); // latest 10.
+ * ```
+ * 
+ * @returns The permalinks of the latest required events.
+ */
+export const getStaticEventsPermalinks = async (quantity: number): Promise<{
+  ok: boolean;
+  permalinks: string[];
+  error?: string;
+}> => {
+  try {
+    const events = await prisma.event.findMany({
+      select: { permalink: true },
+      take: quantity,
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return {
+      ok: true,
+      permalinks: events.map((event) => event.permalink),
+    };
+  } catch(error) {
+    console.error(error);
+    return {
+      ok: false,
+      permalinks: [],
+      error: "Something went wrong !, check logs for details",
+    };
+  }
+};
