@@ -7,7 +7,8 @@ import eventUpdateSchema from "@/actions/events/event_update.schema";
 import { TimePicker } from "@/components/time-picker";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Form,
+import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -58,27 +59,27 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
   const router = useRouter();
 
   const { data: session } = useSession({ required: true });
-  const [ authorOpen, setAuthorOpen ] = useState(false);
-  const [ imageFieldMounted, setImageFieldMounted ] = useState(false);
-  
+  const [authorOpen, setAuthorOpen] = useState(false);
+  const [imageFieldMounted, setImageFieldMounted] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(event ? eventUpdateSchema : eventCreateSchema),
 
     defaultValues: {
-      title: event?.title ?? "Event title",
-      permalink: event?.permalink ?? "Event title",
-      categoryId: event?.category.id ?? "a7996e71-db12-43b1-95de-d67ca44be68e",
+      title: event?.title ?? "",
+      permalink: event?.permalink ?? "",
+      categoryId: event?.category.id ?? "",
       artist: event?.artist ?? "Artist",
-      lineUp: event?.lineUp ? event?.lineUp.join(', ') : "artist 1, artist 2, artist 3",
-      ticketUrl: event?.ticketUrl ?? "https://eventtribe.com/123",
-      location: event?.location ?? "Grandville 123, Vancouver, BC",
-      description: event?.description ?? "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      author: event?.author.id ?? "000683b2-e9af-4209-b0a0-aaa6378a070d",
-      content: event?.content ?? "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      lineUp: event?.lineUp ? event?.lineUp.join(', ') : "",
+      ticketUrl: event?.ticketUrl ?? "",
+      location: event?.location ?? "",
+      description: event?.description ?? "",
+      author: event?.author.id ?? "",
+      content: event?.content ?? "",
       robots: event?.robots ?? "noindex, nofollow",
       eventDate: event?.eventDate ? new Date(event.eventDate) : undefined,
       active: event?.active ?? false,
-      tags: event?.tags ? event?.tags.join(', ') : "tech house, trance, techno",
+      tags: event?.tags ? event?.tags.join(', ') : "",
     },
   });
 
@@ -215,7 +216,7 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
               <div className="w-full h-8 bg-slate-500 rounded animate-pulse" />
             </div>
           )}
-          
+
           <FormField
             control={form.control}
             name="categoryId"
@@ -531,13 +532,13 @@ const EventForm: FC<Props> = ({ event, categories, authors = [] }) => {
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <Spinner />
-                  <span className="animate-pulse">wait ...</span>
-                </span>
-              ) : (
-                <span>{event ? 'Save' : 'Create'}</span>
-              )
+              <span className="flex items-center gap-2">
+                <Spinner />
+                <span className="animate-pulse">wait ...</span>
+              </span>
+            ) : (
+              <span>{event ? 'Save' : 'Create'}</span>
+            )
             }
           </Button>
         </div>

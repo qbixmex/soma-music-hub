@@ -1,6 +1,6 @@
-// "use client"
+"use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Switch } from "@/components/ui/switch";
 import updateActiveEvent from "@/actions/events/toggle_status";
 import { toast } from "sonner";
@@ -11,7 +11,6 @@ type Props = {
 };
 
 const ToggleActive: FC<Props> = ({ id, currentStatus }) => {
-
 
   const onSwitchChange = async () => {
     const response = await updateActiveEvent(id, !currentStatus);
