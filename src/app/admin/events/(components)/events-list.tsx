@@ -1,54 +1,24 @@
-"use client";
-
 import { FC } from "react";
-import Link from "next/link";
-import Image from 'next/image';
-import { Badge } from "@/components/ui/badge";
+import { getEvents } from "@/actions";
+import { auth } from "@/auth.config";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Edit, Trash2 } from "lucide-react";
-import { EventsForList, deleteEvent } from "@/actions";
-import { toast } from "sonner";
-import ToggleActive from "./toggle-active.component";
 import { getImageUrl } from "@/utils";
+import { Edit } from "lucide-react";
+import Image from 'next/image';
+import Link from "next/link";
+import DeleteEvent from "./delete-event";
+import ToggleActive from "./toggle-active.component";
 
-type Props = {
-  events: EventsForList[];
-};
+const EventsList: FC = async () => {
 
-const EventsList: FC<Props> = ({ events }) => {
+  const session = await auth();
 
-  const handleDeleteEvent = async (id: string) => {
-    const response = await deleteEvent(id);
-
-    if (!response.ok) {
-      toast.error(response.message, {
-        duration: 3000,
-        position: "top-right",
-        className: "bg-red-500 text-white",
-      });
-    }
-
-    if (response.ok) {
-      toast.success(response.message, {
-        duration: 3000,
-        position: "top-right",
-        className: "bg-green-500 text-white",
-      });
-    }
-  };
+  const { events } = await getEvents({
+    role: session?.user.role,
+    authorId: session?.user.id
+  });
 
   if (events.length === 0) {
     return (
@@ -130,26 +100,7 @@ const EventsList: FC<Props> = ({ events }) => {
                           <Edit />
                         </Button>
                       </Link>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="danger"><Trash2 /></Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              <p>This action cannot be undone.</p>
-                              <p> This will permanently delete your event and data from our servers will deleted forever.</p>
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDeleteEvent(event.id!)}>
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <DeleteEvent eventId={event.id} />
                     </div>
                   </TableCell>
                 </TableRow>
