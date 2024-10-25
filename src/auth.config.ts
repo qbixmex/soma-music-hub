@@ -93,15 +93,14 @@ export const authConfig: NextAuthConfig = {
       const isOnLogin = nextUrl.pathname === '/auth/login';
       const isOnRegister = nextUrl.pathname === '/auth/register';
 
-
       if (isOnAdmin) {
         // Redirect unauthenticated users to login page if they're not logged in.
         return isLoggedIn ? true : false;
       }
 
-      if (isLoggedIn) {
-        if (isOnLogin || isOnRegister) {
-          return Response.redirect(new URL('/admin/dashboard', nextUrl))
+      if (isOnLogin || isOnRegister) {
+        if (isLoggedIn) {
+          return Response.redirect(new URL('/admin/dashboard', nextUrl));
         }
       }
 
