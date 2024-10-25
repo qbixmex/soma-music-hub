@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - Quantic Coders',
+    template: '%s - Soma Music Hub',
     absolute: 'Admin',
     default: 'Admin',
   },

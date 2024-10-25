@@ -1,6 +1,6 @@
-// "use client"
+"use client";
 
-import { FC, useState } from "react";
+import { FC, useOptimistic } from 'react';
 import { Switch } from "@/components/ui/switch";
 import updateActiveEvent from "@/actions/events/toggle_status";
 import { toast } from "sonner";
@@ -12,11 +12,21 @@ type Props = {
 
 const ToggleActive: FC<Props> = ({ id, currentStatus }) => {
 
+  const [ optimisticStatus, addOptimisticStatus ] = useOptimistic(
+    currentStatus,
+    (currentState, newStatus) => currentState !== newStatus,
+  );
 
   const onSwitchChange = async () => {
+
+    addOptimisticStatus(!currentStatus);
+
     const response = await updateActiveEvent(id, !currentStatus);
 
     if (!response.ok) {
+      // In case the request fails, we revert the optimistic status.
+      addOptimisticStatus(currentStatus);
+
       toast.error(response.message, {
         duration: 3000,
         position: "top-right",
@@ -36,7 +46,7 @@ const ToggleActive: FC<Props> = ({ id, currentStatus }) => {
   return (
     <Switch
       key={id}
-      checked={currentStatus}
+      checked={optimisticStatus}
       onCheckedChange={onSwitchChange}
     />
   );

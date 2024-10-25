@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Content } from "@/components/content";
 import { Title } from "@/components/text";
 import { Button } from "@/components/ui/button";
-import { getEventByPermalinkPublic, getEventMetadataByPermalink } from "@/actions";
+import { getEventByPermalinkPublic, getEventMetadataByPermalink, getStaticEventsPermalinks } from "@/actions";
 import PublicLayout from "../(public)/public.layout";
 import { getImageUrl } from "@/utils";
 import {
@@ -47,6 +47,19 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
     //   images: [`/products/${product?.images[1]}`],
     // },
   }
+};
+
+//* ONLY BUILD TIME
+export const generateStaticParams = async () => {
+
+  const result = await getStaticEventsPermalinks(100);
+
+  if (!result.ok) {
+    throw new Error(result.error);
+  }
+
+  return result.permalinks.map((permalink) => ({ permalink }));
+
 };
 
 //* This re-validates the page every 7 days

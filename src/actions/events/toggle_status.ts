@@ -49,7 +49,7 @@ export const updateActiveEvent = async (id: string, status: boolean) => {
     console.error(error);
     return {
       ok: false,
-      message: 'Error updating an event ❌,\ncheck logs for more details.',
+      message: 'Error updating an event ❌.',
     };
   }
 
