@@ -27,9 +27,11 @@ const EventsList: FC = async () => {
           <h3 className="text-2xl font-bold tracking-tight">
             You have no events created yet.
           </h3>
-          <Link href="/admin/events/new">
-            <Button className="mt-4" variant="primary">Create Event</Button>
-          </Link>
+          <Button className="mt-4" variant="primary" asChild>
+            <Link href="/admin/events/new">
+              Create Event
+            </Link>
+          </Button>
         </div>
       </div>
     );
@@ -42,11 +44,11 @@ const EventsList: FC = async () => {
           Events
         </CardTitle>
         <CardDescription className="text-right">
-        <Link href="/admin/events/new">
-          <Button variant="primary" className="w-full md:w-fit">
-            Add an Event
+          <Button variant="primary" className="w-full md:w-fit" asChild>
+            <Link href="/admin/events/new">
+              Add an Event
+            </Link>
           </Button>
-        </Link>
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -58,6 +60,7 @@ const EventsList: FC = async () => {
               <TableHead className="hidden xl:table-cell">Artist</TableHead>
               <TableHead className="hidden xl:table-cell">Event Date</TableHead>
               <TableHead className="table-cell">Active</TableHead>
+              <TableHead className="hidden xl:table-cell">&nbsp;</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,11 +98,11 @@ const EventsList: FC = async () => {
                   </TableCell>
                   <TableCell className="md:table-cell">
                     <div className="flex gap-2 justify-center items-center">
-                      <Link href={`/admin/events/${event.permalink}/edit/`}>
-                        <Button variant="warning">
+                      <Button variant="warning" asChild>
+                        <Link href={`/admin/events/${event.permalink}/edit/`}>
                           <Edit />
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                       <DeleteEvent eventId={event.id} />
                     </div>
                   </TableCell>

@@ -12,12 +12,11 @@ import { getUserById } from "@/actions";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
-const UserEditPage: FC<Props> = async ({ params: { id } }) => {
+const UserEditPage: FC<Props> = async ({ params }) => {
+  const id = (await params).id;
 
   const response = await getUserById(id);
 

@@ -44,8 +44,7 @@ export const DashboardEvents: FC<Props> = ({ title, subTitle, emptyMessage, even
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="table-cell">Title</TableHead>
-                  <TableHead className="hidden sm:table-cell">Options</TableHead>
+                  <TableHead className="table-cell" colSpan={2}>Title</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -55,23 +54,13 @@ export const DashboardEvents: FC<Props> = ({ title, subTitle, emptyMessage, even
                       {event.title}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/${event.permalink}`}
-                          className="text-sky-600 dark:text-sky-400 hover:underline"
-                          title="View event"
-                          target="_blank"
-                        >
-                          <Globe />
-                        </Link>
-                        <Link
-                          href={`/admin/events/${event.permalink}/edit`}
-                          className="text-orange-600 dark:text-orange-400 hover:underline"
-                          title="Edit event"
-                        >
-                          <Edit />
-                        </Link>
-                      </div>
+                      <Link
+                        href={`/admin/events/${event.permalink}/edit`}
+                        className="text-orange-600 dark:text-orange-400 hover:underline"
+                        title="Edit event"
+                      >
+                        <Edit />
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

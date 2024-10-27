@@ -13,12 +13,13 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
 
 type Props = {
-  params: {
+  params: Promise<{
     permalink: string;
-  };
+  }>;
 };
 
-const EventEditPage: FC<Props> = async ({ params: { permalink } }) => {
+const EventEditPage: FC<Props> = async ({ params }) => {
+  const permalink = (await params).permalink;
 
   const session = await auth();
 

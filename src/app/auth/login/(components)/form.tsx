@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -54,7 +53,9 @@ const LoginForm = () => {
       return;
     }
 
-    route.push('/admin/dashboard');
+    // FULL REFRESH to get the new token
+    window.location.href = "/admin/dashboard";
+
   };
 
   const handleVisibly = () => {
@@ -110,23 +111,23 @@ const LoginForm = () => {
                   />
                 </CardContent>
                 <CardFooter className="flex justify-start md:justify-end">
-                <Button
-                  type="submit"
-                  variant={isPending ? "secondary" : "primary"}
-                  className={clsx("w-full md:w-fit", {
-                    "cursor-not-allowed": isPending,
-                  })}
-                  disabled={ isPending }
-                >
-                  {isPending
-                    ? (
-                      <span className="flex items-center gap-2">
-                        <Spinner />
-                        <span className="animate-pulse">wait ...</span>
-                      </span>
-                    ) : 'Sign In'
-                  }
-                </Button>
+                  <Button
+                    type="submit"
+                    variant={isPending ? "secondary" : "primary"}
+                    className={clsx("w-full md:w-fit", {
+                      "cursor-not-allowed": isPending,
+                    })}
+                    disabled={ isPending }
+                  >
+                    {isPending
+                      ? (
+                        <span className="flex items-center gap-2">
+                          <Spinner />
+                          <span className="animate-pulse">wait ...</span>
+                        </span>
+                      ) : 'Sign In'
+                    }
+                  </Button>
                 </CardFooter>
               </Card>
             </form>
