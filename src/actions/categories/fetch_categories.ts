@@ -106,7 +106,7 @@ export const getCategoryById = async (id: string): Promise<ResponseFetchCategory
   }
 };
 
-export const getCategoryBySlug = async (permalink: string): Promise<ResponseFetchCategory> => {
+export const getCategoryByPermalink = async (permalink: string): Promise<ResponseFetchCategory> => {
   try {
     const category = await prisma.category.findUnique({
       where: { permalink },

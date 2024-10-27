@@ -82,8 +82,10 @@ const TopNavigation = () => {
           </>
         )}
         {session.status === "unauthenticated" && (
-          <DropdownMenuItem className="cursor-pointer">
-            <Link href="/auth/login">Login</Link>
+          <DropdownMenuItem>
+            <Button variant="ghost" className="w-full" asChild>
+              <Link href="/auth/login">Login</Link>
+            </Button>
           </DropdownMenuItem>
         )}
         </DropdownMenuContent>

@@ -9,7 +9,7 @@ const EventsSkeleton = () => {
           Events
         </CardTitle>
         <CardDescription className="w-full flex justify-end">
-          <div className="w-[150px] h-[40px] rounded bg-gray-600 animate-pulse"></div>
+          <span className="block w-[150px] h-[40px] rounded bg-gray-600 animate-pulse"></span>
         </CardDescription>
       </CardHeader>
       <CardContent>

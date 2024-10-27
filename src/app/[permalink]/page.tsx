@@ -7,16 +7,17 @@ import "./event.css";
 import EventSkeleton from "./(components)/event-skeleton";
 
 type Props = {
-  params: {
+  params: Promise<{
     permalink: string;
-  };
+  }>;
 };
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  const params = await props.params;
 
   // fetch data
   const { metadata } = await getEventMetadataByPermalink(params.permalink);
-  
+
   const metaTitle = metadata?.title;
   const metaDescription = metadata?.description
     ? metadata?.description.length >= 160
@@ -56,7 +57,8 @@ export const generateStaticParams = async () => {
 //* This re-validates the page every 7 days
 export const revalidate = 604800;
 
-const EventPage: FC<Props> = async ({ params }) => {
+const EventPage: FC<Props> = async props => {
+  const params = await props.params;
 
   return (
     <PublicLayout>
@@ -65,7 +67,6 @@ const EventPage: FC<Props> = async ({ params }) => {
       </Suspense>
     </PublicLayout>
   );
-
 };
 
 export default EventPage;

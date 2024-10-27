@@ -65,7 +65,9 @@ const DeleteEvent: FC<{eventId: string}> = ({ eventId }) => {
         <AlertDialogFooter>
           <AlertDialogCancel
             className="bg-blue-600 text-blue-50 hover:bg-blue-800"
-          >Cancel</AlertDialogCancel>
+          >
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => handleDeleteEvent(eventId)}
             className="bg-red-600 text-red-50 hover:bg-red-800"
