@@ -8,18 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import CategoryForm from "../../(components)/category-form";
-import { getCategoryBySlug } from "@/actions";
+import { getCategoryByPermalink } from "@/actions";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ permalink: string }>;
 };
 
-const CategoryEditPage: FC<Props> = async ({ params: { slug } }) => {
+const CategoryEditPage: FC<Props> = async ({ params }) => {
+  const permalink = (await params).permalink;
 
-  const { category } = await getCategoryBySlug(slug);
+  const { category } = await getCategoryByPermalink(permalink);
 
   if (!category) {
     redirect('/admin/categories');
